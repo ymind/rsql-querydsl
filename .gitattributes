@@ -1,0 +1,4 @@
+*.sh            text eol=lf
+gradlew         text eol=lf
+mvnw            text eol=lf
+secret.txt      text eol=lf
