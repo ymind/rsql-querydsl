@@ -18,7 +18,7 @@ plugins {
 }
 
 group = "team.yi.rsql"
-version = "0.1.0"
+version = "0.1.2"
 description = "Integration RSQL query language and Querydsl framework."
 
 java {
@@ -90,7 +90,6 @@ tasks {
 
     changelog {
         toRef = "master"
-        isUnstable = true
         lastVersion = "0.0.0"
 
         issueUrlTemplate = "https://github.com/ymind/rsql-querydsl/issues/:issueId"
@@ -122,7 +121,6 @@ tasks {
 
     derive {
         toRef = "master"
-        isUnstable = true
         derivedVersionMark = "NEXT_VERSION:=="
 
         // jsonFile = file("${project.rootDir}/CHANGELOG.json")

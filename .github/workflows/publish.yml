@@ -93,25 +93,11 @@ jobs:
         newVersion=`./gradlew derive --preRelease='SNAPSHOT' -i | grep 'NEXT_VERSION:==' | sed 's/^.*NEXT_VERSION:==//g'`
 
         echo "newVersion: ${newVersion}"
-        echo "::set-output name=newVersion::${newVersion}"
-        echo "::set-output name=newVersion::${newVersion}"
 
         ./gradlew setNewVersion -P newVersion=${newVersion} 1>/dev/null 2>/dev/null
         ./gradlew clean publish -x test -P OSSRH_GPG_SECRET_KEY=./secret.gpg
 
         rm -rf ./secret.gpg
-
-  #    - name: Generate and push CHANGELOG.md
-  #      run: |
-  #        ./gradlew changelog --toRef=master
-  #
-  #        gitCommit="bumped version to ${{ steps.publish.outputs.newVersion }}"
-  #
-  #        git config --global user.name 'ymind'
-  #        git config --global user.email 'ymind@users.noreply.github.com'
-  #        git add ./CHANGELOG* || true
-  #        git add ./build.gradle.kts || true
-  #        git commit -m "${gitCommit}" && git push origin || true
 
   deploy_release:
     needs: [build, test]
