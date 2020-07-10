@@ -36,29 +36,29 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.3.0.RELEASE") {
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.3.1.RELEASE") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:2.3.0.RELEASE")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:2.3.1.RELEASE")
 
     // https://mvnrepository.com/artifact/com.h2database/h2
     testImplementation("com.h2database:h2:1.4.200")
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.1")
 
     // https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api
-    implementation("javax.persistence:javax.persistence-api:2.2")
+    api("javax.persistence:javax.persistence-api:2.2")
 
     // https://mvnrepository.com/artifact/com.querydsl/querydsl-apt
-    implementation("com.querydsl:querydsl-apt:4.3.1")
-    implementation("com.querydsl:querydsl-jpa:4.3.1")
+    api("com.querydsl:querydsl-apt:4.3.1")
+    api("com.querydsl:querydsl-jpa:4.3.1")
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation("org.apache.commons:commons-lang3:3.10")
+    api("org.apache.commons:commons-lang3:3.10")
 
     // https://mvnrepository.com/artifact/cz.jirutka.rsql/rsql-parser
-    implementation("cz.jirutka.rsql:rsql-parser:2.1.0")
+    api("cz.jirutka.rsql:rsql-parser:2.1.0")
 
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 }
@@ -77,13 +77,16 @@ tasks {
             "-Xallow-kotlin-package",
             "-Xopt-in=kotlin.ExperimentalUnsignedTypes",
             "-Xopt-in=kotlin.contracts.ExperimentalContracts",
-            "-XXLanguage:+InlineClasses",
+            // "-XXLanguage:+InlineClasses",
             "-Xjsr305=strict"
         )
     }
 
     compileKotlin(kotlinSettings)
     compileTestKotlin(kotlinSettings)
+    compileJava { options.encoding = "UTF-8" }
+    compileTestJava { options.encoding = "UTF-8" }
+    javadoc { options.encoding = "UTF-8" }
 
     changelog {
         toRef = "master"
