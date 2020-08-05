@@ -1,7 +1,6 @@
 package team.yi.rsql.querydsl.test.kotlintest
 
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import team.yi.rsql.querydsl.QuerydslRsql
@@ -23,7 +22,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
 
         assertNotNull(cars, "Can't handle `isnull` operator for Boolean type correctly")
 
-        cars?.let { assertFalse(cars.isEmpty(), "Can't handle `isnull` operator for Boolean type") }
+        cars?.let { assertTrue(cars.isEmpty(), "Can't handle `isnull` operator for Boolean type") }
     }
 
     @Test
@@ -87,7 +86,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
 
         assertNotNull(cars, "Can't handle `notin` operator for Boolean type correctly")
 
-        cars?.let { assertFalse(cars.isEmpty(), "Can't handle `notin` operator for Boolean type") }
+        cars?.let { assertTrue(cars.isEmpty(), "Can't handle `notin` operator for Boolean type") }
     }
 
     @Test
@@ -112,7 +111,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
 
         assertNotNull(cars, "Can't handle `between` operator for Boolean type correctly")
 
-        cars?.let { assertFalse(cars.isEmpty(), "Can't handle `between` operator for Boolean type") }
+        cars?.let { assertTrue(cars.isEmpty(), "Can't handle `between` operator for Boolean type") }
     }
 
     @Test

@@ -13,11 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class QuerydslRsqlTest extends BaseRsqlTest {
     @Autowired
@@ -59,7 +55,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
         List<Object> cars = rsql.fetch();
 
         assertNotNull(cars, "result is null");
-        assertFalse(cars.isEmpty(), "Can't handle multi level field query");
+        assertTrue(cars.isEmpty(), "Can't handle multi level field query");
     }
 
     @Test
@@ -111,7 +107,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
         assertNotNull(cars, "result is null");
         assertFalse(cars.isEmpty(), "Can't handle `in` operator for Number type");
-        assertNotEquals(3, cars.size(), "Can't handle `in` operator for Number type correctly");
+        assertEquals(3, cars.size(), "Can't handle `in` operator for Number type correctly");
     }
 
     @Test

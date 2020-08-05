@@ -90,7 +90,11 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             val rootNode = RSQLParser(RsqlUtil.getOperators(rsqlConfig.operators)).parse(where)
             val predicate = rootNode.accept(PredicateBuilderVisitor(it, predicateBuilder))
 
-            return if (globalPredicate == null || predicate == null) null else globalPredicate.and(predicate)
+            return when {
+                globalPredicate == null && predicate == null -> null
+                globalPredicate == null -> predicate
+                else -> globalPredicate.and(predicate)
+            }
         }
     }
 

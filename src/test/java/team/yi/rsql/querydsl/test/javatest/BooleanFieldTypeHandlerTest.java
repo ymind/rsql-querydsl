@@ -9,8 +9,7 @@ import team.yi.rsql.querydsl.test.BaseRsqlTest;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Autowired
@@ -25,7 +24,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
         List<Object> cars = rsql.fetch();
 
         assertNotNull(cars, "Can't handle `isnull` operator for Boolean type correctly");
-        assertFalse(cars.isEmpty(), "Can't handle `isnull` operator for Boolean type");
+        assertTrue(cars.isEmpty(), "Can't handle `isnull` operator for Boolean type");
     }
 
     @Test
@@ -73,7 +72,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
         List<Object> cars = rsql.fetch();
 
         assertNotNull(cars, "Can't handle `notin` operator for Boolean type correctly");
-        assertFalse(cars.isEmpty(), "Can't handle `notin` operator for Boolean type");
+        assertTrue(cars.isEmpty(), "Can't handle `notin` operator for Boolean type");
     }
 
     @Test
@@ -97,7 +96,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
         List<Object> cars = rsql.fetch();
 
         assertNotNull(cars, "Can't handle `between` operator for Boolean type correctly");
-        assertFalse(cars.isEmpty(), "Can't handle `between` operator for Boolean type");
+        assertTrue(cars.isEmpty(), "Can't handle `between` operator for Boolean type");
     }
 
     @Test
