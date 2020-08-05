@@ -7,6 +7,7 @@
 - **deps** External dependencies
 - **docs** Code notes, API documentation, development guidelines, update logs, contribution guides, instructions for use, etc.
 - **config** Project configuration information
+- **changelog** Changelog and anything related.
 - **common** Commons, exceptions and utils etc.
 - **model** Models
 - **operator** Operators
