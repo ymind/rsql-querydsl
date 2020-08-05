@@ -53,7 +53,7 @@ dependencies {
     api("com.querydsl:querydsl-jpa:4.3.1")
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    api("org.apache.commons:commons-lang3:3.10")
+    api("org.apache.commons:commons-lang3:3.11")
 
     // https://mvnrepository.com/artifact/cz.jirutka.rsql/rsql-parser
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
