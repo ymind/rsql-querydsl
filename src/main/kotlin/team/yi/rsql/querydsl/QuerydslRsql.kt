@@ -18,7 +18,7 @@ import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.RsqlUtil
 import javax.persistence.EntityManager
 
-@Suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST", "unused", "MemberVisibilityCanBePrivate")
 class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val predicateBuilder: PredicateBuilder<E>
     private val entityClass: Class<E>
