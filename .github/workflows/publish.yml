@@ -16,6 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
@@ -42,6 +45,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
@@ -64,10 +70,13 @@ jobs:
     needs: [build, test]
     runs-on: ubuntu-latest
 
-    if: (github.ref == 'refs/heads/master') && startsWith(github.event.head_commit.message, 'bumped version to ') != true && startsWith(github.event.head_commit.message, 'release:') != true
+    if: (github.ref == 'refs/heads/master') && startsWith(github.event.head_commit.message, 'release:') != true
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
@@ -81,7 +90,10 @@ jobs:
         restore-keys: ${{ runner.os }}-gradle-
 
     - name: Prepare to build
-      run: chmod +x ./gradlew
+      run: |
+        chmod +x ./gradlew
+        git show-ref
+        git log --graph --full-history --all --color --date=short --pretty=format:"%Cred%x09%h %Creset%ad%Cgreen%d %Creset %s %C(bold)(%an)%Creset" || true
 
     - id: install-secret-key
       name: Install gpg secret key
@@ -107,6 +119,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
@@ -120,7 +135,10 @@ jobs:
         restore-keys: ${{ runner.os }}-gradle-
 
     - name: Prepare to build
-      run: chmod +x ./gradlew
+      run: |
+        chmod +x ./gradlew
+        git show-ref
+        git log --graph --full-history --all --color --date=short --pretty=format:"%Cred%x09%h %Creset%ad%Cgreen%d %Creset %s %C(bold)(%an)%Creset" || true
 
     - id: install-secret-key
       name: Install gpg secret key
