@@ -28,7 +28,6 @@ java {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
@@ -49,8 +48,9 @@ dependencies {
     api("javax.persistence:javax.persistence-api:2.2")
 
     // https://mvnrepository.com/artifact/com.querydsl/querydsl-apt
-    api("com.querydsl:querydsl-apt:4.3.1")
     api("com.querydsl:querydsl-jpa:4.3.1")
+    api("com.querydsl:querydsl-codegen:4.3.1")
+    kapt("com.querydsl:querydsl-apt:4.3.1:jpa")
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     api("org.apache.commons:commons-lang3:3.11")
@@ -68,14 +68,6 @@ tasks {
     val kotlinSettings: KotlinCompile.() -> Unit = {
         kotlinOptions.jvmTarget = "1.8"
         kotlinOptions.freeCompilerArgs += listOf(
-            "-Xno-call-assertions",
-            "-Xno-receiver-assertions",
-            "-Xno-param-assertions",
-            "-Xjvm-default=enable",
-            "-Xallow-kotlin-package",
-            "-Xopt-in=kotlin.ExperimentalUnsignedTypes",
-            "-Xopt-in=kotlin.contracts.ExperimentalContracts",
-            // "-XXLanguage:+InlineClasses",
             "-Xjsr305=strict"
         )
     }

@@ -1,6 +1,8 @@
 package team.yi.rsql.querydsl.test.kotlintest
 
 import com.querydsl.core.Tuple
+import com.querydsl.core.types.Ops
+import com.querydsl.core.types.dsl.Expressions
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -58,7 +60,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
         assertNotNull(cars, "result is null")
 
-        cars?.let { assertFalse(cars.isEmpty(), "Can't handle multi level field query") }
+        cars?.let { assertTrue(cars.isEmpty(), "Can't handle multi level field query") }
     }
 
     @Test
@@ -121,7 +123,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
         cars?.let {
             assertFalse(cars.isEmpty(), "Can't handle `in` operator for Number type")
-            assertNotEquals(3, cars.size, "Can't handle `in` operator for Number type correctly")
+            assertEquals(3, cars.size, "Can't handle `in` operator for Number type correctly")
         }
     }
 
@@ -221,5 +223,22 @@ class QuerydslRsqlTest : BaseRsqlTest() {
         assertEquals(15, cars.size, "Can't handle limit expression")
         assertEquals(2, cars[0].toArray().size, "More than two column")
         assertTrue(cars[0].toArray()[0] == "Béla34" && cars[1].toArray()[0] == "Béla33", "Not in order")
+    }
+
+    @Test
+    fun shouldReturnAllActived() {
+        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(entityManager)
+            .select("name,description,active")
+            .from("Car")
+            .where("id=notnull=''")
+            .globalPredicate(
+                Expressions.booleanOperation(Ops.EQ, Expressions.booleanPath("active"), Expressions.asBoolean(true))
+            )
+            .sort("id.desc")
+            .build()
+        val cars: List<Tuple> = querydslRsql.fetch() as List<Tuple>
+
+        assertFalse(cars.isEmpty(), "Can't handle limit expression")
+        assertTrue(cars.stream().allMatch { it.toArray()[2] as Boolean }, "Can't handle globalPredicate")
     }
 }

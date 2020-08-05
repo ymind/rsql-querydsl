@@ -10,15 +10,15 @@ class PredicateBuilderVisitor<E>(
     private val rootClass: Class<E>,
     private val predicateBuilder: PredicateBuilder<E>
 ) : RSQLVisitor<Predicate, Predicate> {
-    override fun visit(node: AndNode, param: Predicate): Predicate = getLogicalExpression(node, param, Ops.AND)
+    override fun visit(node: AndNode, param: Predicate?): Predicate = getLogicalExpression(node, param, Ops.AND)
 
-    override fun visit(node: OrNode, param: Predicate): Predicate = getLogicalExpression(node, param, Ops.OR)
+    override fun visit(node: OrNode, param: Predicate?): Predicate = getLogicalExpression(node, param, Ops.OR)
 
-    override fun visit(node: ComparisonNode, param: Predicate): Predicate? {
+    override fun visit(node: ComparisonNode, param: Predicate?): Predicate? {
         return predicateBuilder.getExpression(rootClass, node, RsqlOperator(node.operator.symbol))
     }
 
-    private fun getLogicalExpression(node: LogicalNode, param: Predicate, logicalOperator: Ops): BooleanExpression {
+    private fun getLogicalExpression(node: LogicalNode, param: Predicate?, logicalOperator: Ops): BooleanExpression {
         val children: MutableList<Node> = node.children.toMutableList()
         val firstNode: Node = children.removeAt(0)
         var predicate = firstNode.accept(this, param) as BooleanExpression
