@@ -22,3 +22,7 @@ indent_size = 2
 [*.md.mustache]
 indent_size = 0
 insert_final_newline = false
+
+[*.{kt, kts}]
+disabled_rules = no-wildcard-imports
+kotlin_imports_layout = idea

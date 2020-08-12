@@ -34,9 +34,10 @@ class BooleanFieldTypeHandler(
     override fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
         return when {
             values.isNullOrEmpty() -> null
-            else -> values
-                .map { if (it.isNullOrBlank()) null else Expressions.asBoolean(it.toBoolean()) }
-                .toList()
+            else ->
+                values
+                    .map { if (it.isNullOrBlank()) null else Expressions.asBoolean(it.toBoolean()) }
+                    .toList()
         }
     }
 
