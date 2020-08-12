@@ -27,9 +27,8 @@ class EnumFieldTypeHandler<E : Enum<E>>(
 
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
         val type = fieldMetadata.type as? Class<out E>
-        val path = Expressions.enumPath(type, parentPath as Path<*>?, fieldMetadata.fieldSelector)
 
-        return path
+        return Expressions.enumPath(type, parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }
 
     override fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {

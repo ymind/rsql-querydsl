@@ -20,10 +20,10 @@ abstract class TemporalFieldTypeHandler<E : Comparable<E>>(
     override val config: RsqlConfig<E>
 ) : ComparableFieldTypeHandler<E>(node, operator, fieldMetadata, config) {
     override fun supportsType(type: Class<*>): Boolean {
-        return Date::class.java.isAssignableFrom(type)
-            || java.sql.Date::class.java.isAssignableFrom(type)
-            || Time::class.java.isAssignableFrom(type)
-            || Timestamp::class.java.isAssignableFrom(type)
+        return Date::class.java.isAssignableFrom(type) ||
+            java.sql.Date::class.java.isAssignableFrom(type) ||
+            Time::class.java.isAssignableFrom(type) ||
+            Timestamp::class.java.isAssignableFrom(type)
     }
 
     override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {

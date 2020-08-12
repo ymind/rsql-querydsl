@@ -5,4 +5,3 @@ class TypeNotSupportedException(message: String) : RsqlException(message) {
         private const val serialVersionUID = 5993677606796379281L
     }
 }
-
