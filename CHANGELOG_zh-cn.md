@@ -1,5 +1,22 @@
 # 更新日志
 
+## 0.1.10 (2020-08-18)
+
+### Bug Fixes
+
+- **common**: fix `FieldNotSupportedException` arguments type ([79305a96](https://github.com/ymind/rsql-querydsl/commit/79305a960f69425cad91dc583ea257fd63b1cfae))
+
+
+### Styles
+
+- add ktlint plugin and fix code styles ([86cbdc7f](https://github.com/ymind/rsql-querydsl/commit/86cbdc7fff7d12af278b569fed3d1140aa7a535c))
+
+
+### Tests
+
+- print sql and parameters ([2e536968](https://github.com/ymind/rsql-querydsl/commit/2e536968f1cddbca14ecca7561d15da4568872be))
+
+
 ## 0.1.9 (2020-08-05)
 
 ### Bug Fixes
