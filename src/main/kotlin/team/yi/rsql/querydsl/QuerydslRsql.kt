@@ -283,10 +283,10 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             fun operator(operator: RsqlOperator): BuildBuilder<E> = this.also { super.rsqlConfig.operators = mutableListOf(operator) }
 
             fun fieldTypeHandlers(fieldTypeHandlers: List<Class<FieldTypeHandler<E>>>?): BuildBuilder<E> =
-                this.also { super.rsqlConfig.setFieldTypeHandlers(fieldTypeHandlers?.toMutableList()) }
+                this.also { super.rsqlConfig.addFieldTypeHandlers(fieldTypeHandlers?.toMutableList()) }
 
             fun fieldTypeHandler(fieldTypeHandler: Class<FieldTypeHandler<E>>): BuildBuilder<E> =
-                this.also { super.rsqlConfig.setFieldTypeHandlers(mutableListOf(fieldTypeHandler)) }
+                this.also { super.rsqlConfig.addFieldTypeHandlers(mutableListOf(fieldTypeHandler)) }
 
             fun dateFormat(dateFormat: String): BuildBuilder<E> = this.also { super.rsqlConfig.dateFormat = dateFormat }
         }

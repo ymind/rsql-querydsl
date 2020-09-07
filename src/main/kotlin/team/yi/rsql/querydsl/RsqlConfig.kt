@@ -8,13 +8,40 @@ import team.yi.rsql.querydsl.operator.RsqlOperator
 import javax.persistence.EntityManager
 
 class RsqlConfig<E> private constructor(builder: Builder<E>) {
+    private val fieldTypeHandlers: MutableList<Class<out FieldTypeHandler<*>>>
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    val defaultFieldTypeHandlers: List<Class<out FieldTypeHandler<*>>>
+        get() = listOf(
+            FunctionTypeHandler::class.java,
+            NumberFieldTypeHandler::class.java,
+            EnumFieldTypeHandler::class.java,
+            StringFieldTypeHandler::class.java,
+            CharacterFieldTypeHandler::class.java,
+            DateTimeFieldTypeHandler::class.java,
+            BooleanFieldTypeHandler::class.java,
+            ListFieldTypeHandler::class.java,
+            SetFieldTypeHandler::class.java,
+            CollectionFieldTypeHandler::class.java,
+            SimpleFieldTypeHandler::class.java,
+        )
+
     val entityManager: EntityManager
     var operators: List<RsqlOperator>
     var dateFormat: String
 
-    private val fieldTypeHandlers: MutableList<Class<out FieldTypeHandler<*>>>
+    init {
+        this.entityManager = builder.entityManager
+        this.operators = builder.operators.orEmpty()
+        this.dateFormat = builder.dateFormat.orEmpty()
 
-    fun setFieldTypeHandlers(fieldTypeHandlers: List<Class<out FieldTypeHandler<E>>>?) {
+        this.fieldTypeHandlers = mutableListOf()
+        this.fieldTypeHandlers.addAll(defaultFieldTypeHandlers)
+
+        builder.fieldTypeHandlers?.let { fieldTypeHandlers.addAll(it) }
+    }
+
+    fun addFieldTypeHandlers(fieldTypeHandlers: List<Class<out FieldTypeHandler<E>>>?) {
         fieldTypeHandlers?.let { this.fieldTypeHandlers.addAll(fieldTypeHandlers) }
     }
 
@@ -60,6 +87,7 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
         throw TypeNotSupportedException("Type is not supported: $type")
     }
 
+    @Suppress("unused")
     class Builder<E>(var entityManager: EntityManager) {
         var operators: List<RsqlOperator>? = null
         var fieldTypeHandlers: List<Class<out FieldTypeHandler<*>>>? = null
@@ -86,29 +114,4 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
             }
         }
     }
-
-    init {
-        this.entityManager = builder.entityManager
-        this.operators = builder.operators.orEmpty()
-        this.dateFormat = builder.dateFormat.orEmpty()
-        this.fieldTypeHandlers = mutableListOf()
-        this.fieldTypeHandlers.addAll(defaultFieldTypeHandlers)
-
-        builder.fieldTypeHandlers?.let { fieldTypeHandlers.addAll(it) }
-    }
-
-    val defaultFieldTypeHandlers: List<Class<out FieldTypeHandler<*>>>
-        get() = listOf(
-            FunctionTypeHandler::class.java,
-            NumberFieldTypeHandler::class.java,
-            EnumFieldTypeHandler::class.java,
-            StringFieldTypeHandler::class.java,
-            CharacterFieldTypeHandler::class.java,
-            DateTimeFieldTypeHandler::class.java,
-            BooleanFieldTypeHandler::class.java,
-            ListFieldTypeHandler::class.java,
-            SetFieldTypeHandler::class.java,
-            CollectionFieldTypeHandler::class.java,
-            SimpleFieldTypeHandler::class.java
-        )
 }
