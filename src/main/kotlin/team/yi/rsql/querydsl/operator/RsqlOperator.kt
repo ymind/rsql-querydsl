@@ -1,23 +1,6 @@
 package team.yi.rsql.querydsl.operator
 
-class RsqlOperator {
-    val symbols: Array<String>
-    var name: String? = null
-        private set
-
-    constructor(symbol: String) {
-        symbols = arrayOf(symbol)
-    }
-
-    constructor(symbols: Array<String>) {
-        this.symbols = symbols
-    }
-
-    constructor(name: String?, symbols: Array<String>) {
-        this.name = name
-        this.symbols = symbols
-    }
-
+class RsqlOperator(vararg val symbols: String) {
     override fun hashCode(): Int = symbols.contentHashCode()
 
     override fun equals(other: Any?): Boolean {
