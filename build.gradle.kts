@@ -12,7 +12,7 @@ plugins {
     kotlin("plugin.spring")
     kotlin("plugin.jpa")
 
-    id("org.jlleitschuh.gradle.ktlint") version "9.3.0"
+    id("org.jlleitschuh.gradle.ktlint") version "9.4.0"
     id("team.yi.semantic-gitlog") version "0.5.13"
 }
 
