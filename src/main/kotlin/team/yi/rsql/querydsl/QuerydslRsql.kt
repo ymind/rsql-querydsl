@@ -14,6 +14,7 @@ import team.yi.rsql.querydsl.exception.EntityNotFoundException
 import team.yi.rsql.querydsl.exception.RsqlException
 import team.yi.rsql.querydsl.exception.TypeNotSupportedException
 import team.yi.rsql.querydsl.handler.FieldTypeHandler
+import team.yi.rsql.querydsl.handler.SortFieldTypeHandler
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.RsqlUtil
 import javax.persistence.EntityManager
@@ -124,7 +125,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private fun getSortPath(fieldMetadataList: List<FieldMetadata>): Expression<*> {
         val rootPath: Path<E> = Expressions.path(entityClass, entityClass.simpleName.toLowerCase())
         val processedPaths: MutableList<Expression<*>> = mutableListOf()
-        var fieldType: FieldTypeHandler<E>
+        var fieldType: SortFieldTypeHandler<E>
 
         for (i in fieldMetadataList.indices) {
             fieldType = rsqlConfig.getSortFieldTypeHandler(fieldMetadataList[i])
@@ -160,10 +161,14 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             entityManager: EntityManager?,
             operators: List<RsqlOperator>? = null,
             fieldTypeHandlers: List<Class<FieldTypeHandler<E>>>? = null,
+            sortFieldTypeHandlers: List<Class<SortFieldTypeHandler<E>>>? = null,
+            dateFormat: String? = null,
         ) : this(
             RsqlConfig.Builder<E>(entityManager!!)
-                .operators(operators?.toMutableList())
-                .fieldTypeHandlers(fieldTypeHandlers?.toMutableList())
+                .operator(*(operators ?: emptyList()).toTypedArray())
+                .fieldTypeHandler(*(fieldTypeHandlers ?: emptyList()).toTypedArray())
+                .sortFieldTypeHandler(*(sortFieldTypeHandlers ?: emptyList()).toTypedArray())
+                .dateFormat(dateFormat)
                 .build()
         )
 
@@ -275,18 +280,23 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
             fun offset(offset: Int?): BuildBuilder<E> = offset(offset?.toLong())
             fun offset(offset: Long?): BuildBuilder<E> = this.also { super.offset = offset }
+
             fun size(size: Int?): BuildBuilder<E> = size(size?.toLong())
             fun size(size: Long?): BuildBuilder<E> = this.also { super.size = size }
+
             fun sort(sort: String?): BuildBuilder<E> = this.also { super.sort = sort }
             fun sort(orderSpecifiers: List<OrderSpecifier<*>>?): BuildBuilder<E> = this.also { super.orderSpecifiers = orderSpecifiers }
-            fun operators(operators: List<RsqlOperator>): BuildBuilder<E> = this.also { super.rsqlConfig.operators = operators.toMutableList() }
-            fun operator(operator: RsqlOperator): BuildBuilder<E> = this.also { super.rsqlConfig.operators = mutableListOf(operator) }
 
-            fun fieldTypeHandlers(fieldTypeHandlers: List<Class<FieldTypeHandler<E>>>?): BuildBuilder<E> =
-                this.also { super.rsqlConfig.addFieldTypeHandlers(fieldTypeHandlers?.toMutableList()) }
+            fun operator(vararg operator: RsqlOperator): BuildBuilder<E> = this.also { super.rsqlConfig.operators = operator.toList() }
+            fun operators(operators: List<RsqlOperator>): BuildBuilder<E> = this.also { super.rsqlConfig.operators = operators.toList() }
 
-            fun fieldTypeHandler(fieldTypeHandler: Class<FieldTypeHandler<E>>): BuildBuilder<E> =
-                this.also { super.rsqlConfig.addFieldTypeHandlers(mutableListOf(fieldTypeHandler)) }
+            fun fieldTypeHandler(vararg typeHandler: Class<FieldTypeHandler<E>>): BuildBuilder<E> {
+                return this.also { super.rsqlConfig.addFieldTypeHandler(*typeHandler) }
+            }
+
+            fun sortFieldTypeHandler(vararg typeHandler: Class<SortFieldTypeHandler<E>>): BuildBuilder<E> {
+                return this.also { super.rsqlConfig.addSortFieldTypeHandler(*typeHandler) }
+            }
 
             fun dateFormat(dateFormat: String): BuildBuilder<E> = this.also { super.rsqlConfig.dateFormat = dateFormat }
         }
