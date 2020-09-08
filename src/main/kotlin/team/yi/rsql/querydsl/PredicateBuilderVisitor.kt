@@ -19,8 +19,8 @@ class PredicateBuilderVisitor<E>(
     }
 
     private fun getLogicalExpression(node: LogicalNode, param: Predicate?, logicalOperator: Ops): BooleanExpression {
-        val children: MutableList<Node> = node.children.toMutableList()
-        val firstNode: Node = children.removeAt(0)
+        val children = node.children.toMutableList()
+        val firstNode = children.removeAt(0)
         var predicate = firstNode.accept(this, param) as BooleanExpression
 
         for (subNode in children) {

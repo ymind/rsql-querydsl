@@ -61,7 +61,7 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
     }
 
     @Override
-    public boolean supportsType(@NotNull final Class<?> type) {
+    public boolean supports(@NotNull final Class<?> type) {
         return String.class.equals(type);
     }
 
@@ -94,26 +94,25 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
     ) {
         if (this.operator == null) return null;
 
-        RsqlOperator operator = this.operator;
         StringExpression left = (StringExpression) path;
         StringExpression[] right = (values == null ? new ArrayList<StringExpression>() : values).stream()
             .map(x -> (StringExpression) x)
             .toArray(StringExpression[]::new);
 
-        if (operator.equals(Operator.EQUALS_IGNORECASE)) return left.equalsIgnoreCase(right[0]);
-        else if (operator.equals(Operator.NOTEQUALS_IGNORECASE)) return left.notEqualsIgnoreCase(right[0]);
-        else if (operator.equals(Operator.LIKE)) return left.like(right[0]);
-        else if (operator.equals(Operator.LIKE_IGNORECASE)) return left.likeIgnoreCase(right[0]);
-        else if (operator.equals(Operator.STARTWITH)) return left.startsWith(right[0]);
-        else if (operator.equals(Operator.STARTWITH_IGNORECASE)) return left.startsWithIgnoreCase(right[0]);
-        else if (operator.equals(Operator.ENDWITH)) return left.endsWith(right[0]);
-        else if (operator.equals(Operator.ENDWITH_IGNORECASE)) return left.endsWithIgnoreCase(right[0]);
-        else if (operator.equals(Operator.ISEMPTY)) return left.isEmpty();
-        else if (operator.equals(Operator.ISNOTEMPTY)) return left.isNotEmpty();
-        else if (operator.equals(Operator.CONTAINS)) return left.contains(right[0]);
-        else if (operator.equals(Operator.CONTAINS_IGNORECASE)) return left.containsIgnoreCase(right[0]);
-        else if (operator.equals(Operator.IN)) return left.in(right);
-        else if (operator.equals(Operator.NOTIN)) return left.notIn(right);
+        if (this.operator.equals(Operator.EQUALS_IGNORECASE)) return left.equalsIgnoreCase(right[0]);
+        else if (this.operator.equals(Operator.NOTEQUALS_IGNORECASE)) return left.notEqualsIgnoreCase(right[0]);
+        else if (this.operator.equals(Operator.LIKE)) return left.like(right[0]);
+        else if (this.operator.equals(Operator.LIKE_IGNORECASE)) return left.likeIgnoreCase(right[0]);
+        else if (this.operator.equals(Operator.STARTWITH)) return left.startsWith(right[0]);
+        else if (this.operator.equals(Operator.STARTWITH_IGNORECASE)) return left.startsWithIgnoreCase(right[0]);
+        else if (this.operator.equals(Operator.ENDWITH)) return left.endsWith(right[0]);
+        else if (this.operator.equals(Operator.ENDWITH_IGNORECASE)) return left.endsWithIgnoreCase(right[0]);
+        else if (this.operator.equals(Operator.ISEMPTY)) return left.isEmpty();
+        else if (this.operator.equals(Operator.ISNOTEMPTY)) return left.isNotEmpty();
+        else if (this.operator.equals(Operator.CONTAINS)) return left.contains(right[0]);
+        else if (this.operator.equals(Operator.CONTAINS_IGNORECASE)) return left.containsIgnoreCase(right[0]);
+        else if (this.operator.equals(Operator.IN)) return left.in(right);
+        else if (this.operator.equals(Operator.NOTIN)) return left.notIn(right);
         else return left.isNotEmpty();
     }
 }

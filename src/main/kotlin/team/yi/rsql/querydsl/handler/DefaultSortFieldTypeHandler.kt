@@ -8,6 +8,8 @@ import team.yi.rsql.querydsl.FieldMetadata
 class DefaultSortFieldTypeHandler<E>(
     override val fieldMetadata: FieldMetadata,
 ) : SortFieldTypeHandler<E> {
+    override fun supports(type: Class<*>): Boolean = true
+
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
         return Expressions.path(fieldMetadata.type, parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }

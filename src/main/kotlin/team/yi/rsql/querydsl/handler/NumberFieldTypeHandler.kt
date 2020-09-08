@@ -17,12 +17,12 @@ import java.math.BigInteger
 
 @Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
 class NumberFieldTypeHandler<E>(
-    override val node: ComparisonNode?,
-    override val operator: RsqlOperator?,
+    override val node: ComparisonNode,
+    override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) where E : Number, E : Comparable<E> {
-    override fun supportsType(type: Class<*>): Boolean {
+    override fun supports(type: Class<*>): Boolean {
         return supportsType(
             type,
             Byte::class.java, Byte::class.javaPrimitiveType, java.lang.Byte::class.java, java.lang.Byte::class.javaPrimitiveType,
@@ -41,7 +41,7 @@ class NumberFieldTypeHandler<E>(
         return Expressions.numberPath(fieldMetadata.type as Class<E>, parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }
 
-    override fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
+    override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
         if (values.isNullOrEmpty()) return null
 
         return values.map {
@@ -61,7 +61,6 @@ class NumberFieldTypeHandler<E>(
     }
 
     override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
-        val operator = this.operator ?: return null
         val left = path as NumberExpression<E>
         val right = values.orEmpty().map { it as NumberExpression<E> }
 

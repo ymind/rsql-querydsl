@@ -13,12 +13,12 @@ import team.yi.rsql.querydsl.operator.Operator
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
 class CustomFieldTypeHandler<E>(
-    override val node: ComparisonNode?,
-    override val operator: RsqlOperator?,
+    override val node: ComparisonNode,
+    override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : FieldTypeHandler<E> {
-    override fun supportsType(type: Class<*>): Boolean {
+    override fun supports(type: Class<*>): Boolean {
         return String::class.java == type
     }
 
@@ -26,7 +26,7 @@ class CustomFieldTypeHandler<E>(
         return Expressions.stringPath(parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }
 
-    override fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
+    override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
         if (values.isNullOrEmpty()) return null
 
         return values.map { Expressions.asSimple(it) }
@@ -34,7 +34,6 @@ class CustomFieldTypeHandler<E>(
 
     @Suppress("INCOMPATIBLE_ENUM_COMPARISON", "UNCHECKED_CAST")
     override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
-        val operator = this.operator ?: return null
         val left = path as StringExpression
         val right = values.orEmpty()
             .map { it as StringExpression }

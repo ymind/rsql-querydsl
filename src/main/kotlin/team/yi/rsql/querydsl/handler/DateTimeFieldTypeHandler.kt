@@ -11,8 +11,8 @@ import team.yi.rsql.querydsl.util.DateUtil
 
 @Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
 class DateTimeFieldTypeHandler<E : Comparable<E>>(
-    override val node: ComparisonNode?,
-    override val operator: RsqlOperator?,
+    override val node: ComparisonNode,
+    override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : TemporalFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
@@ -24,7 +24,7 @@ class DateTimeFieldTypeHandler<E : Comparable<E>>(
         )
     }
 
-    override fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
+    override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
         if (values.isNullOrEmpty()) return null
 
         return values.map {

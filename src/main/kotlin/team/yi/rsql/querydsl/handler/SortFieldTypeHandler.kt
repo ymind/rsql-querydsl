@@ -6,5 +6,6 @@ import team.yi.rsql.querydsl.FieldMetadata
 interface SortFieldTypeHandler<E> {
     val fieldMetadata: FieldMetadata
 
+    fun supports(type: Class<*>): Boolean
     fun getPath(parentPath: Expression<*>?): Expression<*>?
 }

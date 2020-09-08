@@ -6,7 +6,7 @@ import java.util.*
 
 @Suppress("MemberVisibilityCanBePrivate", "SpellCheckingInspection")
 object DateUtil {
-    val regexOptions: Set<RegexOption> = setOf(RegexOption.IGNORE_CASE)
+    val regexOptions = setOf(RegexOption.IGNORE_CASE)
 
     val DATE_FORMATS: Map<String, Regex> = mapOf(
         "dd MMMM yyyy HH:mm:ss" to Regex("^\\d{1,2}\\s[a-z]{4,}\\s\\d{4}\\s\\d{1,2}:\\d{1,2}:\\d{1,2}$", regexOptions),

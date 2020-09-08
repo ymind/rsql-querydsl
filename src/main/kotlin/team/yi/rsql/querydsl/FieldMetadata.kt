@@ -88,7 +88,7 @@ class FieldMetadata {
         }
 
         fun getField(fieldMetadata: FieldMetadata, fieldName: String): Field {
-            val clazz: Class<out Any> = fieldMetadata.parameterizedType ?: fieldMetadata.type
+            val clazz = fieldMetadata.parameterizedType ?: fieldMetadata.type
 
             return this.getField(clazz, fieldName, fieldMetadata)
         }

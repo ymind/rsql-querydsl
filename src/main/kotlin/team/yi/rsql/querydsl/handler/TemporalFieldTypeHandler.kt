@@ -14,12 +14,12 @@ import java.util.*
 
 @Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
 abstract class TemporalFieldTypeHandler<E : Comparable<E>>(
-    override val node: ComparisonNode?,
-    override val operator: RsqlOperator?,
+    override val node: ComparisonNode,
+    override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : ComparableFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supportsType(type: Class<*>): Boolean {
+    override fun supports(type: Class<*>): Boolean {
         return Date::class.java.isAssignableFrom(type) ||
             java.sql.Date::class.java.isAssignableFrom(type) ||
             Time::class.java.isAssignableFrom(type) ||
@@ -27,7 +27,6 @@ abstract class TemporalFieldTypeHandler<E : Comparable<E>>(
     }
 
     override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
-        val operator = this.operator ?: return null
         val left = path as TemporalExpression<E>
         val right = values.orEmpty().map { it as TemporalExpression<E> }
 

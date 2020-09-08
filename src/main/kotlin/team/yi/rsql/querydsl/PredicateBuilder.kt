@@ -1,7 +1,6 @@
 package team.yi.rsql.querydsl
 
 import com.querydsl.core.types.Expression
-import com.querydsl.core.types.Path
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.Expressions
 import cz.jirutka.rsql.parser.ast.ComparisonNode
@@ -14,8 +13,8 @@ class PredicateBuilder<E>(val rsqlConfig: RsqlConfig<E>) {
     @Throws(TypeNotSupportedException::class)
     fun getExpression(rootClass: Class<E>, node: ComparisonNode, operator: RsqlOperator): BooleanExpression? {
         val fieldMetadataList = RsqlUtil.parseFieldSelector(rootClass, node.selector)
-        val rootPath: Path<E> = Expressions.path(rootClass, rootClass.simpleName.toLowerCase())
-        val processedPaths: MutableList<Expression<*>> = mutableListOf()
+        val rootPath = Expressions.path(rootClass, rootClass.simpleName.toLowerCase())
+        val processedPaths = mutableListOf<Expression<*>>()
         var fieldType: FieldTypeHandler<E>? = null
 
         for (i in fieldMetadataList.indices) {

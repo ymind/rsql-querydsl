@@ -14,12 +14,12 @@ import team.yi.rsql.querydsl.operator.RsqlOperator
 
 @Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
 open class SimpleFieldTypeHandler<E>(
-    override val node: ComparisonNode?,
-    override val operator: RsqlOperator?,
+    override val node: ComparisonNode,
+    override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : FieldTypeHandler<E> {
-    override fun supportsType(type: Class<*>): Boolean = true
+    override fun supports(type: Class<*>): Boolean = true
 
     protected fun supportsType(type: Class<*>, vararg target: Class<*>?): Boolean {
         return target.filterNotNull().any { it.isAssignableFrom(type) }
@@ -29,14 +29,13 @@ open class SimpleFieldTypeHandler<E>(
         return Expressions.path(fieldMetadata.type, parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }
 
-    override fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
+    override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
         if (values.isNullOrEmpty()) return null
 
         return values.map { Expressions.asSimple(it) }.toList()
     }
 
     override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
-        val operator = this.operator ?: return null
         val left = path as SimpleExpression<Any?>
         val right = values.orEmpty().toTypedArray()
 

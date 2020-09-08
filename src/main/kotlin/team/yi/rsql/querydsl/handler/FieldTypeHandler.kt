@@ -9,13 +9,13 @@ import team.yi.rsql.querydsl.RsqlConfig
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
 interface FieldTypeHandler<E> {
-    val node: ComparisonNode?
-    val operator: RsqlOperator?
+    val node: ComparisonNode
+    val operator: RsqlOperator
     val fieldMetadata: FieldMetadata
     val rsqlConfig: RsqlConfig<E>
 
-    fun supportsType(type: Class<*>): Boolean
+    fun supports(type: Class<*>): Boolean
     fun getPath(parentPath: Expression<*>?): Expression<*>?
-    fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>?
+    fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>?
     fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression?
 }

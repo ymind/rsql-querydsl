@@ -57,21 +57,21 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun getFieldTypeHandler(node: ComparisonNode?, operator: RsqlOperator?, fieldMetadata: FieldMetadata): FieldTypeHandler<E> {
+    fun getFieldTypeHandler(node: ComparisonNode, operator: RsqlOperator, fieldMetadata: FieldMetadata): FieldTypeHandler<E> {
         return getFieldTypeHandler(fieldMetadata.type, node, operator, fieldMetadata)
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun getFieldTypeHandler(type: Class<*>, node: ComparisonNode?, operator: RsqlOperator?, fieldMetadata: FieldMetadata): FieldTypeHandler<E> {
-        for (fieldType in fieldTypeHandlers) {
-            val handler = fieldType.getDeclaredConstructor(
+    fun getFieldTypeHandler(type: Class<*>, node: ComparisonNode, operator: RsqlOperator, fieldMetadata: FieldMetadata): FieldTypeHandler<E> {
+        for (typeHandler in fieldTypeHandlers) {
+            val handler = typeHandler.getDeclaredConstructor(
                 ComparisonNode::class.java,
                 RsqlOperator::class.java,
                 FieldMetadata::class.java,
                 RsqlConfig::class.java
             ).newInstance(node, operator, fieldMetadata, this)
 
-            if (handler.supportsType(type)) return handler as FieldTypeHandler<E>
+            if (handler.supports(type)) return handler as FieldTypeHandler<E>
         }
 
         throw TypeNotSupportedException("Type is not supported: $type")
@@ -81,14 +81,12 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
     fun getSortFieldTypeHandler(fieldMetadata: FieldMetadata): SortFieldTypeHandler<E> {
         val type = fieldMetadata.type
 
-        for (fieldType in sortFieldTypeHandlers) {
-            if (!SortFieldTypeHandler::class.java.isAssignableFrom(fieldType)) continue
-
-            val handler = fieldType.getDeclaredConstructor(
+        for (typeHandler in sortFieldTypeHandlers) {
+            val handler = typeHandler.getDeclaredConstructor(
                 FieldMetadata::class.java,
             ).newInstance(fieldMetadata)
 
-            return handler as SortFieldTypeHandler<E>
+            if (handler.supports(type)) return handler as SortFieldTypeHandler<E>
         }
 
         throw TypeNotSupportedException("Type is not supported: $type")

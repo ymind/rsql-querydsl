@@ -14,7 +14,7 @@ import javax.persistence.EntityManager
 @Suppress("MemberVisibilityCanBePrivate")
 object RsqlUtil {
     fun convertStringFieldsToPath(type: Class<*>, fields: List<String>): List<Path<*>> {
-        val targetPath: PathBuilder<*> = PathBuilder(type, type.simpleName.toLowerCase())
+        val targetPath = PathBuilder(type, type.simpleName.toLowerCase())
 
         return fields.mapTo(mutableListOf()) { targetPath[it] }
     }
@@ -95,7 +95,7 @@ object RsqlUtil {
         }
 
         val nestedFields = field?.split(".").orEmpty()
-        val fieldMetadataList: MutableList<FieldMetadata> = mutableListOf()
+        val fieldMetadataList = mutableListOf<FieldMetadata>()
 
         for (i in nestedFields.indices) {
             val fieldMetadata: FieldMetadata = if (i == 0) {

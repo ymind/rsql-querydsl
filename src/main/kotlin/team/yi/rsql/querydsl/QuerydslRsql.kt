@@ -37,7 +37,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     fun buildQuery(selectFieldPath: List<Path<*>>?, noPaging: Boolean = false): JPAQuery<*> {
         return try {
             val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
-            val fromPath: PathBuilder<*> = PathBuilder<Any?>(entityClass, entityClass.simpleName.toLowerCase())
+            val fromPath = PathBuilder<Any?>(entityClass, entityClass.simpleName.toLowerCase())
             val predicate = buildPredicate()
 
             val jpaQuery = if (selectFieldPath.isNullOrEmpty() && expressionSelect == null) {
@@ -123,8 +123,8 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
     @Throws(TypeNotSupportedException::class)
     private fun getSortPath(fieldMetadataList: List<FieldMetadata>): Expression<*> {
-        val rootPath: Path<E> = Expressions.path(entityClass, entityClass.simpleName.toLowerCase())
-        val processedPaths: MutableList<Expression<*>> = mutableListOf()
+        val rootPath = Expressions.path(entityClass, entityClass.simpleName.toLowerCase())
+        val processedPaths = mutableListOf<Expression<*>>()
         var fieldType: SortFieldTypeHandler<E>
 
         for (i in fieldMetadataList.indices) {

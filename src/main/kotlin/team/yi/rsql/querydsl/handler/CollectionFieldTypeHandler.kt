@@ -1,7 +1,6 @@
 package team.yi.rsql.querydsl.handler
 
 import com.querydsl.core.alias.DefaultTypeSystem
-import com.querydsl.core.alias.TypeSystem
 import com.querydsl.core.types.Expression
 import com.querydsl.core.types.Path
 import com.querydsl.core.types.PathMetadataFactory
@@ -15,13 +14,13 @@ import team.yi.rsql.querydsl.operator.RsqlOperator
 
 @Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
 open class CollectionFieldTypeHandler<E>(
-    override val node: ComparisonNode?,
-    override val operator: RsqlOperator?,
+    override val node: ComparisonNode,
+    override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supportsType(type: Class<*>): Boolean {
-        val typeSystem: TypeSystem = DefaultTypeSystem()
+    override fun supports(type: Class<*>): Boolean {
+        val typeSystem = DefaultTypeSystem()
 
         return typeSystem.isCollectionType(type)
     }
@@ -34,7 +33,7 @@ open class CollectionFieldTypeHandler<E>(
         return collectionPath.any() as Path<*>
     }
 
-    override fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
+    override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
         if (values.isNullOrEmpty()) return null
 
         val fieldMetadata = fm ?: this.fieldMetadata

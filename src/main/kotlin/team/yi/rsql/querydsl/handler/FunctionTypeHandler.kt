@@ -14,14 +14,12 @@ import java.util.*
 
 @Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
 class FunctionTypeHandler<E>(
-    override val node: ComparisonNode?,
-    override val operator: RsqlOperator?,
+    override val node: ComparisonNode,
+    override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : FieldTypeHandler<E> {
-    override fun supportsType(type: Class<*>): Boolean {
-        if (node == null) return false
-
+    override fun supports(type: Class<*>): Boolean {
         // "filter": "f{JSON_EXTRACT`s`hashes`$.md5}==9be4f0a737bcb851e8c379a063c27004"
         // "filter": "f{JSON_EXTRACT`s`hashes`$.md5}==f{JSON_EXTRACT`ni`exif`$.XMP[0].tagType}"
         // "filter": "f{JSON_EXTRACT`ni`exif`$.XMP[0}.tagType]>0"
@@ -30,8 +28,6 @@ class FunctionTypeHandler<E>(
     }
 
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
-        if (node == null) return null
-
         val declares = node.selector.substring(1).trim('{', '}').split('`')
 
         if (declares.size < 2) return null
@@ -90,9 +86,7 @@ class FunctionTypeHandler<E>(
         }
     }
 
-    override fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
-        if (node == null) return null
-        if (operator == null) return null
+    override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
         if (values.isNullOrEmpty()) return null
 
         return (node.arguments ?: return null)
@@ -161,9 +155,6 @@ class FunctionTypeHandler<E>(
     }
 
     override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
-        if (node == null) return null
-
-        val operator = this.operator ?: return null
         val arr = values.orEmpty()
             .map { it as Expression<E> }
             .toTypedArray()

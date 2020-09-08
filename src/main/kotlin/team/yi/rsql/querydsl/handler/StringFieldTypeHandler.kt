@@ -13,12 +13,12 @@ import team.yi.rsql.querydsl.operator.RsqlOperator
 
 @Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
 class StringFieldTypeHandler<E>(
-    override val node: ComparisonNode?,
-    override val operator: RsqlOperator?,
+    override val node: ComparisonNode,
+    override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supportsType(type: Class<*>): Boolean {
+    override fun supports(type: Class<*>): Boolean {
         return supportsType(
             type,
             String::class.java,
@@ -32,18 +32,14 @@ class StringFieldTypeHandler<E>(
         return Expressions.stringPath(parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }
 
-    override fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
+    override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
         return when {
             values.isNullOrEmpty() -> null
-            else ->
-                values
-                    .map { if (it.isNullOrBlank()) null else Expressions.asString(it) }
-                    .toList()
+            else -> values.map { if (it.isNullOrBlank()) null else Expressions.asString(it) }.toList()
         }
     }
 
     override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
-        val operator = this.operator ?: return null
         val left = path as StringExpression
         val right = values.orEmpty().map { it as Expression<String?>? }
 

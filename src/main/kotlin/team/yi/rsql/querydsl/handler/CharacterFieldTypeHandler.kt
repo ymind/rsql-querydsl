@@ -10,12 +10,12 @@ import team.yi.rsql.querydsl.operator.RsqlOperator
 
 @Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
 class CharacterFieldTypeHandler<E>(
-    override val node: ComparisonNode?,
-    override val operator: RsqlOperator?,
+    override val node: ComparisonNode,
+    override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supportsType(type: Class<*>): Boolean {
+    override fun supports(type: Class<*>): Boolean {
         return supportsType(
             type,
             Char::class.java,
@@ -29,7 +29,7 @@ class CharacterFieldTypeHandler<E>(
         return Expressions.path(fieldMetadata.type, parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }
 
-    override fun getValue(values: List<String?>?, rootPath: Path<*>?, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
+    override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
         if (values.isNullOrEmpty()) return null
 
         return values
