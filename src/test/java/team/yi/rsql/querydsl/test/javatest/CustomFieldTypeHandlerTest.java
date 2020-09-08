@@ -13,11 +13,9 @@ import team.yi.rsql.querydsl.test.javatest.handler.CustomFieldTypeHandler;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
     @Autowired
     private EntityManager entityManager;

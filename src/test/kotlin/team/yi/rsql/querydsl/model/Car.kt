@@ -1,8 +1,11 @@
+@file:Suppress("SpellCheckingInspection")
+
 package team.yi.rsql.querydsl.model
 
 import java.util.*
 import javax.persistence.*
 
+@Suppress("unused")
 @Entity
 class Car {
     @Id
@@ -19,6 +22,7 @@ class Car {
     var active: Boolean? = null
 
     @Column
+    @SuppressWarnings("SpellCheckingInspection")
     var mfgdt: Date? = null
 
     @OneToOne

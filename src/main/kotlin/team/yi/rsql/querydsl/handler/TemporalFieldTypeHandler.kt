@@ -17,8 +17,8 @@ abstract class TemporalFieldTypeHandler<E : Comparable<E>>(
     override val node: ComparisonNode?,
     override val operator: RsqlOperator?,
     override val fieldMetadata: FieldMetadata,
-    override val config: RsqlConfig<E>
-) : ComparableFieldTypeHandler<E>(node, operator, fieldMetadata, config) {
+    override val rsqlConfig: RsqlConfig<E>,
+) : ComparableFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
     override fun supportsType(type: Class<*>): Boolean {
         return Date::class.java.isAssignableFrom(type) ||
             java.sql.Date::class.java.isAssignableFrom(type) ||

@@ -12,7 +12,7 @@ import team.yi.rsql.querydsl.model.Car
 import team.yi.rsql.querydsl.test.BaseRsqlTest
 import javax.persistence.EntityManager
 
-@Suppress("UNCHECKED_CAST")
+@Suppress("SpellCheckingInspection", "UNCHECKED_CAST")
 class QuerydslRsqlTest : BaseRsqlTest() {
     @Autowired
     private lateinit var entityManager: EntityManager

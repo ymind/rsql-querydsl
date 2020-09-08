@@ -1,5 +1,6 @@
 package team.yi.rsql.querydsl.exception
 
+@Suppress("unused")
 open class RsqlException : RuntimeException {
     constructor(cause: Throwable) : super(cause)
     constructor(message: String, cause: Throwable) : super(message, cause)

@@ -12,8 +12,8 @@ class SetFieldTypeHandler<E>(
     override val node: ComparisonNode?,
     override val operator: RsqlOperator?,
     override val fieldMetadata: FieldMetadata,
-    override val config: RsqlConfig<E>
-) : CollectionFieldTypeHandler<E>(node, operator, fieldMetadata, config) {
+    override val rsqlConfig: RsqlConfig<E>,
+) : CollectionFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
     override fun supportsType(type: Class<*>): Boolean {
         val typeSystem: TypeSystem = DefaultTypeSystem()
 

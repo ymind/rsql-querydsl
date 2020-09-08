@@ -8,7 +8,7 @@ import team.yi.rsql.querydsl.operator.RsqlOperator
 
 class PredicateBuilderVisitor<E>(
     private val rootClass: Class<E>,
-    private val predicateBuilder: PredicateBuilder<E>
+    private val predicateBuilder: PredicateBuilder<E>,
 ) : RSQLVisitor<Predicate, Predicate> {
     override fun visit(node: AndNode, param: Predicate?): Predicate = getLogicalExpression(node, param, Ops.AND)
 

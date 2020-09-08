@@ -6,7 +6,7 @@ import team.yi.rsql.querydsl.RsqlConfig
 
 interface SortFieldTypeHandler<E> {
     val fieldMetadata: FieldMetadata
-    val config: RsqlConfig<E>
+    val rsqlConfig: RsqlConfig<E>
 
     fun supportsType(type: Class<*>): Boolean
     fun getPath(parentPath: Expression<*>?): Expression<*>?

@@ -17,7 +17,7 @@ open class SimpleFieldTypeHandler<E>(
     override val node: ComparisonNode?,
     override val operator: RsqlOperator?,
     override val fieldMetadata: FieldMetadata,
-    override val config: RsqlConfig<E>
+    override val rsqlConfig: RsqlConfig<E>,
 ) : FieldTypeHandler<E>, SortFieldTypeHandler<E> {
     override fun supportsType(type: Class<*>): Boolean = true
 

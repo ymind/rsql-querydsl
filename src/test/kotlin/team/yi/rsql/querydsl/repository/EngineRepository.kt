@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository
 import team.yi.rsql.querydsl.model.Engine
 
 @Repository
-interface EngingeRepository : JpaRepository<Engine, Long?>
+interface EngineRepository : JpaRepository<Engine, Long?>

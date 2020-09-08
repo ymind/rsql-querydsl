@@ -20,8 +20,8 @@ class NumberFieldTypeHandler<E>(
     override val node: ComparisonNode?,
     override val operator: RsqlOperator?,
     override val fieldMetadata: FieldMetadata,
-    override val config: RsqlConfig<E>
-) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, config) where E : Number, E : Comparable<E> {
+    override val rsqlConfig: RsqlConfig<E>,
+) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) where E : Number, E : Comparable<E> {
     override fun supportsType(type: Class<*>): Boolean {
         return supportsType(
             type,
@@ -51,6 +51,7 @@ class NumberFieldTypeHandler<E>(
         }.toList()
     }
 
+    @Suppress("ProtectedInFinal")
     protected fun toNumber(value: String?): E? {
         if (value.isNullOrBlank()) return null
 

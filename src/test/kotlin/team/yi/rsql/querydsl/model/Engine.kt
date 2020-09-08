@@ -2,6 +2,7 @@ package team.yi.rsql.querydsl.model
 
 import javax.persistence.*
 
+@Suppress("unused")
 @Entity
 class Engine {
     @Id

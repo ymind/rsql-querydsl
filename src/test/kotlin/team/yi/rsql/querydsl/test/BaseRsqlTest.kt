@@ -9,11 +9,12 @@ import team.yi.rsql.querydsl.model.Engine
 import team.yi.rsql.querydsl.model.Screw
 import team.yi.rsql.querydsl.model.ScrewType
 import team.yi.rsql.querydsl.repository.CarRepository
-import team.yi.rsql.querydsl.repository.EngingeRepository
+import team.yi.rsql.querydsl.repository.EngineRepository
 import team.yi.rsql.querydsl.repository.ScrewRepository
 import java.security.SecureRandom
 import java.util.*
 
+@Suppress("SpellCheckingInspection")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 abstract class BaseRsqlTest {
@@ -24,7 +25,7 @@ abstract class BaseRsqlTest {
     private lateinit var screwRepository: ScrewRepository
 
     @Autowired
-    private lateinit var engingeRepository: EngingeRepository
+    private lateinit var engineRepository: EngineRepository
 
     @BeforeAll
     fun initData() {
@@ -32,7 +33,7 @@ abstract class BaseRsqlTest {
 
         val random = SecureRandom()
 
-        (0..49).forEach { it: Int ->
+        (0..49).forEach {
             val randomNum = random.nextInt(100 - 1 + 1) + 1
 
             val screw = Screw()
@@ -54,7 +55,7 @@ abstract class BaseRsqlTest {
             engine.description = "Engine description $randomNum"
             engine.screws = screws2
 
-            val savedEngine = engingeRepository.save(engine)
+            val savedEngine = engineRepository.save(engine)
             val car = Car()
             car.name = "Béla$it"
             car.description = "Descreption car $randomNum"

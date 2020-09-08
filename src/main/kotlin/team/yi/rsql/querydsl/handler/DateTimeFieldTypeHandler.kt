@@ -14,8 +14,8 @@ class DateTimeFieldTypeHandler<E : Comparable<E>>(
     override val node: ComparisonNode?,
     override val operator: RsqlOperator?,
     override val fieldMetadata: FieldMetadata,
-    override val config: RsqlConfig<E>
-) : TemporalFieldTypeHandler<E>(node, operator, fieldMetadata, config) {
+    override val rsqlConfig: RsqlConfig<E>,
+) : TemporalFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
         return Expressions.dateTimePath(
             fieldMetadata.type as Class<out Comparable<*>?>,
@@ -37,6 +37,6 @@ class DateTimeFieldTypeHandler<E : Comparable<E>>(
     override fun toComparable(value: String?): Comparable<E>? {
         if (value.isNullOrBlank()) return null
 
-        return DateUtil.parse(value, config.dateFormat) as? Comparable<E>?
+        return DateUtil.parse(value, rsqlConfig.dateFormat) as? Comparable<E>?
     }
 }

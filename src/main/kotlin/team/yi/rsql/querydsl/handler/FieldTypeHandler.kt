@@ -12,7 +12,7 @@ interface FieldTypeHandler<E> {
     val node: ComparisonNode?
     val operator: RsqlOperator?
     val fieldMetadata: FieldMetadata
-    val config: RsqlConfig<E>
+    val rsqlConfig: RsqlConfig<E>
 
     fun supportsType(type: Class<*>): Boolean
     fun getPath(parentPath: Expression<*>?): Expression<*>?

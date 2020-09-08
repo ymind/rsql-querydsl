@@ -2,6 +2,7 @@ package team.yi.rsql.querydsl.operator
 
 import java.util.*
 
+@Suppress("SpellCheckingInspection")
 enum class Operator(vararg val rsqlOperator: String) {
     ISNULL("=isnull=", "=isNull="),
     ISNOTNULL("=notnull=", "=notNull=", "=isnotnull=", "=isNotNull="),

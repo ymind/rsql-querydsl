@@ -107,7 +107,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             val sorts = RsqlUtil.parseSortExpression(sort)
 
             for (sortSelect in sorts.keys) {
-                val sortPath = getPath(RsqlUtil.parseFieldSelector(entityClass, sortSelect))
+                val sortPath = getSortPath(RsqlUtil.parseFieldSelector(entityClass, sortSelect))
                 val path = sortPath as? Path<Comparable<*>>
                 val order = OrderSpecifier(sorts[sortSelect], path)
 
@@ -121,7 +121,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     fun buildSelectPath(): List<Path<*>>? = select?.let { RsqlUtil.parseSelect(select, entityClass) }
 
     @Throws(TypeNotSupportedException::class)
-    private fun getPath(fieldMetadataList: List<FieldMetadata>): Expression<*> {
+    private fun getSortPath(fieldMetadataList: List<FieldMetadata>): Expression<*> {
         val rootPath: Path<E> = Expressions.path(entityClass, entityClass.simpleName.toLowerCase())
         val processedPaths: MutableList<Expression<*>> = mutableListOf()
         var fieldType: FieldTypeHandler<E>
@@ -159,7 +159,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         constructor(
             entityManager: EntityManager?,
             operators: List<RsqlOperator>? = null,
-            fieldTypeHandlers: List<Class<FieldTypeHandler<E>>>? = null
+            fieldTypeHandlers: List<Class<FieldTypeHandler<E>>>? = null,
         ) : this(
             RsqlConfig.Builder<E>(entityManager!!)
                 .operators(operators?.toMutableList())

@@ -11,6 +11,7 @@ import team.yi.rsql.querydsl.operator.RsqlOperator
 import java.util.*
 import javax.persistence.EntityManager
 
+@Suppress("MemberVisibilityCanBePrivate")
 object RsqlUtil {
     fun convertStringFieldsToPath(type: Class<*>, fields: List<String>): List<Path<*>> {
         val targetPath: PathBuilder<*> = PathBuilder(type, type.simpleName.toLowerCase())

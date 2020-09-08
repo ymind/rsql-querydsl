@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.*
 
-@Suppress("MemberVisibilityCanBePrivate")
+@Suppress("MemberVisibilityCanBePrivate", "SpellCheckingInspection")
 object DateUtil {
     val regexOptions: Set<RegexOption> = setOf(RegexOption.IGNORE_CASE)
 

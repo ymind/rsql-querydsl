@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import team.yi.rsql.querydsl.util.DateUtil
 
+@Suppress("SpellCheckingInspection")
 class DateUtilTests {
     private val log = LoggerFactory.getLogger(DateUtilTests::class.java)
 

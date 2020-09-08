@@ -34,9 +34,7 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
         this.entityManager = builder.entityManager
         this.operators = builder.operators.orEmpty()
         this.dateFormat = builder.dateFormat.orEmpty()
-
-        this.fieldTypeHandlers = mutableListOf()
-        this.fieldTypeHandlers.addAll(defaultFieldTypeHandlers)
+        this.fieldTypeHandlers = defaultFieldTypeHandlers.toMutableList()
 
         builder.fieldTypeHandlers?.let { fieldTypeHandlers.addAll(it) }
     }
@@ -78,8 +76,7 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
                 RsqlOperator::class.java,
                 FieldMetadata::class.java,
                 RsqlConfig::class.java
-            )
-                .newInstance(null, null, fieldMetadata, this)
+            ).newInstance(null, null, fieldMetadata, this)
 
             if (handler.supportsType(type)) return handler as FieldTypeHandler<E>
         }

@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class QuerydslRsqlTest extends BaseRsqlTest {
     @Autowired
     private EntityManager entityManager;

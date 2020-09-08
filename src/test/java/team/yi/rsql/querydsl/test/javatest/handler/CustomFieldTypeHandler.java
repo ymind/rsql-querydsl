@@ -2,9 +2,7 @@ package team.yi.rsql.querydsl.test.javatest.handler;
 
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.StringExpression;
+import com.querydsl.core.types.dsl.*;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,28 +12,32 @@ import team.yi.rsql.querydsl.handler.FieldTypeHandler;
 import team.yi.rsql.querydsl.operator.Operator;
 import team.yi.rsql.querydsl.operator.RsqlOperator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("ALL")
 public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
     private ComparisonNode node;
     private RsqlOperator operator;
     private FieldMetadata fieldMetadata;
     private RsqlConfig<E> rsqlConfig;
 
-    @Nullable
     @Override
     public ComparisonNode getNode() {
         return this.node;
     }
 
-    @Nullable
+    public void setNode(final ComparisonNode node) {
+        this.node = node;
+    }
+
     @Override
     public RsqlOperator getOperator() {
         return this.operator;
+    }
+
+    public void setOperator(final RsqlOperator operator) {
+        this.operator = operator;
     }
 
     @NotNull
@@ -44,10 +46,18 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
         return this.fieldMetadata;
     }
 
+    public void setFieldMetadata(final FieldMetadata fieldMetadata) {
+        this.fieldMetadata = fieldMetadata;
+    }
+
     @NotNull
     @Override
-    public RsqlConfig<E> getConfig() {
+    public RsqlConfig<E> getRsqlConfig() {
         return this.rsqlConfig;
+    }
+
+    public void setRsqlConfig(final RsqlConfig<E> rsqlConfig) {
+        this.rsqlConfig = rsqlConfig;
     }
 
     @Override
@@ -55,9 +65,8 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
         return String.class.equals(type);
     }
 
-    @Nullable
     @Override
-    public Expression<?> getPath(@Nullable final Expression<?> parentPath) {
+    public Expression<?> getPath(final Expression<?> parentPath) {
         String property = Objects.requireNonNull(fieldMetadata.getFieldSelector());
 
         return Expressions.stringPath((Path<?>) parentPath, property);
@@ -66,9 +75,9 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
     @Nullable
     @Override
     public Collection<Expression<?>> getValue(
-        @Nullable final List<String> values,
-        @Nullable final Path<?> rootPath,
-        @Nullable final FieldMetadata fm
+        final List<String> values,
+        final Path<?> rootPath,
+        final FieldMetadata fm
     ) {
         if (values == null || values.isEmpty()) return null;
 
@@ -80,8 +89,8 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
     @Override
     public BooleanExpression getExpression(
         @NotNull final Expression<?> path,
-        @Nullable final Collection<? extends Expression<?>> values,
-        @Nullable final FieldMetadata fm
+        final Collection<? extends Expression<?>> values,
+        final FieldMetadata fm
     ) {
         if (this.operator == null) return null;
 

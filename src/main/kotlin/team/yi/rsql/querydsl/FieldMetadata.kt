@@ -8,6 +8,7 @@ import team.yi.rsql.querydsl.exception.FieldNotSupportedException
 import java.lang.reflect.Field
 import java.lang.reflect.ParameterizedType
 
+@Suppress("MemberVisibilityCanBePrivate")
 class FieldMetadata {
     val type: Class<*>
     var fieldSelector: String? = null

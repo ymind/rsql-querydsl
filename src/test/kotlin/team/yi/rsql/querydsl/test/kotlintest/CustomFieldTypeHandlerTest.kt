@@ -12,6 +12,7 @@ import team.yi.rsql.querydsl.test.BaseRsqlTest
 import team.yi.rsql.querydsl.test.kotlintest.handler.CustomFieldTypeHandler
 import javax.persistence.EntityManager
 
+@Suppress("SpellCheckingInspection")
 class CustomFieldTypeHandlerTest : BaseRsqlTest() {
     @Autowired
     private lateinit var entityManager: EntityManager

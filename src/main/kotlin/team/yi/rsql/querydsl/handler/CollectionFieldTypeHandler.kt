@@ -18,8 +18,8 @@ open class CollectionFieldTypeHandler<E>(
     override val node: ComparisonNode?,
     override val operator: RsqlOperator?,
     override val fieldMetadata: FieldMetadata,
-    override val config: RsqlConfig<E>
-) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, config) {
+    override val rsqlConfig: RsqlConfig<E>,
+) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
     override fun supportsType(type: Class<*>): Boolean {
         val typeSystem: TypeSystem = DefaultTypeSystem()
 
@@ -44,7 +44,7 @@ open class CollectionFieldTypeHandler<E>(
         val fmd = FieldMetadata(fieldMetadata.collectionType, fieldMetadata)
 
         try {
-            val fieldType = config.getFieldTypeHandler(fieldMetadata.collectionType, node, operator, fmd)
+            val fieldType = rsqlConfig.getFieldTypeHandler(fieldMetadata.collectionType, node, operator, fmd)
 
             return fieldType.getValue(values, rootPath, fmd)
         } catch (e: TypeNotSupportedException) {
