@@ -15,20 +15,23 @@ class PredicateBuilder<E>(val rsqlConfig: RsqlConfig<E>) {
         val fieldMetadataList = RsqlUtil.parseFieldSelector(rootClass, node.selector)
         val rootPath = Expressions.path(rootClass, rootClass.simpleName.toLowerCase())
         val processedPaths = mutableListOf<Expression<*>>()
-        var fieldType: FieldTypeHandler<E>? = null
+        var typeHandler: FieldTypeHandler<E>? = null
 
         for (i in fieldMetadataList.indices) {
-            fieldType = rsqlConfig.getFieldTypeHandler(node, operator, fieldMetadataList[i])
+            typeHandler = rsqlConfig.getFieldTypeHandler(node, operator, fieldMetadataList[i])
 
-            val path = fieldType.getPath(if (i == 0) rootPath else processedPaths[i - 1])
+            val path = typeHandler.getPath(if (i == 0) rootPath else processedPaths[i - 1])
 
             path?.let { processedPaths.add(it) }
         }
 
-        if (fieldType == null) return null
+        if (typeHandler == null) return null
 
-        val values = fieldType.getValue(node.arguments, rootPath, fieldMetadataList[fieldMetadataList.size - 1])
+        val values = typeHandler.getValue(node.arguments, rootPath, fieldMetadataList[fieldMetadataList.size - 1])
 
-        return fieldType.getExpression(processedPaths[processedPaths.size - 1], values, fieldMetadataList[fieldMetadataList.size - 1])
+        return when {
+            processedPaths.isNullOrEmpty() -> typeHandler.getExpression(null, values, fieldMetadataList[fieldMetadataList.size - 1])
+            else -> typeHandler.getExpression(processedPaths[processedPaths.size - 1], values, fieldMetadataList[fieldMetadataList.size - 1])
+        }
     }
 }

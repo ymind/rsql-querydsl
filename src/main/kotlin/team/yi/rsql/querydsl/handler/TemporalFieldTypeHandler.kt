@@ -19,14 +19,14 @@ abstract class TemporalFieldTypeHandler<E : Comparable<E>>(
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : ComparableFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supports(type: Class<*>): Boolean {
-        return Date::class.java.isAssignableFrom(type) ||
+    override fun supports(type: Class<*>?): Boolean {
+        return if (type == null) false else Date::class.java.isAssignableFrom(type) ||
             java.sql.Date::class.java.isAssignableFrom(type) ||
             Time::class.java.isAssignableFrom(type) ||
             Timestamp::class.java.isAssignableFrom(type)
     }
 
-    override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
+    override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as TemporalExpression<E>
         val right = values.orEmpty().map { it as TemporalExpression<E> }
 

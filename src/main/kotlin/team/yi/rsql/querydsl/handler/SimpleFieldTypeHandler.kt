@@ -19,10 +19,10 @@ open class SimpleFieldTypeHandler<E>(
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : FieldTypeHandler<E> {
-    override fun supports(type: Class<*>): Boolean = true
+    override fun supports(type: Class<*>?): Boolean = type != null
 
-    protected fun supportsType(type: Class<*>, vararg target: Class<*>?): Boolean {
-        return target.filterNotNull().any { it.isAssignableFrom(type) }
+    protected fun supportsType(type: Class<*>?, vararg target: Class<*>?): Boolean {
+        return if (type == null) false else target.filterNotNull().any { it.isAssignableFrom(type) }
     }
 
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
@@ -35,11 +35,10 @@ open class SimpleFieldTypeHandler<E>(
         return values.map { Expressions.asSimple(it) }.toList()
     }
 
-    override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
-        val left = path as SimpleExpression<Any?>
+    override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
+        val left = path as SimpleExpression<E>
         val right = values.orEmpty().toTypedArray()
 
-        // SimpleExpression<Any?> 不能适用于所有类型
         return when {
             operator.equals(Operator.ISNULL) -> left.isNull
             operator.equals(Operator.ISNOTNULL) -> left.isNotNull

@@ -15,7 +15,7 @@ class EnumFieldTypeHandler<E : Enum<E>>(
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supports(type: Class<*>): Boolean {
+    override fun supports(type: Class<*>?): Boolean {
         return supportsType(
             type,
             Enum::class.java,

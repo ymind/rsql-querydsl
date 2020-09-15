@@ -25,9 +25,9 @@ class Car {
     @SuppressWarnings("SpellCheckingInspection")
     var mfgdt: Date? = null
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     var engine: Engine? = null
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     var screws: List<Screw>? = null
 }

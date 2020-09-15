@@ -19,18 +19,18 @@ open class CollectionFieldTypeHandler<E>(
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supports(type: Class<*>): Boolean {
-        val typeSystem = DefaultTypeSystem()
-
-        return typeSystem.isCollectionType(type)
+    override fun supports(type: Class<*>?): Boolean {
+        return if (type == null) false else DefaultTypeSystem().isCollectionType(type)
     }
 
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
-        val listMetadata = PathMetadataFactory.forProperty(parentPath as Path<*>?, fieldMetadata.fieldSelector)
-        val queryType = fieldMetadata.pathType as Class<SimpleExpression<E>>
-        val collectionPath = Expressions.collectionPath(fieldMetadata.collectionType as Class<E>, queryType, listMetadata)
+        return fieldMetadata.pathType?.let {
+            val queryType = it as Class<SimpleExpression<E>>
+            val listMetadata = PathMetadataFactory.forProperty(parentPath as Path<*>?, fieldMetadata.fieldSelector)
+            val collectionPath = Expressions.collectionPath(fieldMetadata.collectionType as Class<E>, queryType, listMetadata)
 
-        return collectionPath.any() as Path<*>
+            return collectionPath.any() as Path<*>
+        }
     }
 
     override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
@@ -40,14 +40,16 @@ open class CollectionFieldTypeHandler<E>(
 
         if (fieldMetadata.parameterizedType == null) return null
 
-        val fmd = FieldMetadata(fieldMetadata.collectionType, fieldMetadata)
+        fieldMetadata.collectionType?.let {
+            val fmd = FieldMetadata(it, fieldMetadata)
 
-        try {
-            val fieldType = rsqlConfig.getFieldTypeHandler(fieldMetadata.collectionType, node, operator, fmd)
+            try {
+                val typeHandler = rsqlConfig.getFieldTypeHandler(it, node, operator, fmd)
 
-            return fieldType.getValue(values, rootPath, fmd)
-        } catch (e: TypeNotSupportedException) {
-            e.printStackTrace()
+                return typeHandler.getValue(values, rootPath, fmd)
+            } catch (e: TypeNotSupportedException) {
+                e.printStackTrace()
+            }
         }
 
         return null

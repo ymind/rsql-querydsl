@@ -18,7 +18,7 @@ class StringFieldTypeHandler<E>(
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supports(type: Class<*>): Boolean {
+    override fun supports(type: Class<*>?): Boolean {
         return supportsType(
             type,
             String::class.java,
@@ -39,7 +39,7 @@ class StringFieldTypeHandler<E>(
         }
     }
 
-    override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
+    override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as StringExpression
         val right = values.orEmpty().map { it as Expression<String?>? }
 

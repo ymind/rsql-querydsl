@@ -125,12 +125,12 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private fun getSortPath(fieldMetadataList: List<FieldMetadata>): Expression<*> {
         val rootPath = Expressions.path(entityClass, entityClass.simpleName.toLowerCase())
         val processedPaths = mutableListOf<Expression<*>>()
-        var fieldType: SortFieldTypeHandler<E>
+        var typeHandler: SortFieldTypeHandler<E>
 
         for (i in fieldMetadataList.indices) {
-            fieldType = rsqlConfig.getSortFieldTypeHandler(fieldMetadataList[i])
+            typeHandler = rsqlConfig.getSortFieldTypeHandler(fieldMetadataList[i])
 
-            val path = fieldType.getPath(if (i == 0) rootPath else processedPaths[i - 1])
+            val path = typeHandler.getPath(if (i == 0) rootPath else processedPaths[i - 1])
 
             path?.let { processedPaths.add(it) }
         }

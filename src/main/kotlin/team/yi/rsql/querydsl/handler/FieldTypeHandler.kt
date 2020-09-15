@@ -14,8 +14,8 @@ interface FieldTypeHandler<E> {
     val fieldMetadata: FieldMetadata
     val rsqlConfig: RsqlConfig<E>
 
-    fun supports(type: Class<*>): Boolean
+    fun supports(type: Class<*>?): Boolean
     fun getPath(parentPath: Expression<*>?): Expression<*>?
     fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>?
-    fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression?
+    fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression?
 }

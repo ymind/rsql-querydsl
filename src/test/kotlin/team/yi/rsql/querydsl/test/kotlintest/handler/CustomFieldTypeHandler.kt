@@ -18,7 +18,7 @@ class CustomFieldTypeHandler<E>(
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : FieldTypeHandler<E> {
-    override fun supports(type: Class<*>): Boolean {
+    override fun supports(type: Class<*>?): Boolean {
         return String::class.java == type
     }
 
@@ -33,7 +33,7 @@ class CustomFieldTypeHandler<E>(
     }
 
     @Suppress("INCOMPATIBLE_ENUM_COMPARISON", "UNCHECKED_CAST")
-    override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
+    override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as StringExpression
         val right = values.orEmpty()
             .map { it as StringExpression }

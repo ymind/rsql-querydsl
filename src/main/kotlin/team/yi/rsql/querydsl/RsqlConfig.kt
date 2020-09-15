@@ -62,7 +62,7 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun getFieldTypeHandler(type: Class<*>, node: ComparisonNode, operator: RsqlOperator, fieldMetadata: FieldMetadata): FieldTypeHandler<E> {
+    fun getFieldTypeHandler(type: Class<*>?, node: ComparisonNode, operator: RsqlOperator, fieldMetadata: FieldMetadata): FieldTypeHandler<E> {
         for (typeHandler in fieldTypeHandlers) {
             val handler = typeHandler.getDeclaredConstructor(
                 ComparisonNode::class.java,

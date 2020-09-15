@@ -18,8 +18,8 @@ abstract class ComparableFieldTypeHandler<E : Comparable<E>>(
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supports(type: Class<*>): Boolean {
-        return Comparable::class.java.isAssignableFrom(type)
+    override fun supports(type: Class<*>?): Boolean {
+        return if (type == null) false else Comparable::class.java.isAssignableFrom(type)
     }
 
     override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
@@ -34,7 +34,7 @@ abstract class ComparableFieldTypeHandler<E : Comparable<E>>(
 
     protected abstract fun toComparable(value: String?): Comparable<E>?
 
-    override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
+    override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as ComparableExpression<E>
         val right = values.orEmpty().map { it as ComparableExpression<E> }
 

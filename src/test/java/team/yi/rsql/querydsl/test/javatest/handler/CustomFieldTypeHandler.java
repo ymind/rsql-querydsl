@@ -61,7 +61,7 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
     }
 
     @Override
-    public boolean supports(@NotNull final Class<?> type) {
+    public boolean supports(@Nullable final Class<?> type) {
         return String.class.equals(type);
     }
 
@@ -84,13 +84,13 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
         return values.stream().map(Expressions::asSimple).collect(Collectors.toList());
     }
 
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     @Nullable
+    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     @Override
     public BooleanExpression getExpression(
-        @NotNull final Expression<?> path,
-        final Collection<? extends Expression<?>> values,
-        final FieldMetadata fm
+        @Nullable final Expression<?> path,
+        @Nullable final Collection<? extends Expression<?>> values,
+        @Nullable final FieldMetadata fm
     ) {
         if (this.operator == null) return null;
 

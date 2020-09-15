@@ -19,7 +19,7 @@ class FunctionTypeHandler<E>(
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : FieldTypeHandler<E> {
-    override fun supports(type: Class<*>): Boolean {
+    override fun supports(type: Class<*>?): Boolean {
         // "filter": "f{JSON_EXTRACT`s`hashes`$.md5}==9be4f0a737bcb851e8c379a063c27004"
         // "filter": "f{JSON_EXTRACT`s`hashes`$.md5}==f{JSON_EXTRACT`ni`exif`$.XMP[0].tagType}"
         // "filter": "f{JSON_EXTRACT`ni`exif`$.XMP[0}.tagType]>0"
@@ -154,7 +154,7 @@ class FunctionTypeHandler<E>(
             }
     }
 
-    override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
+    override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val arr = values.orEmpty()
             .map { it as Expression<E> }
             .toTypedArray()

@@ -17,7 +17,7 @@ class BooleanFieldTypeHandler(
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<Boolean>,
 ) : ComparableFieldTypeHandler<Boolean>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supports(type: Class<*>): Boolean {
+    override fun supports(type: Class<*>?): Boolean {
         return supportsType(
             type,
             Boolean::class.java,
@@ -42,7 +42,7 @@ class BooleanFieldTypeHandler(
         return value?.toBoolean()
     }
 
-    override fun getExpression(path: Expression<*>, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
+    override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as BooleanExpression
         val right = values.orEmpty().map { it as BooleanExpression? }
 

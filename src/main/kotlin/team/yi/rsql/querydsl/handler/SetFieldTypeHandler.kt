@@ -13,9 +13,7 @@ class SetFieldTypeHandler<E>(
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
 ) : CollectionFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
-    override fun supports(type: Class<*>): Boolean {
-        val typeSystem = DefaultTypeSystem()
-
-        return typeSystem.isSetType(type)
+    override fun supports(type: Class<*>?): Boolean {
+        return if (type == null) false else DefaultTypeSystem().isSetType(type)
     }
 }

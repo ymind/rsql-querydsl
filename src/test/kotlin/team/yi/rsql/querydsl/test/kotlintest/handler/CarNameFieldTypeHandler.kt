@@ -1,39 +1,36 @@
-package team.yi.rsql.querydsl.handler
+package team.yi.rsql.querydsl.test.kotlintest.handler
 
 import com.querydsl.core.types.Expression
 import com.querydsl.core.types.Path
+import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.Expressions
 import cz.jirutka.rsql.parser.ast.ComparisonNode
 import team.yi.rsql.querydsl.FieldMetadata
 import team.yi.rsql.querydsl.RsqlConfig
+import team.yi.rsql.querydsl.handler.FieldTypeHandler
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
-@Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
-class CharacterFieldTypeHandler<E>(
+class CarNameFieldTypeHandler<E>(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
     override val rsqlConfig: RsqlConfig<E>,
-) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
+) : FieldTypeHandler<E> {
     override fun supports(type: Class<*>?): Boolean {
-        return supportsType(
-            type,
-            Char::class.java,
-            Char::class.javaPrimitiveType,
-            java.lang.Character::class.java,
-            java.lang.Character::class.javaPrimitiveType
-        )
+        return node.selector == "customField"
     }
 
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
-        return Expressions.path(fieldMetadata.type, parentPath as Path<*>?, fieldMetadata.fieldSelector)
+        return null
     }
 
     override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
-        if (values.isNullOrEmpty()) return null
+        return null
+    }
 
-        return values
-            .map { if (it.isNullOrBlank()) null else Expressions.asSimple(it[0]) }
-            .toList()
+    override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
+        val left = Expressions.stringPath("name")
+
+        return left.containsIgnoreCase("3")
     }
 }

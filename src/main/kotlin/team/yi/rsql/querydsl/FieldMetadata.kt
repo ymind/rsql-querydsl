@@ -4,13 +4,12 @@ import com.mysema.codegen.model.TypeCategory
 import com.querydsl.codegen.EntityType
 import com.querydsl.codegen.TypeFactory
 import com.querydsl.core.types.dsl.*
-import team.yi.rsql.querydsl.exception.FieldNotSupportedException
 import java.lang.reflect.Field
 import java.lang.reflect.ParameterizedType
 
 @Suppress("MemberVisibilityCanBePrivate")
 class FieldMetadata {
-    val type: Class<*>
+    val type: Class<*>?
     var fieldSelector: String? = null
         private set
     var fieldSelectorIndex: Int? = null
@@ -27,7 +26,7 @@ class FieldMetadata {
         private set
     var parent: FieldMetadata? = null
         private set
-    val collectionType: Class<*>
+    val collectionType: Class<*>?
         get() = parameterizedType ?: type
 
     constructor(type: Class<*>, parent: FieldMetadata?) {
@@ -40,7 +39,7 @@ class FieldMetadata {
         this.fieldSelectorIndex = parseFieldSelector(fieldSelector)
         this.parent = parent
         this.field = getField(parent, fieldSelector)
-        this.type = getClass(field)
+        this.type = getClass(this.field)
         this.entityType = getEntityType(parameterizedType ?: type)
         this.pathType = getPathType(entityType)
     }
@@ -49,7 +48,7 @@ class FieldMetadata {
         this.fieldSelector = fieldSelector
         this.fieldSelectorIndex = parseFieldSelector(fieldSelector)
         this.field = getField(rootClass, fieldSelector, this)
-        this.type = getClass(field)
+        this.type = getClass(this.field)
         this.entityType = getEntityType(parameterizedType ?: type)
         this.pathType = getPathType(entityType)
     }
@@ -58,20 +57,22 @@ class FieldMetadata {
         return getListIndex(fieldSelector)?.also { this.fieldSelector = removeListIndex(fieldSelector) }
     }
 
-    private fun getClass(field: Field?): Class<*> {
-        if (List::class.java.isAssignableFrom(field!!.type) || Set::class.java.isAssignableFrom(field.type)) {
-            this.collection = true
+    private fun getClass(field: Field?): Class<*>? {
+        return field?.let {
+            if (List::class.java.isAssignableFrom(it.type) || Set::class.java.isAssignableFrom(it.type)) {
+                this.collection = true
 
-            val listType = field.genericType as ParameterizedType
+                val listType = it.genericType as ParameterizedType
 
-            this.parameterizedType = listType.actualTypeArguments[0] as Class<*>
+                this.parameterizedType = listType.actualTypeArguments[0] as Class<*>
+            }
+
+            return it.type
         }
-
-        return field.type
     }
 
     companion object {
-        fun getEntityType(entityClass: Class<*>): EntityType = TypeFactory().getEntityType(entityClass)
+        fun getEntityType(entityClass: Class<*>?): EntityType? = entityClass?.let { TypeFactory().getEntityType(it) }
 
         fun getPathType(entityType: EntityType?): Class<*> {
             return when (entityType?.originalCategory) {
@@ -87,21 +88,19 @@ class FieldMetadata {
             }
         }
 
-        fun getField(fieldMetadata: FieldMetadata, fieldName: String): Field {
+        fun getField(fieldMetadata: FieldMetadata, fieldName: String): Field? {
             val clazz = fieldMetadata.parameterizedType ?: fieldMetadata.type
 
             return this.getField(clazz, fieldName, fieldMetadata)
         }
 
-        fun getField(clazz: Class<*>, fieldName: String, fieldMetadata: FieldMetadata): Field {
-            return try {
-                clazz.getDeclaredField(fieldName)
-            } catch (nsf: NoSuchFieldException) {
-                if (clazz.superclass != null) return getField(clazz.superclass, fieldName, fieldMetadata)
-
-                val message = "Invalid where clause: '${fieldMetadata.fieldSelector}' Could not locate field '$fieldName' on class ${fieldMetadata.type}"
-
-                throw FieldNotSupportedException(message, fieldMetadata.type, fieldName, fieldMetadata.fieldSelector)
+        fun getField(clazz: Class<*>?, fieldName: String, fieldMetadata: FieldMetadata): Field? {
+            return clazz?.let {
+                try {
+                    it.getDeclaredField(fieldName)
+                } catch (nsf: NoSuchFieldException) {
+                    return if (it.superclass == null) null else getField(it.superclass, fieldName, fieldMetadata)
+                }
             }
         }
 
