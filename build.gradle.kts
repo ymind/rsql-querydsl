@@ -17,7 +17,7 @@ plugins {
 }
 
 group = "team.yi.rsql"
-version = "0.1.10"
+version = "0.2.4"
 description = "Integration RSQL query language and Querydsl framework."
 
 java {
@@ -34,10 +34,10 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.3.3.RELEASE") {
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.3.4.RELEASE") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:2.3.3.RELEASE")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:2.3.4.RELEASE")
 
     // https://mvnrepository.com/artifact/com.h2database/h2
     testImplementation("com.h2database:h2:1.4.200")
@@ -82,7 +82,6 @@ tasks {
 
     changelog {
         toRef = "master"
-        lastVersion = "0.0.0"
 
         issueUrlTemplate = "https://github.com/ymind/rsql-querydsl/issues/:issueId"
         commitUrlTemplate = "https://github.com/ymind/rsql-querydsl/commit/:commitId"
@@ -115,23 +114,38 @@ tasks {
         toRef = "master"
         derivedVersionMark = "NEXT_VERSION:=="
 
-        // jsonFile = file("${project.rootDir}/CHANGELOG.json")
         commitLocales = mapOf(
-            "zh-cn" to file("${project.rootDir}/config/gitlog/commit-locales_zh-cn.md")
+                "en" to file("${project.rootDir}/config/gitlog/commit-locales.md"),
+                "zh-cn" to file("${project.rootDir}/config/gitlog/commit-locales_zh-cn.md")
         )
 
         outputs.upToDateWhen { false }
     }
 }
 
-tasks.register("setNewVersion") {
+tasks.register("bumpVersion") {
+    dependsOn(":changelog")
+
     doLast {
-        val newVersion = project.findProperty("newVersion") as? String
+        var newVersion = rootProject.findProperty("newVersion") as? String
+
+        if (newVersion.isNullOrEmpty()) {
+            // ^## ([\d\.]+(-SNAPSHOT)?) \(.+\)$
+            val changelogContents = file("${rootProject.rootDir}/CHANGELOG.md").readText()
+            val versionRegex = Regex("^## ([\\d\\.]+(-SNAPSHOT)?) \\(.+\\)\$", setOf(RegexOption.MULTILINE))
+            val changelogVersion = versionRegex.find(changelogContents)?.groupValues?.get(1)
+
+            changelogVersion?.let { newVersion = it }
+
+            logger.warn("changelogVersion: {}", changelogVersion)
+            logger.warn("newVersion: {}", newVersion)
+        }
 
         newVersion?.let {
-            logger.info("Set Project to new Version $newVersion")
+            logger.info("Set Project to new Version $it")
 
-            val contents = buildFile.readText().replaceFirst("version = \"$version\"", "version = \"$newVersion\"")
+            val contents = buildFile.readText()
+                    .replaceFirst("version = \"$version\"", "version = \"$newVersion\"")
 
             buildFile.writeText(contents)
         }
