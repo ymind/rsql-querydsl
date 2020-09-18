@@ -75,14 +75,6 @@ object RsqlUtil {
         return convertStringFieldsToPath(entityClass, selectFields)
     }
 
-    fun parseTwoParamExpression(limit: String?): List<Int> {
-        val limitParams = parseSelectExpression(limit)
-
-        require(!(limitParams == null || limitParams.isEmpty() || limitParams.size > 2)) { "Invalid expression" }
-
-        return limitParams.mapTo(mutableListOf()) { it.toInt() }
-    }
-
     fun parseFieldSelector(rootClass: Class<*>, fieldSelector: String?): List<FieldMetadata> {
         var field = fieldSelector
 

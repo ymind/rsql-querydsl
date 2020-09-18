@@ -158,23 +158,6 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     }
 
     @Test
-    fun shouldReturnTupleWithPageString() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(entityManager)
-            .select("name,description")
-            .from("Car")
-            .where("id=notnull=''")
-            .sort("id.desc")
-            .page("1,15")
-            .build()
-        val cars: List<Tuple> = querydslRsql.fetch() as List<Tuple>
-
-        assertFalse(cars.isEmpty(), "Can't handle page expression")
-        assertEquals(15, cars.size, "Can't handle page expression")
-        assertEquals(2, cars[0].toArray().size, "More than two column")
-        assertTrue(cars[0].toArray()[0] == "Béla34" && cars[1].toArray()[0] == "Béla33", "Not in order")
-    }
-
-    @Test
     fun shouldReturnTupleWithPageNumber() {
         val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(entityManager)
             .select("name,description")
@@ -187,23 +170,6 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
         assertFalse(cars.isEmpty(), "Can't handle page expression")
         assertEquals(15, cars.size, "Can't handle page expression")
-        assertEquals(2, cars[0].toArray().size, "More than two column")
-        assertTrue(cars[0].toArray()[0] == "Béla34" && cars[1].toArray()[0] == "Béla33", "Not in order")
-    }
-
-    @Test
-    fun shouldReturnTupleWithLimitString() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(entityManager)
-            .select("name,description")
-            .from("Car")
-            .where("id=notnull=''")
-            .sort("id.desc")
-            .limit("15,15")
-            .build()
-        val cars: List<Tuple> = querydslRsql.fetch() as List<Tuple>
-
-        assertFalse(cars.isEmpty(), "Can't handle limit expression")
-        assertEquals(15, cars.size, "Can't handle limit expression")
         assertEquals(2, cars[0].toArray().size, "More than two column")
         assertTrue(cars[0].toArray()[0] == "Béla34" && cars[1].toArray()[0] == "Béla33", "Not in order")
     }

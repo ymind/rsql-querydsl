@@ -148,26 +148,6 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
     }
 
     @Test
-    public void shouldReturnTupleWithPageString() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .select("name,description")
-            .from("Car")
-            .where("id=notnull=''")
-            .sort("id.desc")
-            .page("1,15")
-            .build();
-        List<Object> items = rsql.fetch();
-        List<Tuple> cars = (items == null ? new ArrayList<Tuple>() : items).stream()
-            .map(x -> (Tuple) x)
-            .collect(Collectors.toList());
-
-        assertFalse(cars.isEmpty(), "Can't handle page expression");
-        assertEquals(15, cars.size(), "Can't handle page expression");
-        assertEquals(2, cars.get(0).toArray().length, "More than two column");
-        assertTrue(cars.get(0).toArray()[0].equals("Béla34") && cars.get(1).toArray()[0].equals("Béla33"), "Not in order");
-    }
-
-    @Test
     public void shouldReturnTupleWithPageNumber() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
             .select("name,description")
@@ -183,26 +163,6 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
         assertFalse(cars.isEmpty(), "Can't handle page expression");
         assertEquals(15, cars.size(), "Can't handle page expression");
-        assertEquals(2, cars.get(0).toArray().length, "More than two column");
-        assertTrue(cars.get(0).toArray()[0].equals("Béla34") && cars.get(1).toArray()[0].equals("Béla33"), "Not in order");
-    }
-
-    @Test
-    public void shouldReturnTupleWithLimitString() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .select("name,description")
-            .from("Car")
-            .where("id=notnull=''")
-            .sort("id.desc")
-            .limit("15,15")
-            .build();
-        List<Object> items = rsql.fetch();
-        List<Tuple> cars = (items == null ? new ArrayList<Tuple>() : items).stream()
-            .map(x -> (Tuple) x)
-            .collect(Collectors.toList());
-
-        assertFalse(cars.isEmpty(), "Can't handle limit expression");
-        assertEquals(15, cars.size(), "Can't handle limit expression");
         assertEquals(2, cars.get(0).toArray().length, "More than two column");
         assertTrue(cars.get(0).toArray()[0].equals("Béla34") && cars.get(1).toArray()[0].equals("Béla33"), "Not in order");
     }

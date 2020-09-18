@@ -256,32 +256,12 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
                 super.limit = limit
             }
 
-            fun limit(limit: String): BuildBuilder<E> {
-                val limitParams: List<Int> = try {
-                    RsqlUtil.parseTwoParamExpression(limit)
-                } catch (ex: Exception) {
-                    throw IllegalArgumentException("Invalid limit expression: '$limit' . Excepted format: '(offset, limit)' .")
-                }
-
-                return limit(limitParams[0], limitParams[1])
-            }
-
             fun page(pageNumber: Int, pageSize: Int): BuildBuilder<E> = page(pageNumber.toLong(), pageSize.toLong())
             fun page(pageNumber: Int, pageSize: Long): BuildBuilder<E> = page(pageNumber.toLong(), pageSize)
 
             fun page(pageNumber: Long, pageSize: Long): BuildBuilder<E> = this.also {
                 super.limit = pageSize
                 super.offset = pageNumber * pageSize
-            }
-
-            fun page(page: String): BuildBuilder<E> {
-                val pageParams: List<Int> = try {
-                    RsqlUtil.parseTwoParamExpression(page)
-                } catch (ex: Exception) {
-                    throw IllegalArgumentException("Invalid page expression: '$page' . Excepted format: '(pageNumber,pageSize)' .")
-                }
-
-                return page(pageParams[0], pageParams[1])
             }
 
             fun sort(sort: String?): BuildBuilder<E> = this.also { super.sort = sort }
