@@ -15,7 +15,7 @@ import team.yi.rsql.querydsl.operator.RsqlOperator
 import java.math.BigDecimal
 import java.math.BigInteger
 
-@Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
+@Suppress("UNCHECKED_CAST")
 class NumberFieldTypeHandler<E>(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,

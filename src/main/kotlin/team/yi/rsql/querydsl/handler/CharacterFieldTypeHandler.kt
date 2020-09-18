@@ -8,7 +8,7 @@ import team.yi.rsql.querydsl.FieldMetadata
 import team.yi.rsql.querydsl.RsqlConfig
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
-@Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
+@Suppress("UNCHECKED_CAST")
 class CharacterFieldTypeHandler<E>(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,

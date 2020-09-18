@@ -12,7 +12,7 @@ import java.sql.Time
 import java.sql.Timestamp
 import java.util.*
 
-@Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
+@Suppress("UNCHECKED_CAST")
 abstract class TemporalFieldTypeHandler<E : Comparable<E>>(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,

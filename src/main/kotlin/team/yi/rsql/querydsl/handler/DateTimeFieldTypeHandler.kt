@@ -9,7 +9,7 @@ import team.yi.rsql.querydsl.RsqlConfig
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.DateUtil
 
-@Suppress("UNCHECKED_CAST", "ReplaceCallWithBinaryOperator")
+@Suppress("UNCHECKED_CAST")
 class DateTimeFieldTypeHandler<E : Comparable<E>>(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,
