@@ -15,7 +15,7 @@ class StringFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleLike() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("name=like=%la3%")
             .build()
         val cars = rsql.fetch()

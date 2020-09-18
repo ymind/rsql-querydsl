@@ -15,7 +15,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanIsNull() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=isnull=1")
             .build()
         val cars = rsql.fetch()
@@ -28,7 +28,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanNotNull() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=notnull=1")
             .build()
         val cars = rsql.fetch()
@@ -43,7 +43,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanEquals() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active==true")
             .build()
         val cars = rsql.fetch()
@@ -55,7 +55,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanNotEquals() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active!=true")
             .build()
         val cars = rsql.fetch()
@@ -67,7 +67,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanIn() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=in=(true,false)")
             .build()
         val cars = rsql.fetch()
@@ -79,7 +79,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanNotIn() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=notin=(true,false)")
             .build()
         val cars = rsql.fetch()
@@ -92,7 +92,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanBetween() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=between=(false,true)")
             .build()
         val cars = rsql.fetch()
@@ -104,7 +104,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanNotBetween() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=notbetween=(false,true)")
             .build()
         val cars = rsql.fetch()
@@ -117,7 +117,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanGreater() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=gt=false")
             .build()
         val cars = rsql.fetch()
@@ -129,7 +129,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanGreaterOrEquals() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=goe=false")
             .build()
         val cars = rsql.fetch()
@@ -141,7 +141,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanLessThan() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=lt=true")
             .build()
         val cars = rsql.fetch()
@@ -153,7 +153,7 @@ class BooleanFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldHandleBooleanLessThanOrEquals() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=loe=true")
             .build()
         val cars = rsql.fetch()

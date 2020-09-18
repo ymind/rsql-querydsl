@@ -21,7 +21,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     fun shouldReadRsqlConfig() {
         val config = RsqlConfig.Builder<Car>(entityManager).build()
         val rsql = QuerydslRsql.Builder(config)
-            .selectFrom(Car::class.java)
+            .from(Car::class.java)
             .where("description=notempty=''")
             .build()
         val cars = rsql.fetch()
@@ -37,7 +37,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     @Test
     fun shouldHandleMultiLevelQuery() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("engine.screws.name=con='name'")
             .build()
         val cars = rsql.fetch()
@@ -53,7 +53,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     @Test
     fun shouldReturnEmptyListHandleMultiLevelQuery() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("engine.screws.name=con='Eszti'")
             .build()
         val cars = rsql.fetch()
@@ -66,7 +66,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     @Test
     fun shouldHandleSelectFromString() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("id=notnull=''")
             .build()
         val cars = rsql.fetch()
@@ -82,7 +82,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     @Test
     fun shouldHandleSelectFromClass() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("id=notnull=''")
             .build()
         val cars = rsql.fetch()
@@ -98,7 +98,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     @Test
     fun shouldHandleNotNullDate() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("mfgdt=notnull=''")
             .build()
         val cars = rsql.fetch()
@@ -114,7 +114,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     @Test
     fun shouldHandleNumberIn() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("id=in=(3,6,9)")
             .build()
         val cars = rsql.fetch()

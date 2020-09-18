@@ -24,7 +24,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
     public void shouldReadRsqlConfig() {
         RsqlConfig<Car> config = new RsqlConfig.Builder<Car>(this.entityManager).build();
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<>(config)
-            .selectFrom(Car.class)
+            .from(Car.class)
             .where("description=notempty=''")
             .build();
         List<Object> cars = rsql.fetch();
@@ -37,7 +37,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
     @Test
     public void shouldHandleMultiLevelQuery() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("engine.screws.name=con='name'")
             .build();
         List<Object> cars = rsql.fetch();
@@ -50,7 +50,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
     @Test
     public void shouldReturnEmptyListHandleMultiLevelQuery() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("engine.screws.name=con='Eszti'")
             .build();
         List<Object> cars = rsql.fetch();
@@ -62,7 +62,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
     @Test
     public void shouldHandleSelectFromString() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("id=notnull=''")
             .build();
         List<Object> cars = rsql.fetch();
@@ -75,7 +75,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
     @Test
     public void shouldHandleSelectFromClass() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("id=notnull=''")
             .build();
         List<Object> cars = rsql.fetch();
@@ -88,7 +88,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
     @Test
     public void shouldHandleNotNullDate() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("mfgdt=notnull=''")
             .build();
         List<Object> cars = rsql.fetch();
@@ -101,7 +101,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
     @Test
     public void shouldHandleNumberIn() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("id=in=(3,6,9)")
             .build();
         List<Object> cars = rsql.fetch();

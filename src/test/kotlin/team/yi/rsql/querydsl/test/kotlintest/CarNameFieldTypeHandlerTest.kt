@@ -20,7 +20,7 @@ class CarNameFieldTypeHandlerTest : BaseRsqlTest() {
             .fieldTypeHandler(CarNameFieldTypeHandler::class.java)
             .build()
         val rsql = QuerydslRsql.Builder(config)
-            .selectFrom("Car")
+            .from("Car")
             // NOTE: this operator and value will not work
             .where("customField=eq='xxx'")
             .build()

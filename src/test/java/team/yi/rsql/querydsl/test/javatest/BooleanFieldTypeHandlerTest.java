@@ -18,7 +18,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanIsNull() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=isnull=1")
             .build();
         List<Object> cars = rsql.fetch();
@@ -30,7 +30,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanNotNull() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=notnull=1")
             .build();
         List<Object> cars = rsql.fetch();
@@ -42,7 +42,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanEquals() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active!=true")
             .build();
         List<Object> cars = rsql.fetch();
@@ -54,7 +54,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanIn() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=in=(true,false)")
             .build();
         List<Object> cars = rsql.fetch();
@@ -66,7 +66,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanNotIn() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=notin=(true,false)")
             .build();
         List<Object> cars = rsql.fetch();
@@ -78,7 +78,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanBetween() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=between=(false,true)")
             .build();
         List<Object> cars = rsql.fetch();
@@ -90,7 +90,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanNotBetween() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=notbetween=(false,true)")
             .build();
         List<Object> cars = rsql.fetch();
@@ -102,7 +102,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanGreater() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=gt=false")
             .build();
         List<Object> cars = rsql.fetch();
@@ -114,7 +114,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanGreaterOrEquals() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=goe=false")
             .build();
         List<Object> cars = rsql.fetch();
@@ -126,7 +126,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanLessThan() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=lt=true")
             .build();
         List<Object> cars = rsql.fetch();
@@ -138,7 +138,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldHandleBooleanLessThanOrEquals() {
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
-            .selectFrom("Car")
+            .from("Car")
             .where("active=loe=true")
             .build();
         List<Object> cars = rsql.fetch();

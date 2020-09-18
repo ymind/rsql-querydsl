@@ -27,7 +27,7 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
             .javaFieldTypeHandler(CustomFieldTypeHandler.class)
             .build();
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<>(config)
-            .selectFrom("Car")
+            .from("Car")
             .where("description=customnotempty=''")
             .build();
         List<Object> cars = rsql.fetch();
@@ -44,7 +44,7 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
                 .javaFieldTypeHandler(CustomFieldTypeHandler.class)
                 .build();
             QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<>(config)
-                .selectFrom("Car")
+                .from("Car")
                 .where("description=customnotempty=''")
                 .build();
 
@@ -58,7 +58,7 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
             .javaFieldTypeHandler(CustomFieldTypeHandler.class)
             .build();
         QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<>(config)
-            .selectFrom("Car")
+            .from("Car")
             .where("description=notempty=''")
             .build();
         List<Object> cars = rsql.fetch();

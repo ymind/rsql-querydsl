@@ -186,6 +186,18 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             this.orderSpecifiers = builder.orderSpecifiers
         }
 
+        fun from(entityName: String?): FromBuilder<E> {
+            this.entityName = entityName
+
+            return FromBuilder(this)
+        }
+
+        fun from(entityClass: Class<E>?): FromBuilder<E> {
+            this.entityClass = entityClass
+
+            return FromBuilder(this)
+        }
+
         fun select(select: String?): SelectBuilder<E> {
             this.select = select
 
@@ -196,18 +208,6 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             expressionSelect = expression
 
             return SelectBuilder(this)
-        }
-
-        fun selectFrom(entityName: String?): FromBuilder<E> {
-            this.entityName = entityName
-
-            return FromBuilder(this)
-        }
-
-        fun selectFrom(entityClass: Class<E>?): FromBuilder<E> {
-            this.entityClass = entityClass
-
-            return FromBuilder(this)
         }
 
         class SelectBuilder<E>(private val builder: Builder<E>) {
