@@ -1,5 +1,48 @@
 # Changelog
 
+## 0.2.4 (2020-09-18)
+
+### Code Refactoring
+
+- rename `RsqlConfig.getFieldTypeHandlers` to `RsqlConfig.addFieldTypeHandlers` ([7bd52a4c](https://github.com/ymind/rsql-querydsl/commit/7bd52a4c4f5314ec5ef80ccc038702ffbb229363))
+- remove name field from RsqlOperator ([0d8f36ae](https://github.com/ymind/rsql-querydsl/commit/0d8f36ae77a1e185f6297123984e9fc8a3fa6582))
+- typo fix and code cleanup ([126d59e7](https://github.com/ymind/rsql-querydsl/commit/126d59e7dabb1ff32b08e1bfa31a979f17fe8612))
+- split SortFieldTypeHandler ([2f64a51c](https://github.com/ymind/rsql-querydsl/commit/2f64a51c0c5646f311f6a137d3bc613bc4caf1f8))
+- optimize type handlers ([c01d6e4e](https://github.com/ymind/rsql-querydsl/commit/c01d6e4e1b3a21ab3030d63b9b0955b76ddd10ea))
+- make EntityManager none null ([7ea867a4](https://github.com/ymind/rsql-querydsl/commit/7ea867a4a49327f7341e19ace69742a9aec45175))
+- make regexOptions private ([762b8339](https://github.com/ymind/rsql-querydsl/commit/762b83399b40e30ba8b8c7b3aaebd9f6d023347c))
+
+
+### Features
+
+- support custom entity field type handler ([ce1ee662](https://github.com/ymind/rsql-querydsl/commit/ce1ee662c714e068af3b8a52a0f0e4c731d46fd6))
+
+
+### Performance Improvements
+
+- **util**: enhance DateUtil ([c3f44b19](https://github.com/ymind/rsql-querydsl/commit/c3f44b1979daccce6acc057dbe3b283122ed454c))
+
+
+### Styles
+
+- code cleanup ([2d168474](https://github.com/ymind/rsql-querydsl/commit/2d168474ed319c04de6831c43a131112e87c3448))
+
+
+### Chores
+
+- **deps**: upgrade org.jlleitschuh.gradle.ktlint version from 9.3.0 to 9.4.0 ([e7d7f497](https://github.com/ymind/rsql-querydsl/commit/e7d7f497b1e8a0e0283f1717343787f62351690a))
+- **deps**: upgrade spring version from 2.3.2.RELEASE to 2.3.3.RELEASE ([5deb9de1](https://github.com/ymind/rsql-querydsl/commit/5deb9de17eb5d3896d306c942c1f9982aa12d08d))
+- **deps**: upgrade team.yi.semantic-gitlog version from 0.5.12 to 0.5.13 ([1b0bb49c](https://github.com/ymind/rsql-querydsl/commit/1b0bb49c02428a1850f7edf5ffa6525d8ab4cf24))
+- **deps**: upgrade spring version from 2.3.3.RELEASE to 2.3.4.RELEASE ([f437a348](https://github.com/ymind/rsql-querydsl/commit/f437a34861970107a3ef251f465e774bb012bf00))
+
+
+### Build System
+
+- **gradle**: upgrade gradle version from 6.5.1 to 6.6.1 ([71eccb2f](https://github.com/ymind/rsql-querydsl/commit/71eccb2f3f91822bb1f853a690ef6f82717b700a))
+- **kotlin**: upgrade kotlin version from 1.3.72 to 1.4.0 ([9b3d1692](https://github.com/ymind/rsql-querydsl/commit/9b3d1692fecdfeaae041ae7a3cc1c1014c6aa947))
+- **kotlin**: upgrade kotlin version from 1.4.0 to 1.4.10 ([8efdbb95](https://github.com/ymind/rsql-querydsl/commit/8efdbb951464e668074d36d872242ef2620c481a))
+
+
 ## 0.1.10 (2020-08-18)
 
 ### Bug Fixes

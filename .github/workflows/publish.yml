@@ -106,7 +106,7 @@ jobs:
 
         echo "newVersion: ${newVersion}"
 
-        ./gradlew setNewVersion -P newVersion=${newVersion} 1>/dev/null 2>/dev/null
+        ./gradlew bumpVersion -P newVersion=${newVersion} 1>/dev/null 2>/dev/null
         ./gradlew clean publish -x test -P OSSRH_GPG_SECRET_KEY=./secret.gpg
 
         rm -rf ./secret.gpg

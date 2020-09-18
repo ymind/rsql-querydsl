@@ -115,8 +115,8 @@ tasks {
         derivedVersionMark = "NEXT_VERSION:=="
 
         commitLocales = mapOf(
-                "en" to file("${project.rootDir}/config/gitlog/commit-locales.md"),
-                "zh-cn" to file("${project.rootDir}/config/gitlog/commit-locales_zh-cn.md")
+            "en" to file("${project.rootDir}/config/gitlog/commit-locales.md"),
+            "zh-cn" to file("${project.rootDir}/config/gitlog/commit-locales_zh-cn.md")
         )
 
         outputs.upToDateWhen { false }
@@ -145,7 +145,7 @@ tasks.register("bumpVersion") {
             logger.info("Set Project to new Version $it")
 
             val contents = buildFile.readText()
-                    .replaceFirst("version = \"$version\"", "version = \"$newVersion\"")
+                .replaceFirst("version = \"$version\"", "version = \"$newVersion\"")
 
             buildFile.writeText(contents)
         }
