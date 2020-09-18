@@ -19,8 +19,8 @@ object RsqlUtil {
         return fields.mapTo(mutableListOf()) { targetPath[it] }
     }
 
-    fun getClassForEntityString(entityName: String, entityManager: EntityManager?): Class<*>? {
-        return (entityManager ?: return null).metamodel.entities
+    fun getClassForEntityString(entityName: String, entityManager: EntityManager): Class<*>? {
+        return entityManager.metamodel.entities
             .firstOrNull { entityName == it.name }
             ?.bindableJavaType
     }

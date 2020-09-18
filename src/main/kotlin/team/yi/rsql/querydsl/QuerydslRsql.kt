@@ -155,16 +155,16 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             this.rsqlConfig = rsqlConfig
         }
 
-        constructor(entityManager: EntityManager?) : this(entityManager, null, null)
+        constructor(entityManager: EntityManager) : this(entityManager, null, null)
 
         constructor(
-            entityManager: EntityManager?,
+            entityManager: EntityManager,
             operators: List<RsqlOperator>? = null,
             fieldTypeHandlers: List<Class<FieldTypeHandler<E>>>? = null,
             sortFieldTypeHandlers: List<Class<SortFieldTypeHandler<E>>>? = null,
             dateFormat: String? = null,
         ) : this(
-            RsqlConfig.Builder<E>(entityManager!!)
+            RsqlConfig.Builder<E>(entityManager)
                 .operator(*(operators ?: emptyList()).toTypedArray())
                 .fieldTypeHandler(*(fieldTypeHandlers ?: emptyList()).toTypedArray())
                 .sortFieldTypeHandler(*(sortFieldTypeHandlers ?: emptyList()).toTypedArray())
@@ -310,9 +310,9 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
         requireNotNull(rsqlConfig.entityManager) { "Entity manager cannot be null." }
 
-        this.entityClass = when {
-            builder.entityClass != null -> builder.entityClass
-            else -> RsqlUtil.getClassForEntityString(builder.entityName!!, rsqlConfig.entityManager) as Class<E>?
+        this.entityClass = when (builder.entityClass) {
+            null -> RsqlUtil.getClassForEntityString(builder.entityName!!, rsqlConfig.entityManager) as Class<E>?
+            else -> builder.entityClass
         } ?: throw EntityNotFoundException("Can't find entity with name: " + builder.entityName, builder.entityName)
 
         this.select = builder.select
