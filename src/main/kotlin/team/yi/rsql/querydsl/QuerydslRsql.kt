@@ -28,7 +28,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val where: String?
     private val globalPredicate: BooleanExpression?
     private val offset: Long?
-    private val size: Long?
+    private val limit: Long?
     private val sort: String?
     private val orderSpecifiers: List<OrderSpecifier<*>>?
     private val rsqlConfig: RsqlConfig<E>
@@ -54,7 +54,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
             if (!noPaging) {
                 offset?.let { jpaQuery.offset(it) }
-                size?.let { jpaQuery.limit(it) }
+                limit?.let { jpaQuery.limit(it) }
             }
 
             val orderSpecifiers = buildOrder()
@@ -147,7 +147,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         var where: String? = null
         var globalPredicate: BooleanExpression? = null
         var offset: Long? = null
-        var size: Long? = null
+        var limit: Long? = null
         var sort: String? = null
         var orderSpecifiers: List<OrderSpecifier<*>>? = null
 
@@ -180,7 +180,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             this.where = builder.where
             this.globalPredicate = builder.globalPredicate
             this.offset = builder.offset
-            this.size = builder.size
+            this.limit = builder.limit
             this.sort = builder.sort
             this.rsqlConfig = builder.rsqlConfig
             this.orderSpecifiers = builder.orderSpecifiers
@@ -244,17 +244,23 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
                 }
             }
 
-            fun limit(offset: Int?, size: Int?): BuildBuilder<E> = limit(offset?.toLong(), size?.toLong())
-            fun limit(offset: Long?, size: Long?): BuildBuilder<E> = this.also {
+            fun offset(offset: Int?): BuildBuilder<E> = offset(offset?.toLong())
+            fun offset(offset: Long?): BuildBuilder<E> = this.also { super.offset = offset }
+
+            fun limit(limit: Int?): BuildBuilder<E> = limit(limit?.toLong())
+            fun limit(limit: Long?): BuildBuilder<E> = this.also { super.limit = limit }
+
+            fun limit(offset: Int?, limit: Int?): BuildBuilder<E> = limit(offset?.toLong(), limit?.toLong())
+            fun limit(offset: Long?, limit: Long?): BuildBuilder<E> = this.also {
                 super.offset = offset
-                super.size = size
+                super.limit = limit
             }
 
             fun limit(limit: String): BuildBuilder<E> {
                 val limitParams: List<Int> = try {
                     RsqlUtil.parseTwoParamExpression(limit)
                 } catch (ex: Exception) {
-                    throw IllegalArgumentException("Invalid limit expression: '$limit' . Excepted format: '(offset,size)' .")
+                    throw IllegalArgumentException("Invalid limit expression: '$limit' . Excepted format: '(offset, limit)' .")
                 }
 
                 return limit(limitParams[0], limitParams[1])
@@ -264,7 +270,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             fun page(pageNumber: Int, pageSize: Long): BuildBuilder<E> = page(pageNumber.toLong(), pageSize)
 
             fun page(pageNumber: Long, pageSize: Long): BuildBuilder<E> = this.also {
-                super.size = pageSize
+                super.limit = pageSize
                 super.offset = pageNumber * pageSize
             }
 
@@ -277,12 +283,6 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
                 return page(pageParams[0], pageParams[1])
             }
-
-            fun offset(offset: Int?): BuildBuilder<E> = offset(offset?.toLong())
-            fun offset(offset: Long?): BuildBuilder<E> = this.also { super.offset = offset }
-
-            fun size(size: Int?): BuildBuilder<E> = size(size?.toLong())
-            fun size(size: Long?): BuildBuilder<E> = this.also { super.size = size }
 
             fun sort(sort: String?): BuildBuilder<E> = this.also { super.sort = sort }
             fun sort(orderSpecifiers: List<OrderSpecifier<*>>?): BuildBuilder<E> = this.also { super.orderSpecifiers = orderSpecifiers }
@@ -320,7 +320,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         this.where = builder.where
         this.globalPredicate = builder.globalPredicate
         this.offset = builder.offset
-        this.size = builder.size
+        this.limit = builder.limit
         this.sort = builder.sort
         this.orderSpecifiers = builder.orderSpecifiers
     }
