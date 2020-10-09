@@ -13,7 +13,7 @@ plugins {
     kotlin("plugin.jpa")
 
     id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
-    id("team.yi.semantic-gitlog") version "0.5.13"
+    id("team.yi.semantic-gitlog") version "0.5.17"
 }
 
 group = "team.yi.rsql"
