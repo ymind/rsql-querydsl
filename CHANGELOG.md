@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.4 (2020-10-09)
+## 0.5.5 (2020-10-09)
 
 ### BREAKING CHANGES
 
@@ -65,6 +65,7 @@
 ### Documentation
 
 - **changelog**: adjust changelog templates ([e2a191d6](https://github.com/ymind/rsql-querydsl/commit/e2a191d66ae8a183f9eb193a98d0f0afcb92eb44))
+- update docs ([251e3f7f](https://github.com/ymind/rsql-querydsl/commit/251e3f7fd4680ffd86885ad7117873af25c06d6c))
 
 
 ### Build System
