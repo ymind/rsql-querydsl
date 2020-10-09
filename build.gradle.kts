@@ -17,7 +17,7 @@ plugins {
 }
 
 group = "team.yi.rsql"
-version = "0.2.4"
+version = "0.5.4"
 description = "Integration RSQL query language and Querydsl framework."
 
 java {
@@ -81,7 +81,10 @@ tasks {
     javadoc { options.encoding = "UTF-8" }
 
     changelog {
+        group = "publishing"
+
         toRef = "master"
+        isUnstable = true
 
         issueUrlTemplate = "https://github.com/ymind/rsql-querydsl/issues/:issueId"
         commitUrlTemplate = "https://github.com/ymind/rsql-querydsl/commit/:commitId"
@@ -94,29 +97,32 @@ tasks {
                 file("${project.rootDir}/CHANGELOG.md")
             ),
             team.yi.gradle.plugin.FileSet(
-                file("${project.rootDir}/config/gitlog/CHANGELOG_zh-cn.md.mustache"),
-                file("${project.rootDir}/CHANGELOG_zh-cn.md")
+                file("${project.rootDir}/config/gitlog/CHANGELOG.zh-cn.md.mustache"),
+                file("${project.rootDir}/CHANGELOG.zh-cn.md")
             )
         )
         commitLocales = mapOf(
             "en" to file("${project.rootDir}/config/gitlog/commit-locales.md"),
-            "zh-cn" to file("${project.rootDir}/config/gitlog/commit-locales_zh-cn.md")
+            "zh-cn" to file("${project.rootDir}/config/gitlog/commit-locales.zh-cn.md")
         )
         scopeProfiles = mapOf(
             "en" to file("${project.rootDir}/config/gitlog/commit-scopes.md"),
-            "zh-cn" to file("${project.rootDir}/config/gitlog/commit-scopes_zh-cn.md")
+            "zh-cn" to file("${project.rootDir}/config/gitlog/commit-scopes.zh-cn.md")
         )
 
         outputs.upToDateWhen { false }
     }
 
     derive {
+        group = "publishing"
+
         toRef = "master"
+        isUnstable = true
         derivedVersionMark = "NEXT_VERSION:=="
 
         commitLocales = mapOf(
             "en" to file("${project.rootDir}/config/gitlog/commit-locales.md"),
-            "zh-cn" to file("${project.rootDir}/config/gitlog/commit-locales_zh-cn.md")
+            "zh-cn" to file("${project.rootDir}/config/gitlog/commit-locales.zh-cn.md")
         )
 
         outputs.upToDateWhen { false }
@@ -124,6 +130,8 @@ tasks {
 }
 
 tasks.register("bumpVersion") {
+    group = "publishing"
+
     dependsOn(":changelog")
 
     doLast {

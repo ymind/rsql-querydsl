@@ -1,4 +1,4 @@
-# Changelog
+# 更新日志
 
 ## 0.5.4 (2020-10-09)
 
@@ -90,5 +90,5 @@
 
 ### Features
 
-- implement primary features and challenges ([d3336750](https://github.com/ymind/rsql-querydsl/commit/d333675068fbd3051b8a6fd06b6e34d8826f73bd))
+- 实现主要功能 ([d3336750](https://github.com/ymind/rsql-querydsl/commit/d333675068fbd3051b8a6fd06b6e34d8826f73bd))
 

@@ -1,3 +1,6 @@
 - [Overview](/en-us/)
 - **Getting started**
   - [Quick start](/en-us/quickstart)
+- **Links**
+- [Changelog](/en-us/changelog)
+- [![Github](https://icongram.jgog.in/simple/github.svg?color=808080&size=16)Github](https://github.com/ymind/rsql-querydsl)
