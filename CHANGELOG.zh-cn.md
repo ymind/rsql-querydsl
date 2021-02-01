@@ -1,5 +1,22 @@
 # 更新日志
 
+## 0.5.11 (2021-02-01)
+
+### Bug Fixes
+
+- when has only a single value, the `in` operation will throw an exception ([2e748d22](https://github.com/ymind/rsql-querydsl/commit/2e748d225c4f42604bd6edf0586deaf688d53ee1))
+
+### Chores
+
+- **deps**: bumped spring version from 2.3.4.RELEASE to 2.4.2 ([5dc0c3c7](https://github.com/ymind/rsql-querydsl/commit/5dc0c3c73aefb250e63c3ced28f33c48ff3bc9a0))
+- **deps**: bumped jackson-module-kotlin version from 2.11.3 to 2.12.1 ([4edce4cc](https://github.com/ymind/rsql-querydsl/commit/4edce4cc9eb1af9df1f1b05de63e1b9c74450318))
+- **gradle**: add use-latest-versions plugin ([f00b578f](https://github.com/ymind/rsql-querydsl/commit/f00b578fbbf8fa65944a82aab05a991fa80b9057))
+
+### Build System
+
+- **gradle**: bumped gradle wrapper version from 6.6.1 to 6.8.1 ([f279f322](https://github.com/ymind/rsql-querydsl/commit/f279f322ec06daaa4f767fe753d96b4700c401c5))
+- **kotlin**: bumped kotlin version from 1.4.10 to 1.4.21-2 ([c204e14d](https://github.com/ymind/rsql-querydsl/commit/c204e14d76c9427fdfcfe2e8f01821e013d08bfa))
+
 ## 0.5.5 (2020-10-09)
 
 ### BREAKING CHANGES
@@ -7,7 +24,6 @@
 - rename `selectFrom` to `from` ([18be5930](https://github.com/ymind/rsql-querydsl/commit/18be59302ca8d89b45af18de94ffb31b7cb60454))
 - rename `size` to `limit` ([7cfff03c](https://github.com/ymind/rsql-querydsl/commit/7cfff03c544e283ff95fc9f1c0901433d79e2fd7))
 - remove `page-string` and `limit-string` support ([289e780a](https://github.com/ymind/rsql-querydsl/commit/289e780a2ed0e24a8c13e9ecda680599703d887a))
-
 
 ### Bug Fixes
 
@@ -17,6 +33,7 @@
 
 ### Features
 
+- 实现主要功能 ([d3336750](https://github.com/ymind/rsql-querydsl/commit/d333675068fbd3051b8a6fd06b6e34d8826f73bd))
 - support custom entity field type handler ([063203a0](https://github.com/ymind/rsql-querydsl/commit/063203a00d26c694d1e20de24a36e5cddbf49b4e))
 
 
@@ -85,11 +102,4 @@
 - **github**: disable push-back ([552c8f10](https://github.com/ymind/rsql-querydsl/commit/552c8f10cd58c4e3a00e3f30be3ea2d29ac4de4b))
 - **github**: adjust ci config ([0f06f6cc](https://github.com/ymind/rsql-querydsl/commit/0f06f6cc56b273b0d07ae89510f4f175e85a2582))
 - **github**: adjust project version update command ([4c7f68e9](https://github.com/ymind/rsql-querydsl/commit/4c7f68e97fcded9d17ccb732f556a29309f66b56))
-
-
-## 0.1.0 (2020-06-03)
-
-### Features
-
-- 实现主要功能 ([d3336750](https://github.com/ymind/rsql-querydsl/commit/d333675068fbd3051b8a6fd06b6e34d8826f73bd))
 

@@ -22,7 +22,7 @@ plugins {
 }
 
 group = "team.yi.rsql"
-version = "0.5.5"
+version = "0.5.11"
 description = "Integration RSQL query language and Querydsl framework."
 
 java {
@@ -89,7 +89,6 @@ tasks {
         group = "publishing"
 
         toRef = "master"
-        isUnstable = true
 
         issueUrlTemplate = "https://github.com/ymind/rsql-querydsl/issues/:issueId"
         commitUrlTemplate = "https://github.com/ymind/rsql-querydsl/commit/:commitId"
@@ -122,7 +121,6 @@ tasks {
         group = "publishing"
 
         toRef = "master"
-        isUnstable = true
         derivedVersionMark = "NEXT_VERSION:=="
 
         commitLocales = mapOf(
