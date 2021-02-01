@@ -14,6 +14,11 @@ plugins {
 
     id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
     id("team.yi.semantic-gitlog") version "0.5.17"
+
+    // https://plugins.gradle.org/plugin/se.patrikerdes.use-latest-versions
+    id("se.patrikerdes.use-latest-versions") version "0.2.15"
+    // https://plugins.gradle.org/plugin/com.github.ben-manes.versions
+    id("com.github.ben-manes.versions") version "0.36.0"
 }
 
 group = "team.yi.rsql"
