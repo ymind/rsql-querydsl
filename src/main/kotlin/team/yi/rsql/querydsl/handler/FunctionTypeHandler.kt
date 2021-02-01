@@ -155,44 +155,49 @@ class FunctionTypeHandler<E>(
     }
 
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
-        val arr = values.orEmpty()
-            .map { it as Expression<E> }
-            .toTypedArray()
+        val arr = values.orEmpty().distinct().map { it as Expression<E> }.toTypedArray()
+        val op = if (arr.size == 1) {
+            when (operator) {
+                RsqlOperator.`in` -> RsqlOperator.equals
+                RsqlOperator.notIn -> RsqlOperator.notEquals
+                else -> operator
+            }
+        } else operator
 
         when {
-            operator.equals(Operator.ISNULL) -> return (path as SimpleExpression).isNull
-            operator.equals(Operator.ISNOTNULL) -> return (path as SimpleExpression).isNotNull
-            operator.equals(Operator.IN) -> return (path as SimpleExpression).`in`(arr as CollectionExpression<out Collection<Nothing>, out Nothing>)
-            operator.equals(Operator.NOTIN) -> return (path as SimpleExpression).notIn(arr as CollectionExpression<out Collection<Nothing>, out Nothing>)
+            op.equals(Operator.ISNULL) -> return (path as SimpleExpression).isNull
+            op.equals(Operator.ISNOTNULL) -> return (path as SimpleExpression).isNotNull
+            op.equals(Operator.IN) -> return (path as SimpleExpression).`in`(arr as CollectionExpression<out Collection<Nothing>, out Nothing>)
+            op.equals(Operator.NOTIN) -> return (path as SimpleExpression).notIn(arr as CollectionExpression<out Collection<Nothing>, out Nothing>)
 
-            operator.equals(Operator.EQUALS) -> return (path as SimpleExpression).eq(arr[0] as Expression<Any?>)
-            operator.equals(Operator.NOTEQUALS) -> return (path as SimpleExpression).ne(arr[0] as Expression<Any?>)
+            op.equals(Operator.EQUALS) -> return (path as SimpleExpression).eq(arr[0] as Expression<Any?>)
+            op.equals(Operator.NOTEQUALS) -> return (path as SimpleExpression).ne(arr[0] as Expression<Any?>)
 
-            operator.equals(Operator.ISTRUE) -> return (path as BooleanExpression).isTrue
-            operator.equals(Operator.ISFALSE) -> return (path as BooleanExpression).isFalse
+            op.equals(Operator.ISTRUE) -> return (path as BooleanExpression).isTrue
+            op.equals(Operator.ISFALSE) -> return (path as BooleanExpression).isFalse
 
-            operator.equals(Operator.ISEMPTY) -> return (path as StringExpression).isEmpty
-            operator.equals(Operator.ISNOTEMPTY) -> return (path as StringExpression).isNotEmpty
-            operator.equals(Operator.EQUALS_IGNORECASE) -> return (path as StringExpression).equalsIgnoreCase(arr[0] as StringExpression)
-            operator.equals(Operator.NOTEQUALS_IGNORECASE) -> return (path as StringExpression).notEqualsIgnoreCase(arr[0] as StringExpression)
-            operator.equals(Operator.LIKE) -> return (path as StringExpression).like(arr[0] as StringExpression)
-            operator.equals(Operator.NOTLIKE) -> return (path as StringExpression).notLike(arr[0] as StringExpression)
-            operator.equals(Operator.LIKE_IGNORECASE) -> return (path as StringExpression).likeIgnoreCase(arr[0] as StringExpression)
-            operator.equals(Operator.STARTWITH) -> return (path as StringExpression).startsWith(arr[0] as StringExpression)
-            operator.equals(Operator.STARTWITH_IGNORECASE) -> return (path as StringExpression).startsWithIgnoreCase(arr[0] as StringExpression)
-            operator.equals(Operator.ENDWITH) -> return (path as StringExpression).endsWith(arr[0] as StringExpression)
-            operator.equals(Operator.ENDWITH_IGNORECASE) -> return (path as StringExpression).endsWithIgnoreCase(arr[0] as StringExpression)
-            operator.equals(Operator.CONTAINS) -> return (path as StringExpression).contains(arr[0] as StringExpression)
-            operator.equals(Operator.CONTAINS_IGNORECASE) -> return (path as StringExpression).containsIgnoreCase(arr[0] as StringExpression)
+            op.equals(Operator.ISEMPTY) -> return (path as StringExpression).isEmpty
+            op.equals(Operator.ISNOTEMPTY) -> return (path as StringExpression).isNotEmpty
+            op.equals(Operator.EQUALS_IGNORECASE) -> return (path as StringExpression).equalsIgnoreCase(arr[0] as StringExpression)
+            op.equals(Operator.NOTEQUALS_IGNORECASE) -> return (path as StringExpression).notEqualsIgnoreCase(arr[0] as StringExpression)
+            op.equals(Operator.LIKE) -> return (path as StringExpression).like(arr[0] as StringExpression)
+            op.equals(Operator.NOTLIKE) -> return (path as StringExpression).notLike(arr[0] as StringExpression)
+            op.equals(Operator.LIKE_IGNORECASE) -> return (path as StringExpression).likeIgnoreCase(arr[0] as StringExpression)
+            op.equals(Operator.STARTWITH) -> return (path as StringExpression).startsWith(arr[0] as StringExpression)
+            op.equals(Operator.STARTWITH_IGNORECASE) -> return (path as StringExpression).startsWithIgnoreCase(arr[0] as StringExpression)
+            op.equals(Operator.ENDWITH) -> return (path as StringExpression).endsWith(arr[0] as StringExpression)
+            op.equals(Operator.ENDWITH_IGNORECASE) -> return (path as StringExpression).endsWithIgnoreCase(arr[0] as StringExpression)
+            op.equals(Operator.CONTAINS) -> return (path as StringExpression).contains(arr[0] as StringExpression)
+            op.equals(Operator.CONTAINS_IGNORECASE) -> return (path as StringExpression).containsIgnoreCase(arr[0] as StringExpression)
 
             // number
-            operator.equals(Operator.GREATER) -> return (path as NumberExpression<Nothing>).gt(arr[0] as Expression<Nothing>)
-            operator.equals(Operator.GREATER_OR_EQUALS) -> return (path as NumberExpression<Nothing>).goe(arr[0] as Expression<Nothing>)
-            operator.equals(Operator.LESS_THAN) -> return (path as NumberExpression<Nothing>).lt(arr[0] as Expression<Nothing>)
-            operator.equals(Operator.LESS_THAN_OR_EQUALS) -> return (path as NumberExpression<Nothing>).loe(arr[0] as Expression<Nothing>)
+            op.equals(Operator.GREATER) -> return (path as NumberExpression<Nothing>).gt(arr[0] as Expression<Nothing>)
+            op.equals(Operator.GREATER_OR_EQUALS) -> return (path as NumberExpression<Nothing>).goe(arr[0] as Expression<Nothing>)
+            op.equals(Operator.LESS_THAN) -> return (path as NumberExpression<Nothing>).lt(arr[0] as Expression<Nothing>)
+            op.equals(Operator.LESS_THAN_OR_EQUALS) -> return (path as NumberExpression<Nothing>).loe(arr[0] as Expression<Nothing>)
 
-            operator.equals(Operator.BEFORE) -> return (path as TemporalExpression<Comparable<Nothing>>).before(arr[0] as Expression<Comparable<Nothing>>)
-            operator.equals(Operator.AFTER) -> return (path as TemporalExpression<Comparable<Nothing>>).after(arr[0] as Expression<Comparable<Nothing>>)
+            op.equals(Operator.BEFORE) -> return (path as TemporalExpression<Comparable<Nothing>>).before(arr[0] as Expression<Comparable<Nothing>>)
+            op.equals(Operator.AFTER) -> return (path as TemporalExpression<Comparable<Nothing>>).after(arr[0] as Expression<Comparable<Nothing>>)
 
             else -> return (path as SimpleTemplate<Any?>).eq(values)
         }

@@ -37,17 +37,24 @@ open class SimpleFieldTypeHandler<E>(
 
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as SimpleExpression<E>
-        val right = values.orEmpty().toTypedArray()
+        val right = values.orEmpty().distinct().toTypedArray()
+        val op = if (right.size == 1) {
+            when (operator) {
+                RsqlOperator.`in` -> RsqlOperator.equals
+                RsqlOperator.notIn -> RsqlOperator.notEquals
+                else -> operator
+            }
+        } else operator
 
         return when {
-            operator.equals(Operator.ISNULL) -> left.isNull
-            operator.equals(Operator.ISNOTNULL) -> left.isNotNull
+            op.equals(Operator.ISNULL) -> left.isNull
+            op.equals(Operator.ISNOTNULL) -> left.isNotNull
 
-            operator.equals(Operator.EQUALS) -> Expressions.booleanOperation(Ops.EQ, path, right[0])
-            operator.equals(Operator.NOTEQUALS) -> Expressions.booleanOperation(Ops.NE, path, right[0])
+            op.equals(Operator.EQUALS) -> Expressions.booleanOperation(Ops.EQ, path, right[0])
+            op.equals(Operator.NOTEQUALS) -> Expressions.booleanOperation(Ops.NE, path, right[0])
 
-            operator.equals(Operator.IN) -> Expressions.booleanOperation(Ops.IN, path, Expressions.set(*right))
-            operator.equals(Operator.NOTIN) -> Expressions.booleanOperation(Ops.NOT_IN, path, Expressions.set(*right))
+            op.equals(Operator.IN) -> Expressions.booleanOperation(Ops.IN, path, Expressions.list(*right))
+            op.equals(Operator.NOTIN) -> Expressions.booleanOperation(Ops.NOT_IN, path, Expressions.list(*right))
 
             else -> null
         }

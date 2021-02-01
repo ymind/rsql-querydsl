@@ -62,7 +62,7 @@ class NumberFieldTypeHandler<E>(
 
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as NumberExpression<E>
-        val right = values.orEmpty().map { it as NumberExpression<E> }
+        val right = values.orEmpty().distinct().map { it as NumberExpression<E> }
 
         return when {
             operator.equals(Operator.BETWEEN) -> left.between(right[0], right[1])

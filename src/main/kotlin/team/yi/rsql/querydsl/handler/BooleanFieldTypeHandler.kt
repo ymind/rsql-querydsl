@@ -44,7 +44,7 @@ class BooleanFieldTypeHandler(
 
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as BooleanExpression
-        val right = values.orEmpty().map { it as BooleanExpression? }
+        val right = values.orEmpty().distinct().map { it as BooleanExpression? }
 
         return when {
             operator.equals(Operator.ISTRUE) -> left.isTrue

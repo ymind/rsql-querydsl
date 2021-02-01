@@ -41,7 +41,7 @@ class StringFieldTypeHandler<E>(
 
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as StringExpression
-        val right = values.orEmpty().map { it as Expression<String?>? }
+        val right = values.orEmpty().distinct().map { it as Expression<String?>? }
 
         return when {
             operator.equals(Operator.CONTAINS) -> left.contains(right[0])

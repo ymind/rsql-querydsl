@@ -12,4 +12,18 @@ class RsqlOperator(vararg val symbols: String) {
             else -> false
         }
     }
+
+    companion object {
+        @JvmStatic
+        val equals = RsqlOperator(*Operator.EQUALS.rsqlOperator)
+
+        @JvmStatic
+        val notEquals = RsqlOperator(*Operator.NOTEQUALS.rsqlOperator)
+
+        @JvmStatic
+        val `in` = RsqlOperator(*Operator.IN.rsqlOperator)
+
+        @JvmStatic
+        val notIn = RsqlOperator(*Operator.NOTIN.rsqlOperator)
+    }
 }

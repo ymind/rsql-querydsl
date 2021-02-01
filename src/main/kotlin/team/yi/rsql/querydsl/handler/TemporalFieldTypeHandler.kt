@@ -28,7 +28,7 @@ abstract class TemporalFieldTypeHandler<E : Comparable<E>>(
 
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as TemporalExpression<E>
-        val right = values.orEmpty().map { it as TemporalExpression<E> }
+        val right = values.orEmpty().distinct().map { it as TemporalExpression<E> }
 
         return when {
             operator.equals(Operator.AFTER) -> left.after(right[0])

@@ -128,6 +128,38 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     }
 
     @Test
+    fun shouldHandleNumberInSingleValue() {
+        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+            .from("Car")
+            .where("id=in=(3)")
+            .build()
+        val cars = rsql.fetch()
+
+        assertNotNull(cars, "result is null")
+
+        cars?.let {
+            assertFalse(cars.isEmpty(), "Can't handle `in` operator for Number type")
+            assertEquals(1, cars.size, "Can't handle `in` operator for Number type correctly")
+        }
+    }
+
+    @Test
+    fun shouldHandleNumberNotInSingleValue() {
+        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+            .from("Car")
+            .where("id=out=(3)")
+            .build()
+        val cars = rsql.fetch()
+
+        assertNotNull(cars, "result is null")
+
+        cars?.let {
+            assertFalse(cars.isEmpty(), "Can't handle `in` operator for Number type")
+            assertEquals(49, cars.size, "Can't handle `in` operator for Number type correctly")
+        }
+    }
+
+    @Test
     fun shouldReturnTupleWithSelectExpression() {
         val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(entityManager)
             .select("name,description")
