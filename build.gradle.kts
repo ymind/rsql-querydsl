@@ -39,10 +39,10 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.4.2") {
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.4.5") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:2.4.2")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:2.4.5")
 
     // https://mvnrepository.com/artifact/com.h2database/h2
     testImplementation("com.h2database:h2:1.4.200")
