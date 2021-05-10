@@ -12,7 +12,7 @@ plugins {
     kotlin("plugin.spring")
     kotlin("plugin.jpa")
 
-    id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
+    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
     id("team.yi.semantic-gitlog") version "0.5.17"
 
     // https://plugins.gradle.org/plugin/se.patrikerdes.use-latest-versions
@@ -129,6 +129,20 @@ tasks {
         )
 
         outputs.upToDateWhen { false }
+    }
+}
+
+ktlint {
+    version.set("0.41.0")
+    debug.set(false)
+    outputToConsole.set(true)
+    outputColorName.set("RED")
+    ignoreFailures.set(true)
+    enableExperimentalRules.set(true)
+
+    filter {
+        exclude("**/generated/**")
+        include("**/kotlin/**")
     }
 }
 
