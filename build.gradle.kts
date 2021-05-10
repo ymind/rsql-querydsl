@@ -59,7 +59,7 @@ dependencies {
     kapt("com.querydsl:querydsl-apt:4.4.0:jpa")
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    api("org.apache.commons:commons-lang3:3.11")
+    api("org.apache.commons:commons-lang3:3.12.0")
 
     // https://mvnrepository.com/artifact/cz.jirutka.rsql/rsql-parser
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
