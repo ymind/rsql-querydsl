@@ -14,7 +14,7 @@ import javax.persistence.EntityManager
 @Suppress("MemberVisibilityCanBePrivate")
 object RsqlUtil {
     fun convertStringFieldsToPath(type: Class<*>, fields: List<String>): List<Path<*>> {
-        val targetPath = PathBuilder(type, type.simpleName.toLowerCase())
+        val targetPath = PathBuilder(type, type.simpleName.lowercase(Locale.getDefault()))
 
         return fields.mapTo(mutableListOf()) { targetPath[it] }
     }
@@ -115,7 +115,7 @@ object RsqlUtil {
 
             val params = arrayOf(param.substring(0, dotLastIndex), param.substring(dotLastIndex + 1))
 
-            result[params[0]] = Order.valueOf(value = params[1].toUpperCase())
+            result[params[0]] = Order.valueOf(value = params[1].uppercase(Locale.getDefault()))
         }
 
         return result

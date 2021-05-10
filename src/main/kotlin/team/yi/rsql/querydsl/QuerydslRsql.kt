@@ -10,6 +10,8 @@ import com.querydsl.core.types.dsl.PathBuilder
 import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import cz.jirutka.rsql.parser.RSQLParser
+import java.util.*
+import javax.persistence.EntityManager
 import team.yi.rsql.querydsl.exception.EntityNotFoundException
 import team.yi.rsql.querydsl.exception.RsqlException
 import team.yi.rsql.querydsl.exception.TypeNotSupportedException
@@ -17,7 +19,6 @@ import team.yi.rsql.querydsl.handler.FieldTypeHandler
 import team.yi.rsql.querydsl.handler.SortFieldTypeHandler
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.RsqlUtil
-import javax.persistence.EntityManager
 
 @Suppress("UNCHECKED_CAST", "unused", "MemberVisibilityCanBePrivate")
 class QuerydslRsql<E> private constructor(builder: Builder<E>) {
@@ -37,7 +38,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     fun buildQuery(selectFieldPath: List<Path<*>>?, noPaging: Boolean = false): JPAQuery<*> {
         return try {
             val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
-            val fromPath = PathBuilder<Any?>(entityClass, entityClass.simpleName.toLowerCase())
+            val fromPath = PathBuilder<Any?>(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
             val predicate = buildPredicate()
 
             val jpaQuery = if (selectFieldPath.isNullOrEmpty() && expressionSelect == null) {
@@ -123,7 +124,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
     @Throws(TypeNotSupportedException::class)
     private fun getSortPath(fieldMetadataList: List<FieldMetadata>): Expression<*> {
-        val rootPath = Expressions.path(entityClass, entityClass.simpleName.toLowerCase())
+        val rootPath = Expressions.path(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
         val processedPaths = mutableListOf<Expression<*>>()
         var typeHandler: SortFieldTypeHandler<E>
 
