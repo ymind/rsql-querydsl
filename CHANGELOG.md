@@ -1,10 +1,40 @@
 # Changelog
 
+## 0.5.22 (2021-05-10)
+
+### Bug Fixes
+
+- `globalPredicate` not work when `where` is null ([e8aa876f](https://github.com/ymind/rsql-querydsl/commit/e8aa876f30d95612da8641dfc6ceac43f2a07d24))
+
+
+### Code Refactoring
+
+- **util**: support `yyyy-MM-dd'T'HH:mm:ss.SSS` date format ([4cc949b0](https://github.com/ymind/rsql-querydsl/commit/4cc949b042c7a685c1076be27e7051cc811dae26))
+- upgrade deprecated toLowerCase() method ([5f5c592a](https://github.com/ymind/rsql-querydsl/commit/5f5c592a91364ab84530dfe896e3a7dc52318439))
+
+
+### Chores
+
+- **deps**: upgrade spring version to 2.4.5 ([9e7bbeca](https://github.com/ymind/rsql-querydsl/commit/9e7bbecae41d7f64113cc55e52d8464d314830a1))
+- **deps**: upgrade jackson-module-kotlin version to 2.12.3 ([51c618af](https://github.com/ymind/rsql-querydsl/commit/51c618afe44bb7b813f61a3bb21ed1791c0cca0c))
+- **deps**: upgrade commons-lang3 version to 3.12.0 ([ea90fc5f](https://github.com/ymind/rsql-querydsl/commit/ea90fc5f7aea6366001c56e26660863bd9468dde))
+
+
+### Build System
+
+- **gradle**: bumped gradle wrapper version to 7.0 ([610a234b](https://github.com/ymind/rsql-querydsl/commit/610a234b357e851c98ad6a282349fb8bf7ecac6b))
+- **kotlin**: bumped kotlin version from to 1.5.0 ([f6b37888](https://github.com/ymind/rsql-querydsl/commit/f6b378885a288b2be8a81ba6c244b221d9a2995b))
+- **gradle/plugin**: upgrade com.github.ben-manes.versions version to 0.38.0 ([f2876820](https://github.com/ymind/rsql-querydsl/commit/f2876820d4c111e20a4156771256227e36e6fda7))
+- **gradle/plugin**: upgrade se.patrikerdes.use-latest-versions version to 0.2.16 ([732cb1e0](https://github.com/ymind/rsql-querydsl/commit/732cb1e0730bdd23b3a5d5ca3f3c9fb73428dac3))
+- **gradle/plugin**: upgrade org.jlleitschuh.gradle.ktlint version to 10.0.0 ([543fe50a](https://github.com/ymind/rsql-querydsl/commit/543fe50ad356675dd52308453ebc8c8dc332477e))
+
+
 ## 0.5.11 (2021-02-01)
 
 ### Bug Fixes
 
 - when has only a single value, the `in` operation will throw an exception ([2e748d22](https://github.com/ymind/rsql-querydsl/commit/2e748d225c4f42604bd6edf0586deaf688d53ee1))
+
 
 ### Chores
 
@@ -12,10 +42,12 @@
 - **deps**: bumped jackson-module-kotlin version from 2.11.3 to 2.12.1 ([4edce4cc](https://github.com/ymind/rsql-querydsl/commit/4edce4cc9eb1af9df1f1b05de63e1b9c74450318))
 - **gradle**: add use-latest-versions plugin ([f00b578f](https://github.com/ymind/rsql-querydsl/commit/f00b578fbbf8fa65944a82aab05a991fa80b9057))
 
+
 ### Build System
 
 - **gradle**: bumped gradle wrapper version from 6.6.1 to 6.8.1 ([f279f322](https://github.com/ymind/rsql-querydsl/commit/f279f322ec06daaa4f767fe753d96b4700c401c5))
 - **kotlin**: bumped kotlin version from 1.4.10 to 1.4.21-2 ([c204e14d](https://github.com/ymind/rsql-querydsl/commit/c204e14d76c9427fdfcfe2e8f01821e013d08bfa))
+
 
 ## 0.5.5 (2020-10-09)
 
@@ -24,6 +56,7 @@
 - rename `selectFrom` to `from` ([18be5930](https://github.com/ymind/rsql-querydsl/commit/18be59302ca8d89b45af18de94ffb31b7cb60454))
 - rename `size` to `limit` ([7cfff03c](https://github.com/ymind/rsql-querydsl/commit/7cfff03c544e283ff95fc9f1c0901433d79e2fd7))
 - remove `page-string` and `limit-string` support ([289e780a](https://github.com/ymind/rsql-querydsl/commit/289e780a2ed0e24a8c13e9ecda680599703d887a))
+
 
 ### Bug Fixes
 
