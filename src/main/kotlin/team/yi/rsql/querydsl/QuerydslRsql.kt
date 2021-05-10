@@ -87,7 +87,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     @Throws(RsqlException::class)
     fun buildPredicate(): Predicate? {
         entityClass.let {
-            if (where.isNullOrBlank()) return null
+            if (where.isNullOrBlank()) return globalPredicate
 
             val rootNode = RSQLParser(RsqlUtil.getOperators(rsqlConfig.operators)).parse(where)
             val predicate = rootNode.accept(PredicateBuilderVisitor(it, predicateBuilder))
