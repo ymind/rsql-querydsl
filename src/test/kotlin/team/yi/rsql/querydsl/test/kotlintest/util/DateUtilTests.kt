@@ -18,6 +18,7 @@ class DateUtilTests {
         "yyyy-MM-dd'?T'?HH:mm:ss" to "2022-07-19T13:47:24",
         "yyyy-MM-dd'?T'?HH:mm:ss'?Z'?" to "2022-07-19T13:47:24Z",
         "yyyy-MM-dd'?T'?HH:mm:ss.SSS'?Z'?" to "2022-07-19T13:47:24.345Z",
+        "yyyy-MM-dd'?T'?HH:mm:ss.SSS" to "2022-07-19T13:47:24.345",
         "yyyy-MM-dd HH:mm:ss" to "2022-07-19 13:47:24",
         "dd-MM-yyyy HH:mm:ss" to "19-07-2022 13:47:24",
         "yyyyMMdd HHmmss" to "20220719 134724",

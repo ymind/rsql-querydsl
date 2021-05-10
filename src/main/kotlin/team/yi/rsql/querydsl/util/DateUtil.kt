@@ -16,6 +16,7 @@ object DateUtil {
         "yyyy-MM-dd'T'HH:mm:ss" to Regex("^\\d{4}-\\d{1,2}-\\d{1,2}'?T'?\\d{1,2}:\\d{1,2}:\\d{1,2}$", regexOptions),
         "yyyy-MM-dd'T'HH:mm:ss'Z'" to Regex("^\\d{4}-\\d{1,2}-\\d{1,2}'?T'?\\d{1,2}:\\d{1,2}:\\d{1,2}'?Z'?$", regexOptions),
         "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" to Regex("^\\d{4}-\\d{1,2}-\\d{1,2}'?T'?\\d{1,2}:\\d{1,2}:\\d{1,2}\\.\\d{3}'?Z'?$", regexOptions),
+        "yyyy-MM-dd'T'HH:mm:ss.SSS" to Regex("^\\d{4}-\\d{1,2}-\\d{1,2}'?T'?\\d{1,2}:\\d{1,2}:\\d{1,2}\\.\\d{3}$", regexOptions),
         "yyyy-MM-dd HH:mm:ss" to Regex("^\\d{4}-\\d{1,2}-\\d{1,2}\\s\\d{1,2}:\\d{1,2}:\\d{1,2}$", regexOptions),
         "dd-MM-yyyy HH:mm:ss" to Regex("^\\d{1,2}-\\d{1,2}-\\d{4}\\s\\d{1,2}:\\d{1,2}:\\d{1,2}$", regexOptions),
         "yyyyMMdd HHmmss" to Regex("^\\d{8}\\s\\d{6}$", regexOptions),
