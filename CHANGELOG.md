@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.6.0 (2021-05-20)
+
+### Features
+
+- support auto detect datetime format ([a9b75691](https://github.com/ymind/rsql-querydsl/commit/a9b75691aca805cb28115698b1d270a7d279e416))
+
+
+### Build System
+
+- **gradle**: bumped gradle wrapper version to 7.0.2 ([e11163ac](https://github.com/ymind/rsql-querydsl/commit/e11163ac933fce0a3f43ea8f97803e5da2109e5d))
+
+
 ## 0.5.22 (2021-05-10)
 
 ### Bug Fixes
@@ -66,7 +78,6 @@
 
 ### Features
 
-- implement primary features and challenges ([d3336750](https://github.com/ymind/rsql-querydsl/commit/d333675068fbd3051b8a6fd06b6e34d8826f73bd))
 - support custom entity field type handler ([063203a0](https://github.com/ymind/rsql-querydsl/commit/063203a00d26c694d1e20de24a36e5cddbf49b4e))
 
 
@@ -135,4 +146,11 @@
 - **github**: disable push-back ([552c8f10](https://github.com/ymind/rsql-querydsl/commit/552c8f10cd58c4e3a00e3f30be3ea2d29ac4de4b))
 - **github**: adjust ci config ([0f06f6cc](https://github.com/ymind/rsql-querydsl/commit/0f06f6cc56b273b0d07ae89510f4f175e85a2582))
 - **github**: adjust project version update command ([4c7f68e9](https://github.com/ymind/rsql-querydsl/commit/4c7f68e97fcded9d17ccb732f556a29309f66b56))
+
+
+## 0.1.0 (2020-06-03)
+
+### Features
+
+- implement primary features and challenges ([d3336750](https://github.com/ymind/rsql-querydsl/commit/d333675068fbd3051b8a6fd06b6e34d8826f73bd))
 

@@ -25,4 +25,4 @@ insert_final_newline = false
 
 [*.{kt, kts}]
 disabled_rules = no-wildcard-imports, import-ordering
-kotlin_imports_layout = idea
+kotlin_imports_layout = *, java.**, javax.**, kotlin.**, ^

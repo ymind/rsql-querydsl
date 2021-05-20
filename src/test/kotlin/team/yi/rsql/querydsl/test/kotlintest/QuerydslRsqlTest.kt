@@ -3,7 +3,6 @@ package team.yi.rsql.querydsl.test.kotlintest
 import com.querydsl.core.Tuple
 import com.querydsl.core.types.Ops
 import com.querydsl.core.types.dsl.Expressions
-import javax.persistence.EntityManager
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,6 +10,7 @@ import team.yi.rsql.querydsl.QuerydslRsql
 import team.yi.rsql.querydsl.RsqlConfig
 import team.yi.rsql.querydsl.model.Car
 import team.yi.rsql.querydsl.test.BaseRsqlTest
+import javax.persistence.EntityManager
 
 @Suppress("SpellCheckingInspection", "UNCHECKED_CAST")
 class QuerydslRsqlTest : BaseRsqlTest() {
@@ -246,7 +246,11 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("id=notnull=''")
             .globalPredicate(
-                Expressions.booleanOperation(Ops.EQ, Expressions.booleanPath("active"), Expressions.asBoolean(true))
+                Expressions.booleanOperation(
+                    Ops.EQ,
+                    Expressions.booleanPath("active"),
+                    Expressions.asBoolean(true),
+                )
             )
             .sort("id.desc")
             .build()
