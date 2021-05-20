@@ -15,7 +15,7 @@ class CarNameFieldTypeHandlerTest : BaseRsqlTest() {
     private lateinit var entityManager: EntityManager
 
     @Test
-    fun shouldReadRsqlConfigxWithFieldTypeHandler() {
+    fun shouldReadRsqlConfigWithFieldTypeHandler() {
         val config = RsqlConfig.Builder<Car>(entityManager)
             .fieldTypeHandler(CarNameFieldTypeHandler::class.java)
             .build()

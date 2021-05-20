@@ -52,7 +52,7 @@ object DateUtil {
     }
 
     fun parse(dateString: String, dateFormat: String): Date? {
-        val format = if (dateFormat.isBlank()) return null else dateFormat
+        val format = dateFormat.ifBlank { return null }
 
         return try {
             val sdf = SimpleDateFormat(format)

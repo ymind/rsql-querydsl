@@ -1,11 +1,11 @@
 package team.yi.rsql.querydsl
 
 import cz.jirutka.rsql.parser.ast.ComparisonNode
+import javax.persistence.EntityManager
 import team.yi.rsql.querydsl.exception.RsqlException
 import team.yi.rsql.querydsl.exception.TypeNotSupportedException
 import team.yi.rsql.querydsl.handler.*
 import team.yi.rsql.querydsl.operator.RsqlOperator
-import javax.persistence.EntityManager
 
 class RsqlConfig<E> private constructor(builder: Builder<E>) {
     private val fieldTypeHandlers: MutableList<Class<out FieldTypeHandler<*>>>
@@ -33,14 +33,11 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
             DefaultSortFieldTypeHandler::class.java,
         )
 
-    val entityManager: EntityManager
-    var operators: List<RsqlOperator>
-    var dateFormat: String
+    val entityManager: EntityManager = builder.entityManager
+    var operators: List<RsqlOperator> = builder.operators.orEmpty()
+    var dateFormat: String? = builder.dateFormat
 
     init {
-        entityManager = builder.entityManager
-        operators = builder.operators.orEmpty()
-        dateFormat = builder.dateFormat.orEmpty()
         fieldTypeHandlers = defaultFieldTypeHandlers.toMutableList()
         sortFieldTypeHandlers = defaultSortFieldTypeHandlers.toMutableList()
 

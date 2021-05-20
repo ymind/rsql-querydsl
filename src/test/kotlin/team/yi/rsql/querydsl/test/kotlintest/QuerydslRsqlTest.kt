@@ -3,6 +3,7 @@ package team.yi.rsql.querydsl.test.kotlintest
 import com.querydsl.core.Tuple
 import com.querydsl.core.types.Ops
 import com.querydsl.core.types.dsl.Expressions
+import javax.persistence.EntityManager
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,7 +11,6 @@ import team.yi.rsql.querydsl.QuerydslRsql
 import team.yi.rsql.querydsl.RsqlConfig
 import team.yi.rsql.querydsl.model.Car
 import team.yi.rsql.querydsl.test.BaseRsqlTest
-import javax.persistence.EntityManager
 
 @Suppress("SpellCheckingInspection", "UNCHECKED_CAST")
 class QuerydslRsqlTest : BaseRsqlTest() {
@@ -100,6 +100,22 @@ class QuerydslRsqlTest : BaseRsqlTest() {
         val rsql = QuerydslRsql.Builder<Car>(entityManager)
             .from("Car")
             .where("mfgdt=notnull=''")
+            .build()
+        val cars = rsql.fetch()
+
+        assertNotNull(cars, "result is null")
+
+        cars?.let {
+            assertFalse(cars.isEmpty(), "Can't handle `notnull` operator for Date type")
+            assertEquals(50, cars.size, "Can't handle `notnull` operator for Date type correctly")
+        }
+    }
+
+    @Test
+    fun shouldHandleDateRange() {
+        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+            .from("Car")
+            .where("mfgdt>='2000-01-01 00:01:02' and mfgdt<='6666-12-31 23:59:59'")
             .build()
         val cars = rsql.fetch()
 

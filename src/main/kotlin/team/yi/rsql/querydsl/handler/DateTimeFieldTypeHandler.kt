@@ -37,6 +37,12 @@ class DateTimeFieldTypeHandler<E : Comparable<E>>(
     override fun toComparable(value: String?): Comparable<E>? {
         if (value.isNullOrBlank()) return null
 
-        return DateUtil.parse(value, rsqlConfig.dateFormat) as? Comparable<E>?
+        val dateFormat = rsqlConfig.dateFormat
+
+        return if (dateFormat.isNullOrEmpty()) {
+            DateUtil.parse(value)
+        } else {
+            DateUtil.parse(value, dateFormat)
+        } as? Comparable<E>?
     }
 }
