@@ -1,5 +1,5 @@
 pluginManagement {
-    val kotlinVersion = "1.5.0"
+    val kotlinVersion = "1.5.10"
 
     plugins {
         kotlin("jvm") version kotlinVersion
