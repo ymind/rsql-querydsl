@@ -16,7 +16,7 @@ object RsqlUtil {
     fun convertStringFieldsToPath(type: Class<*>, fields: List<String>): List<Path<*>> {
         val targetPath = PathBuilder(type, type.simpleName.lowercase(Locale.getDefault()))
 
-        return fields.mapTo(mutableListOf()) { targetPath[it] }
+        return fields.map { targetPath[it] }
     }
 
     fun getClassForEntityString(entityName: String, entityManager: EntityManager): Class<*>? {

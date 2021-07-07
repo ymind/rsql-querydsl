@@ -3,12 +3,13 @@ package team.yi.rsql.querydsl.test.kotlintest
 import com.querydsl.core.Tuple
 import com.querydsl.core.types.Ops
 import com.querydsl.core.types.dsl.Expressions
+import cz.jirutka.rsql.parser.ast.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import team.yi.rsql.querydsl.QuerydslRsql
-import team.yi.rsql.querydsl.RsqlConfig
+import team.yi.rsql.querydsl.*
 import team.yi.rsql.querydsl.model.Car
+import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.test.BaseRsqlTest
 import javax.persistence.EntityManager
 
@@ -31,6 +32,40 @@ class QuerydslRsqlTest : BaseRsqlTest() {
         cars?.let {
             assertFalse(cars.isEmpty(), "Can't read config")
             assertEquals(50, cars.size, "Can't read config correctly")
+        }
+    }
+
+    @Test
+    fun shouldRewriteQueryWithRsqlNodeInterceptor() {
+        val config = RsqlConfig.Builder<Car>(entityManager)
+            .nodeInterceptor {
+                object : RsqlNodeInterceptor {
+                    override fun <E> supports(rootClass: Class<E>, comparisonNode: ComparisonNode, operator: RsqlOperator): Boolean {
+                        return comparisonNode.selector.equals("description", ignoreCase = true)
+                    }
+
+                    override fun <E> visit(rootClass: Class<E>, comparisonNode: ComparisonNode, operator: RsqlOperator, nodesFactory: NodesFactory): ComparisonNode? {
+                        val arguments = listOf("")
+
+                        return nodesFactory.createComparisonNode(
+                            "=isnull=",
+                            comparisonNode.selector,
+                            arguments
+                        )
+                    }
+                }
+            }
+            .build()
+        val rsql = QuerydslRsql.Builder(config)
+            .from(Car::class.java)
+            .where("description=notempty=''")
+            .build()
+        val cars = rsql.fetch()
+
+        assertNotNull(cars, "result is null")
+
+        cars?.let {
+            assertTrue(cars.isEmpty(), "Rewrite failed")
         }
     }
 

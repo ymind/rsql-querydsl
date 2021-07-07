@@ -1,11 +1,11 @@
 package team.yi.rsql.querydsl
 
-import cz.jirutka.rsql.parser.ast.ComparisonNode
-import javax.persistence.EntityManager
-import team.yi.rsql.querydsl.exception.RsqlException
-import team.yi.rsql.querydsl.exception.TypeNotSupportedException
+import cz.jirutka.rsql.parser.ast.*
+import team.yi.rsql.querydsl.exception.*
 import team.yi.rsql.querydsl.handler.*
 import team.yi.rsql.querydsl.operator.RsqlOperator
+import team.yi.rsql.querydsl.util.RsqlUtil
+import javax.persistence.EntityManager
 
 class RsqlConfig<E> private constructor(builder: Builder<E>) {
     private val fieldTypeHandlers: MutableList<Class<out FieldTypeHandler<*>>>
@@ -35,6 +35,8 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
 
     val entityManager: EntityManager = builder.entityManager
     var operators: List<RsqlOperator> = builder.operators.orEmpty()
+    val nodesFactory: NodesFactory = NodesFactory(RsqlUtil.getOperators(operators))
+    val nodeInterceptors = builder.nodeInterceptors
     var dateFormat: String? = builder.dateFormat
 
     init {
@@ -54,8 +56,8 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun getFieldTypeHandler(node: ComparisonNode, operator: RsqlOperator, fieldMetadata: FieldMetadata): FieldTypeHandler<E> {
-        return getFieldTypeHandler(fieldMetadata.type, node, operator, fieldMetadata)
+    fun getFieldTypeHandler(node: ComparisonNode, fieldMetadata: FieldMetadata): FieldTypeHandler<E> {
+        return getFieldTypeHandler(fieldMetadata.type, node, RsqlOperator(node.operator.symbol), fieldMetadata)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -93,6 +95,7 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
         internal var operators: List<RsqlOperator>? = null
         internal var fieldTypeHandlers: List<Class<out FieldTypeHandler<*>>>? = null
         internal var sortFieldTypeHandlers: List<Class<out SortFieldTypeHandler<*>>>? = null
+        internal val nodeInterceptors = mutableListOf<RsqlNodeInterceptor>()
         internal var dateFormat: String? = null
 
         fun operator(vararg operator: RsqlOperator): Builder<E> = this.also { this.operators = operator.toList() }
@@ -107,6 +110,24 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
         @Suppress("UNCHECKED_CAST", "unused")
         fun javaSortFieldTypeHandler(vararg typeHandler: Class<*>): Builder<E> = this.also {
             this.sortFieldTypeHandlers = typeHandler.mapNotNull { it as? Class<out SortFieldTypeHandler<*>> }
+        }
+
+        fun nodeInterceptors(nodeInterceptors: List<RsqlNodeInterceptor>?): Builder<E> {
+            nodeInterceptors?.let { this.nodeInterceptors.addAll(nodeInterceptors) }
+
+            return this
+        }
+
+        fun nodeInterceptor(block: () -> RsqlNodeInterceptor?): Builder<E> {
+            block()?.let { this.nodeInterceptor(it) }
+
+            return this
+        }
+
+        fun nodeInterceptor(nodeInterceptor: RsqlNodeInterceptor?): Builder<E> {
+            nodeInterceptor?.let { this.nodeInterceptors.add(nodeInterceptor) }
+
+            return this
         }
 
         fun dateFormat(dateFormat: String?): Builder<E> = this.also { this.dateFormat = dateFormat }

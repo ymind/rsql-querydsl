@@ -1,16 +1,19 @@
 package team.yi.rsql.querydsl.test.javatest;
 
 import com.querydsl.core.Tuple;
+import cz.jirutka.rsql.parser.UnknownOperatorException;
+import cz.jirutka.rsql.parser.ast.ComparisonNode;
+import cz.jirutka.rsql.parser.ast.NodesFactory;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import team.yi.rsql.querydsl.QuerydslRsql;
-import team.yi.rsql.querydsl.RsqlConfig;
+import team.yi.rsql.querydsl.*;
 import team.yi.rsql.querydsl.model.Car;
+import team.yi.rsql.querydsl.operator.RsqlOperator;
 import team.yi.rsql.querydsl.test.BaseRsqlTest;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,6 +35,42 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
         assertNotNull(cars, "result is null");
         assertFalse(cars.isEmpty(), "Can't read config");
         assertEquals(50, cars.size(), "Can't read config correctly");
+    }
+
+    @Test
+    public void shouldRewriteQueryWithRsqlNodeInterceptor() {
+        RsqlConfig<Car> config = new RsqlConfig.Builder<Car>(this.entityManager)
+            .nodeInterceptor(() -> new RsqlNodeInterceptor() {
+                @Override
+                public <E> boolean supports(@NotNull Class<E> rootClass, @NotNull ComparisonNode comparisonNode, @NotNull RsqlOperator operator) {
+                    return comparisonNode.getSelector().equalsIgnoreCase("description");
+                }
+
+                @Override
+                public <E> ComparisonNode visit(
+                    @NotNull Class<E> rootClass,
+                    @NotNull ComparisonNode comparisonNode,
+                    @NotNull RsqlOperator operator,
+                    @NotNull NodesFactory nodesFactory
+                ) throws UnknownOperatorException {
+                    List<String> arguments = Collections.singletonList("");
+
+                    return nodesFactory.createComparisonNode(
+                        "=isnull=",
+                        comparisonNode.getSelector(),
+                        arguments
+                    );
+                }
+            })
+            .build();
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<>(config)
+            .from(Car.class)
+            .where("description=notempty=''")
+            .build();
+        List<Object> cars = rsql.fetch();
+
+        assertNotNull(cars, "result is null");
+        assertTrue(cars.isEmpty(), "Rewrite failed");
     }
 
     @Test

@@ -1,24 +1,15 @@
 package team.yi.rsql.querydsl
 
-import com.querydsl.core.types.Expression
-import com.querydsl.core.types.OrderSpecifier
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.Predicate
-import com.querydsl.core.types.dsl.BooleanExpression
-import com.querydsl.core.types.dsl.Expressions
-import com.querydsl.core.types.dsl.PathBuilder
-import com.querydsl.jpa.impl.JPAQuery
-import com.querydsl.jpa.impl.JPAQueryFactory
+import com.querydsl.core.types.*
+import com.querydsl.core.types.dsl.*
+import com.querydsl.jpa.impl.*
 import cz.jirutka.rsql.parser.RSQLParser
-import java.util.*
-import javax.persistence.EntityManager
-import team.yi.rsql.querydsl.exception.EntityNotFoundException
-import team.yi.rsql.querydsl.exception.RsqlException
-import team.yi.rsql.querydsl.exception.TypeNotSupportedException
-import team.yi.rsql.querydsl.handler.FieldTypeHandler
-import team.yi.rsql.querydsl.handler.SortFieldTypeHandler
+import team.yi.rsql.querydsl.exception.*
+import team.yi.rsql.querydsl.handler.*
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.RsqlUtil
+import java.util.*
+import javax.persistence.EntityManager
 
 @Suppress("UNCHECKED_CAST", "unused", "MemberVisibilityCanBePrivate")
 class QuerydslRsql<E> private constructor(builder: Builder<E>) {
@@ -89,7 +80,8 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         entityClass.let {
             if (where.isNullOrBlank()) return globalPredicate
 
-            val rootNode = RSQLParser(RsqlUtil.getOperators(rsqlConfig.operators)).parse(where)
+            val operators = RsqlUtil.getOperators(rsqlConfig.operators)
+            val rootNode = RSQLParser(operators).parse(where)
             val predicate = rootNode.accept(PredicateBuilderVisitor(it, predicateBuilder))
 
             return when {
@@ -163,12 +155,14 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             operators: List<RsqlOperator>? = null,
             fieldTypeHandlers: List<Class<FieldTypeHandler<E>>>? = null,
             sortFieldTypeHandlers: List<Class<SortFieldTypeHandler<E>>>? = null,
+            nodeInterceptors: List<RsqlNodeInterceptor>? = null,
             dateFormat: String? = null,
         ) : this(
             RsqlConfig.Builder<E>(entityManager)
                 .operator(*(operators ?: emptyList()).toTypedArray())
                 .fieldTypeHandler(*(fieldTypeHandlers ?: emptyList()).toTypedArray())
                 .sortFieldTypeHandler(*(sortFieldTypeHandlers ?: emptyList()).toTypedArray())
+                .nodeInterceptors(nodeInterceptors)
                 .dateFormat(dateFormat)
                 .build()
         )

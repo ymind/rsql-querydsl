@@ -1,11 +1,9 @@
 package team.yi.rsql.querydsl
 
-import com.mysema.codegen.model.TypeCategory
-import com.querydsl.codegen.EntityType
-import com.querydsl.codegen.TypeFactory
+import com.querydsl.codegen.*
+import com.querydsl.codegen.utils.model.TypeCategory
 import com.querydsl.core.types.dsl.*
-import java.lang.reflect.Field
-import java.lang.reflect.ParameterizedType
+import java.lang.reflect.*
 
 @Suppress("MemberVisibilityCanBePrivate")
 class FieldMetadata {
