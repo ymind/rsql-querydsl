@@ -285,10 +285,14 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
         requireNotNull(rsqlConfig.entityManager) { "Entity manager cannot be null." }
 
-        this.entityClass = when (builder.entityClass) {
-            null -> RsqlUtil.getClassForEntityString(builder.entityName!!, rsqlConfig.entityManager) as Class<E>?
-            else -> builder.entityClass
-        } ?: throw EntityNotFoundException("Can't find entity with name: " + builder.entityName, builder.entityName)
+        val entityClass = builder.entityClass
+        val entityName = builder.entityName
+
+        this.entityClass = when {
+            entityClass != null -> entityClass
+            entityName != null -> RsqlUtil.getClassForEntityString(entityName, rsqlConfig.entityManager) as Class<E>?
+            else -> null
+        } ?: throw EntityNotFoundException("Can't find entity with name: $entityName", entityName)
 
         this.select = builder.select
         this.expressionSelect = builder.expressionSelect
