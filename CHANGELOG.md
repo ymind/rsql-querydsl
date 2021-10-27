@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.7.11 (2021-10-27)
+
+### Code Refactoring
+
+- remove `FunctionTypeHandler` ([49966547](https://github.com/ymind/rsql-querydsl/commit/4996654770efb8721c542019f133ace6808be37a))
+
+
+### Chores
+
+- **deps**: bumped spring version to 2.5.6 ([7139ac4a](https://github.com/ymind/rsql-querydsl/commit/7139ac4a477f35200a5910c770f2f2d988f49dc2))
+- **deps**: bumped jackson-module-kotlin version to 2.13.0 ([22f27daa](https://github.com/ymind/rsql-querydsl/commit/22f27daa5ad4ccfe42b40d098eeb2e98303b74b0))
+- code cleanup ([7e2df15d](https://github.com/ymind/rsql-querydsl/commit/7e2df15d5f8b52a5cb43c4e0c2ea7d403cab7ea6))
+
+
+### Build System
+
+- **chore**: bumped querydsl version to 5.0.0 ([9323216f](https://github.com/ymind/rsql-querydsl/commit/9323216f47d5cc132f26eb47055d675c0851b47d))
+- **gradle**: bumped gradle wrapper version to 7.2 ([31519600](https://github.com/ymind/rsql-querydsl/commit/3151960067e110c1e6ed71efa5ebfc8481493af4))
+- **kotlin**: bumped kotlin version from to 1.5.31 ([ae84c9b4](https://github.com/ymind/rsql-querydsl/commit/ae84c9b48d5b530c8f5b375703e0a2d8e2e102d6))
+- **gradle/plugin**: bumped org.jlleitschuh.gradle.ktlint version to 10.2.0 ([0faf97f3](https://github.com/ymind/rsql-querydsl/commit/0faf97f3c59c544c6ee652b574a8e2d197a7ed96))
+
+
 ## 0.7.3 (2021-07-12)
 
 ### Features
@@ -106,7 +128,6 @@
 
 ### Features
 
-- implement primary features and challenges ([d3336750](https://github.com/ymind/rsql-querydsl/commit/d333675068fbd3051b8a6fd06b6e34d8826f73bd))
 - support custom entity field type handler ([063203a0](https://github.com/ymind/rsql-querydsl/commit/063203a00d26c694d1e20de24a36e5cddbf49b4e))
 
 
@@ -175,4 +196,11 @@
 - **github**: disable push-back ([552c8f10](https://github.com/ymind/rsql-querydsl/commit/552c8f10cd58c4e3a00e3f30be3ea2d29ac4de4b))
 - **github**: adjust ci config ([0f06f6cc](https://github.com/ymind/rsql-querydsl/commit/0f06f6cc56b273b0d07ae89510f4f175e85a2582))
 - **github**: adjust project version update command ([4c7f68e9](https://github.com/ymind/rsql-querydsl/commit/4c7f68e97fcded9d17ccb732f556a29309f66b56))
+
+
+## 0.1.0 (2020-06-03)
+
+### Features
+
+- implement primary features and challenges ([d3336750](https://github.com/ymind/rsql-querydsl/commit/d333675068fbd3051b8a6fd06b6e34d8826f73bd))
 
