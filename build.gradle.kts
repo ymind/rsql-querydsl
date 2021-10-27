@@ -54,9 +54,9 @@ dependencies {
     api("javax.persistence:javax.persistence-api:2.2")
 
     // https://mvnrepository.com/artifact/com.querydsl/querydsl-apt
-    api("com.querydsl:querydsl-jpa:5.0.0.M1")
-    api("com.querydsl:querydsl-codegen:5.0.0.M1")
-    kapt("com.querydsl:querydsl-apt:5.0.0.M1:jpa")
+    api("com.querydsl:querydsl-jpa:5.0.0")
+    api("com.querydsl:querydsl-codegen:5.0.0")
+    kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     api("org.apache.commons:commons-lang3:3.12.0")
