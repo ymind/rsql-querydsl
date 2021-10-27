@@ -14,7 +14,6 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
     @Suppress("MemberVisibilityCanBePrivate")
     val defaultFieldTypeHandlers: List<Class<out FieldTypeHandler<*>>>
         get() = listOf(
-            FunctionTypeHandler::class.java,
             NumberFieldTypeHandler::class.java,
             EnumFieldTypeHandler::class.java,
             StringFieldTypeHandler::class.java,
