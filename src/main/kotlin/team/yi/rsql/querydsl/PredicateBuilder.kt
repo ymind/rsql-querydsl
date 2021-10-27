@@ -32,7 +32,7 @@ class PredicateBuilder<E>(val rsqlConfig: RsqlConfig<E>) {
         val values = typeHandler.getValue(node.arguments, rootPath, fieldMetadataList[fieldMetadataList.size - 1])
 
         return when {
-            processedPaths.isNullOrEmpty() -> typeHandler.getExpression(null, values, fieldMetadataList[fieldMetadataList.size - 1])
+            processedPaths.isEmpty() -> typeHandler.getExpression(null, values, fieldMetadataList[fieldMetadataList.size - 1])
             else -> typeHandler.getExpression(processedPaths[processedPaths.size - 1], values, fieldMetadataList[fieldMetadataList.size - 1])
         }
     }

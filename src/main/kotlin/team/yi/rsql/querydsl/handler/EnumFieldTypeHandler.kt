@@ -32,7 +32,7 @@ class EnumFieldTypeHandler<E : Enum<E>>(
     }
 
     override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
-        if (values.isNullOrEmpty()) return null
+        if (values.isEmpty()) return null
 
         return values
             .map { if (it.isNullOrBlank()) null else Expressions.asEnum(java.lang.Enum.valueOf(fieldMetadata.type as Class<E>, it)) }

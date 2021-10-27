@@ -6,6 +6,6 @@ class EntityNotFoundException(
     val entityName: String?,
 ) : BuildException(message) {
     companion object {
-        private const val serialVersionUID = -8652075411472181004L
+        private const val serialVersionUID = 1L
     }
 }

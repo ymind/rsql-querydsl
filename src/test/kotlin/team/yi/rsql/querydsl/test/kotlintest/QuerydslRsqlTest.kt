@@ -3,11 +3,14 @@ package team.yi.rsql.querydsl.test.kotlintest
 import com.querydsl.core.Tuple
 import com.querydsl.core.types.Ops
 import com.querydsl.core.types.dsl.Expressions
-import cz.jirutka.rsql.parser.ast.*
+import cz.jirutka.rsql.parser.ast.ComparisonNode
+import cz.jirutka.rsql.parser.ast.NodesFactory
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import team.yi.rsql.querydsl.*
+import team.yi.rsql.querydsl.QuerydslRsql
+import team.yi.rsql.querydsl.RsqlConfig
+import team.yi.rsql.querydsl.RsqlNodeInterceptor
 import team.yi.rsql.querydsl.model.Car
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.test.BaseRsqlTest
@@ -47,11 +50,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
                     override fun <E> visit(rootClass: Class<E>, comparisonNode: ComparisonNode, operator: RsqlOperator, nodesFactory: NodesFactory): ComparisonNode? {
                         val arguments = listOf("")
 
-                        return nodesFactory.createComparisonNode(
-                            "=isnull=",
-                            comparisonNode.selector,
-                            arguments
-                        )
+                        return nodesFactory.createComparisonNode("=isnull=", comparisonNode.selector, arguments)
                     }
                 }
             }
@@ -280,13 +279,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .select("name,description,active")
             .from("Car")
             .where("id=notnull=''")
-            .globalPredicate(
-                Expressions.booleanOperation(
-                    Ops.EQ,
-                    Expressions.booleanPath("active"),
-                    Expressions.asBoolean(true),
-                )
-            )
+            .globalPredicate(Expressions.booleanOperation(Ops.EQ, Expressions.booleanPath("active"), Expressions.asBoolean(true)))
             .sort("id.desc")
             .build()
         val cars: List<Tuple> = querydslRsql.fetch() as List<Tuple>

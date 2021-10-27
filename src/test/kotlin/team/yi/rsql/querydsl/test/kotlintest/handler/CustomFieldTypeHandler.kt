@@ -27,7 +27,7 @@ class CustomFieldTypeHandler<E>(
     }
 
     override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
-        if (values.isNullOrEmpty()) return null
+        if (values.isEmpty()) return null
 
         return values.map { Expressions.asSimple(it) }
     }

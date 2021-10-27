@@ -7,6 +7,6 @@ open class RsqlException : RuntimeException {
     constructor(message: String) : super(message)
 
     companion object {
-        private const val serialVersionUID = -6636177131093201908L
+        private const val serialVersionUID = 1L
     }
 }

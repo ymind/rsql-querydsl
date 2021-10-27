@@ -69,10 +69,8 @@ object DateUtil {
     }
 
     fun determineDateFormat(dateString: String): String? {
-        for ((t, u) in DATE_FORMATS) {
-            if (u.matches(dateString)) return t
-        }
-
-        return null
+        return DATE_FORMATS.filter { it.value.matches(dateString) }
+            .map { it.key }
+            .firstOrNull()
     }
 }

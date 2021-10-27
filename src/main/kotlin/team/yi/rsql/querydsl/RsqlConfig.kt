@@ -1,7 +1,9 @@
 package team.yi.rsql.querydsl
 
-import cz.jirutka.rsql.parser.ast.*
-import team.yi.rsql.querydsl.exception.*
+import cz.jirutka.rsql.parser.ast.ComparisonNode
+import cz.jirutka.rsql.parser.ast.NodesFactory
+import team.yi.rsql.querydsl.exception.RsqlException
+import team.yi.rsql.querydsl.exception.TypeNotSupportedException
 import team.yi.rsql.querydsl.handler.*
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.RsqlUtil
