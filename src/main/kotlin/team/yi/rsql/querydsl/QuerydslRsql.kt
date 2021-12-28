@@ -1,11 +1,20 @@
 package team.yi.rsql.querydsl
 
-import com.querydsl.core.types.*
-import com.querydsl.core.types.dsl.*
-import com.querydsl.jpa.impl.*
+import com.querydsl.core.types.Expression
+import com.querydsl.core.types.OrderSpecifier
+import com.querydsl.core.types.Path
+import com.querydsl.core.types.Predicate
+import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.core.types.dsl.Expressions
+import com.querydsl.core.types.dsl.PathBuilder
+import com.querydsl.jpa.impl.JPAQuery
+import com.querydsl.jpa.impl.JPAQueryFactory
 import cz.jirutka.rsql.parser.RSQLParser
-import team.yi.rsql.querydsl.exception.*
-import team.yi.rsql.querydsl.handler.*
+import team.yi.rsql.querydsl.exception.EntityNotFoundException
+import team.yi.rsql.querydsl.exception.RsqlException
+import team.yi.rsql.querydsl.exception.TypeNotSupportedException
+import team.yi.rsql.querydsl.handler.FieldTypeHandler
+import team.yi.rsql.querydsl.handler.SortFieldTypeHandler
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.RsqlUtil
 import java.util.*
@@ -26,7 +35,10 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val rsqlConfig: RsqlConfig<E>
 
     @Throws(RsqlException::class)
-    fun buildQuery(selectFieldPath: List<Path<*>>?, noPaging: Boolean = false): JPAQuery<*> {
+    fun buildJPAQuery(noPaging: Boolean = false): JPAQuery<*> = buildJPAQuery(buildSelectPath(), noPaging)
+
+    @Throws(RsqlException::class)
+    fun buildJPAQuery(selectFieldPath: List<Path<*>>?, noPaging: Boolean = false): JPAQuery<*> {
         return try {
             val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
             val fromPath = PathBuilder<Any?>(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
@@ -62,7 +74,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     @Throws(RsqlException::class)
     fun fetch(): List<Any>? {
         val selectFieldPath = buildSelectPath()
-        val jpaQuery = buildQuery(selectFieldPath)
+        val jpaQuery = buildJPAQuery(selectFieldPath)
 
         return jpaQuery.fetch()
     }
@@ -70,7 +82,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     @Throws(RsqlException::class)
     fun fetchOne(): Any? {
         val selectFieldPath = buildSelectPath()
-        val jpaQuery = buildQuery(selectFieldPath)
+        val jpaQuery = buildJPAQuery(selectFieldPath)
 
         return jpaQuery.fetchOne()
     }
