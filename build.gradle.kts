@@ -12,7 +12,7 @@ plugins {
     kotlin("plugin.spring")
     kotlin("plugin.jpa")
 
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
     id("team.yi.semantic-gitlog") version "0.5.17"
 
     // https://plugins.gradle.org/plugin/se.patrikerdes.use-latest-versions
