@@ -80,14 +80,6 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     }
 
     @Throws(RsqlException::class)
-    fun fetchOne(): Any? {
-        val selectFieldPath = buildSelectPath()
-        val jpaQuery = buildJPAQuery(selectFieldPath)
-
-        return jpaQuery.fetchOne()
-    }
-
-    @Throws(RsqlException::class)
     fun buildPredicate(): Predicate? {
         entityClass.let {
             if (where.isNullOrBlank()) return globalPredicate
