@@ -24,7 +24,7 @@ class CarNameFieldTypeHandlerTest : BaseRsqlTest() {
             // NOTE: this operator and value will not work
             .where("customField=eq='xxx'")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         Assertions.assertNotNull(cars, "result is null")
 

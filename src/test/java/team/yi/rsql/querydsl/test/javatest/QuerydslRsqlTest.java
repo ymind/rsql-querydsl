@@ -30,7 +30,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .from(Car.class)
             .where("description=notempty=''")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "result is null");
         assertFalse(cars.isEmpty(), "Can't read config");
@@ -67,7 +67,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .from(Car.class)
             .where("description=notempty=''")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "result is null");
         assertTrue(cars.isEmpty(), "Rewrite failed");
@@ -79,7 +79,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .from("Car")
             .where("engine.screws.name=con='name'")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "result is null");
         assertFalse(cars.isEmpty(), "Can't handle multi level field query");
@@ -92,7 +92,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .from("Car")
             .where("engine.screws.name=con='Eszti'")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "result is null");
         assertTrue(cars.isEmpty(), "Can't handle multi level field query");
@@ -104,7 +104,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .from("Car")
             .where("id=notnull=''")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "result is null");
         assertFalse(cars.isEmpty(), "Can't handle select from with String");
@@ -117,7 +117,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .from("Car")
             .where("id=notnull=''")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "result is null");
         assertFalse(cars.isEmpty(), "Can't handle select from with Class");
@@ -130,7 +130,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .from("Car")
             .where("mfgdt=notnull=''")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "result is null");
         assertFalse(cars.isEmpty(), "Can't handle `notnull` operator for Date type");
@@ -143,7 +143,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .from("Car")
             .where("id=in=(3,6,9)")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "result is null");
         assertFalse(cars.isEmpty(), "Can't handle `in` operator for Number type");
@@ -157,7 +157,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .from("Car")
             .where("id=notnull=''")
             .build();
-        List<Object> items = rsql.fetch();
+        List<?> items = rsql.buildJPAQuery().fetch();
         List<Tuple> cars = (items == null ? new ArrayList<Tuple>() : items).stream()
             .map(x -> (Tuple) x)
             .collect(Collectors.toList());
@@ -175,7 +175,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .where("id=notnull=''")
             .sort("id.desc")
             .build();
-        List<Object> items = rsql.fetch();
+        List<?> items = rsql.buildJPAQuery().fetch();
         List<Tuple> cars = (items == null ? new ArrayList<Tuple>() : items).stream()
             .map(x -> (Tuple) x)
             .collect(Collectors.toList());
@@ -195,7 +195,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .sort("id.desc")
             .page(1, 15)
             .build();
-        List<Object> items = rsql.fetch();
+        List<?> items = rsql.buildJPAQuery().fetch();
         List<Tuple> cars = (items == null ? new ArrayList<Tuple>() : items).stream()
             .map(x -> (Tuple) x)
             .collect(Collectors.toList());
@@ -215,7 +215,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             .sort("id.desc")
             .limit(15L, 15L)
             .build();
-        List<Object> items = rsql.fetch();
+        List<?> items = rsql.buildJPAQuery().fetch();
         List<Tuple> cars = (items == null ? new ArrayList<Tuple>() : items).stream()
             .map(x -> (Tuple) x)
             .collect(Collectors.toList());

@@ -28,7 +28,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from(Car::class.java)
             .where("description=notempty=''")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -59,7 +59,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from(Car::class.java)
             .where("description=notempty=''")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -74,7 +74,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("engine.screws.name=con='name'")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -90,7 +90,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("engine.screws.name=con='Eszti'")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -103,7 +103,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("id=notnull=''")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -119,7 +119,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("id=notnull=''")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -135,7 +135,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("mfgdt=notnull=''")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -151,7 +151,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("mfgdt>='2000-01-01 00:01:02' and mfgdt<='6666-12-31 23:59:59'")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -167,7 +167,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("id=in=(3,6,9)")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -183,7 +183,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("id=in=(3)")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -199,7 +199,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("id=out=(3)")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -216,7 +216,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("id=notnull=''")
             .build()
-        val cars: List<Tuple> = querydslRsql.fetch() as List<Tuple>
+        val cars: List<Tuple> = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
 
         assertFalse(cars.isEmpty(), "Can't handle select expression")
         assertEquals(50, cars.size, "Can't handle select expression correctly")
@@ -231,7 +231,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .where("id=notnull=''")
             .sort("id.desc")
             .build()
-        val cars: List<Tuple> = querydslRsql.fetch() as List<Tuple>
+        val cars: List<Tuple> = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
 
         assertFalse(cars.isEmpty(), "Can't handle select expression")
         assertEquals(50, cars.size, "Can't handle select expression correctly")
@@ -248,7 +248,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .sort("id.desc")
             .page(1, 15)
             .build()
-        val cars: List<Tuple> = querydslRsql.fetch() as List<Tuple>
+        val cars: List<Tuple> = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
 
         assertFalse(cars.isEmpty(), "Can't handle page expression")
         assertEquals(15, cars.size, "Can't handle page expression")
@@ -265,7 +265,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .sort("id.desc")
             .limit(15L, 15)
             .build()
-        val cars: List<Tuple> = querydslRsql.fetch() as List<Tuple>
+        val cars: List<Tuple> = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
 
         assertFalse(cars.isEmpty(), "Can't handle limit expression")
         assertEquals(15, cars.size, "Can't handle limit expression")
@@ -282,7 +282,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .globalPredicate(Expressions.booleanOperation(Ops.EQ, Expressions.booleanPath("active"), Expressions.asBoolean(true)))
             .sort("id.desc")
             .build()
-        val cars: List<Tuple> = querydslRsql.fetch() as List<Tuple>
+        val cars: List<Tuple> = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
 
         assertFalse(cars.isEmpty(), "Can't handle limit expression")
         assertTrue(cars.stream().allMatch { it.toArray()[2] as Boolean }, "Can't handle globalPredicate")

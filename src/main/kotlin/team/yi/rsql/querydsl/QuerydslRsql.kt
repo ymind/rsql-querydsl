@@ -34,9 +34,11 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val orderSpecifiers: List<OrderSpecifier<*>>?
     private val rsqlConfig: RsqlConfig<E>
 
+    @JvmOverloads
     @Throws(RsqlException::class)
     fun buildJPAQuery(noPaging: Boolean = false): JPAQuery<*> = buildJPAQuery(buildSelectPath(), noPaging)
 
+    @JvmOverloads
     @Throws(RsqlException::class)
     fun buildJPAQuery(selectFieldPath: List<Path<*>>?, noPaging: Boolean = false): JPAQuery<*> {
         return try {
@@ -69,14 +71,6 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         } catch (ex: Exception) {
             throw RsqlException(ex)
         }
-    }
-
-    @Throws(RsqlException::class)
-    fun fetch(): List<Any>? {
-        val selectFieldPath = buildSelectPath()
-        val jpaQuery = buildJPAQuery(selectFieldPath)
-
-        return jpaQuery.fetch()
     }
 
     @Throws(RsqlException::class)

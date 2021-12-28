@@ -27,7 +27,7 @@ class CustomFieldTypeHandlerTest : BaseRsqlTest() {
             .from("Car")
             .where("description=customnotempty=''")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 
@@ -48,7 +48,7 @@ class CustomFieldTypeHandlerTest : BaseRsqlTest() {
                 .where("description=customnotempty=''")
                 .build()
 
-            rsql.fetch()
+            rsql.buildJPAQuery().fetch()
         }
     }
 
@@ -61,7 +61,7 @@ class CustomFieldTypeHandlerTest : BaseRsqlTest() {
             .from("Car")
             .where("description=notempty=''")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         assertNotNull(cars, "result is null")
 

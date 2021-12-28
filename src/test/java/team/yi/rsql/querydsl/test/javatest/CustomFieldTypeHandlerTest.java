@@ -30,7 +30,7 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("description=customnotempty=''")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "result is null");
         assertFalse(cars.isEmpty(), "Can't read config with custom operator");
@@ -48,7 +48,7 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
                 .where("description=customnotempty=''")
                 .build();
 
-            rsql.fetch();
+            rsql.buildJPAQuery().fetch();
         });
     }
 
@@ -61,7 +61,7 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("description=notempty=''")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "result is null");
         assertFalse(cars.isEmpty(), "Can't read config with custom field type handler");

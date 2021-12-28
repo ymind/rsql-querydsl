@@ -21,7 +21,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active=isnull=1")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `isnull` operator for Boolean type correctly");
         assertTrue(cars.isEmpty(), "Can't handle `isnull` operator for Boolean type");
@@ -33,7 +33,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active=notnull=1")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `notnull` operator for Boolean type correctly");
         assertFalse(cars.isEmpty(), "Can't handle `notnull` operator for Boolean type");
@@ -45,7 +45,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active!=true")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `ne` operator for Boolean type correctly");
         assertFalse(cars.isEmpty(), "Can't handle `ne` operator for Boolean type");
@@ -57,7 +57,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active=in=(true,false)")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `in` operator for Boolean type correctly");
         assertFalse(cars.isEmpty(), "Can't handle `in` operator for Boolean type");
@@ -69,7 +69,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active=notin=(true,false)")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `notin` operator for Boolean type correctly");
         assertTrue(cars.isEmpty(), "Can't handle `notin` operator for Boolean type");
@@ -81,7 +81,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active=between=(false,true)")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `between` operator for Boolean type correctly");
         assertFalse(cars.isEmpty(), "Can't handle `between` operator for Boolean type");
@@ -93,7 +93,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active=notbetween=(false,true)")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `between` operator for Boolean type correctly");
         assertTrue(cars.isEmpty(), "Can't handle `between` operator for Boolean type");
@@ -105,7 +105,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active=gt=false")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `gt` operator for Boolean type correctly");
         assertFalse(cars.isEmpty(), "Can't handle `gt` operator for Boolean type");
@@ -117,7 +117,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active=goe=false")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `goe` operator for Boolean type correctly");
         assertFalse(cars.isEmpty(), "Can't handle `goe` operator for Boolean type");
@@ -129,7 +129,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active=lt=true")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `lt` operator for Boolean type correctly");
         assertFalse(cars.isEmpty(), "Can't handle `lt` operator for Boolean type");
@@ -141,7 +141,7 @@ public class BooleanFieldTypeHandlerTest extends BaseRsqlTest {
             .from("Car")
             .where("active=loe=true")
             .build();
-        List<Object> cars = rsql.fetch();
+        List<?> cars = rsql.buildJPAQuery().fetch();
 
         assertNotNull(cars, "Can't handle `loe` operator for Boolean type correctly");
         assertFalse(cars.isEmpty(), "Can't handle `loe` operator for Boolean type");

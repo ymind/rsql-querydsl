@@ -18,7 +18,7 @@ class StringFieldTypeHandlerTest : BaseRsqlTest() {
             .from("Car")
             .where("name=like=%la3%")
             .build()
-        val cars = rsql.fetch()
+        val cars = rsql.buildJPAQuery().fetch()
 
         Assertions.assertNotNull(cars, "Can't handle `like` operator for String type correctly")
 
