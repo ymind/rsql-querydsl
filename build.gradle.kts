@@ -22,7 +22,7 @@ plugins {
 }
 
 group = "team.yi.rsql"
-version = "1.1.0"
+version = "1.1.1"
 description = "Integration RSQL query language and Querydsl framework."
 
 java {

@@ -1,5 +1,12 @@
 # 更新日志
 
+## 1.1.1 (2022-01-28)
+
+### Bug Fixes
+
+- `selectFieldPath` is not work ([9b89cf06](https://github.com/ymind/rsql-querydsl/commit/9b89cf06017d1509dd7b28d6a5efe572fae4e42c))
+
+
 ## 1.1.0 (2022-01-28)
 
 ### BREAKING CHANGES
