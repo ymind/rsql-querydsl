@@ -25,7 +25,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val predicateBuilder: PredicateBuilder<E>
     private val entityClass: Class<E>
     private val select: String?
-    private val selectExpressions: List<Expression<*>>?
+    private val selectExpressions: List<Expression<*>>
     private val where: String?
     private val globalPredicate: BooleanExpression?
     private val offset: Long?
@@ -40,22 +40,16 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
     @JvmOverloads
     @Throws(RsqlException::class)
-    fun buildJPAQuery(selectFieldPath: Set<Path<*>>?, noPaging: Boolean = false): JPAQuery<*> {
+    fun buildJPAQuery(selectFieldPath: Set<Expression<*>>?, noPaging: Boolean = false): JPAQuery<*> {
         return try {
             val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
             val fromPath = PathBuilder<Any?>(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
             val predicate = buildPredicate()
 
-            val jpaQuery = if (selectFieldPath.isNullOrEmpty() && selectExpressions.isNullOrEmpty()) {
+            val jpaQuery = if (selectFieldPath.isNullOrEmpty() && selectExpressions.isEmpty()) {
                 queryFactory.from(fromPath).where(predicate)
             } else {
-                val q = if (selectExpressions.isNullOrEmpty()) {
-                    queryFactory.select(*selectFieldPath?.toTypedArray().orEmpty())
-                } else {
-                    queryFactory.select(*selectExpressions.toTypedArray())
-                }
-
-                q.from(fromPath).where(predicate) as JPAQuery<*>
+                queryFactory.select(*(selectExpressions + selectFieldPath.orEmpty()).toTypedArray()).from(fromPath).where(predicate)
             }
 
             if (!noPaging) {
@@ -134,7 +128,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         var entityClass: Class<E>? = null
         var entityName: String? = null
         var select: String? = null
-        var selectExpressions: List<Expression<*>>? = null
+        var selectExpressions: List<Expression<*>> = emptyList()
         var where: String? = null
         var globalPredicate: BooleanExpression? = null
         var offset: Long? = null
