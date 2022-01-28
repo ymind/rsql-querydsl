@@ -25,7 +25,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val predicateBuilder: PredicateBuilder<E>
     private val entityClass: Class<E>
     private val select: String?
-    private val expressionSelect: Expression<*>?
+    private val selectExpressions: List<Expression<*>>?
     private val where: String?
     private val globalPredicate: BooleanExpression?
     private val offset: Long?
@@ -40,19 +40,19 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
     @JvmOverloads
     @Throws(RsqlException::class)
-    fun buildJPAQuery(selectFieldPath: List<Path<*>>?, noPaging: Boolean = false): JPAQuery<*> {
+    fun buildJPAQuery(selectFieldPath: Set<Path<*>>?, noPaging: Boolean = false): JPAQuery<*> {
         return try {
             val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
             val fromPath = PathBuilder<Any?>(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
             val predicate = buildPredicate()
 
-            val jpaQuery = if (selectFieldPath.isNullOrEmpty() && expressionSelect == null) {
+            val jpaQuery = if (selectFieldPath.isNullOrEmpty() && selectExpressions.isNullOrEmpty()) {
                 queryFactory.from(fromPath).where(predicate)
             } else {
-                val q = if (expressionSelect == null) {
-                    queryFactory.select(*RsqlUtil.convertPathToExpression(selectFieldPath))
+                val q = if (selectExpressions.isNullOrEmpty()) {
+                    queryFactory.select(*selectFieldPath?.toTypedArray().orEmpty())
                 } else {
-                    queryFactory.select(expressionSelect)
+                    queryFactory.select(*selectExpressions.toTypedArray())
                 }
 
                 q.from(fromPath).where(predicate) as JPAQuery<*>
@@ -110,7 +110,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         return orderSpecifiers.toTypedArray()
     }
 
-    fun buildSelectPath(): List<Path<*>>? = select?.let { RsqlUtil.parseSelect(select, entityClass) }
+    fun buildSelectPath(): Set<Path<*>> = RsqlUtil.parseSelect(select, entityClass)
 
     @Throws(TypeNotSupportedException::class)
     private fun getSortPath(fieldMetadataList: List<FieldMetadata>): Expression<*> {
@@ -134,7 +134,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         var entityClass: Class<E>? = null
         var entityName: String? = null
         var select: String? = null
-        var expressionSelect: Expression<*>? = null
+        var selectExpressions: List<Expression<*>>? = null
         var where: String? = null
         var globalPredicate: BooleanExpression? = null
         var offset: Long? = null
@@ -169,7 +169,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             this.entityClass = builder.entityClass
             this.entityName = builder.entityName
             this.select = builder.select
-            this.expressionSelect = builder.expressionSelect
+            this.selectExpressions = builder.selectExpressions
             this.where = builder.where
             this.globalPredicate = builder.globalPredicate
             this.offset = builder.offset
@@ -197,8 +197,8 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             return SelectBuilder(this)
         }
 
-        fun select(expression: Expression<*>?): SelectBuilder<E> {
-            expressionSelect = expression
+        fun select(vararg expression: Expression<*>?): SelectBuilder<E> {
+            selectExpressions = expression.filterNotNull().distinct()
 
             return SelectBuilder(this)
         }
@@ -293,7 +293,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         } ?: throw EntityNotFoundException("Can't find entity with name: $entityName", entityName)
 
         this.select = builder.select
-        this.expressionSelect = builder.expressionSelect
+        this.selectExpressions = builder.selectExpressions
         this.where = builder.where
         this.globalPredicate = builder.globalPredicate
         this.offset = builder.offset

@@ -1,6 +1,5 @@
 package team.yi.rsql.querydsl.util
 
-import com.querydsl.core.types.Expression
 import com.querydsl.core.types.Order
 import com.querydsl.core.types.Path
 import com.querydsl.core.types.dsl.PathBuilder
@@ -13,23 +12,10 @@ import javax.persistence.EntityManager
 
 @Suppress("MemberVisibilityCanBePrivate")
 object RsqlUtil {
-    fun convertStringFieldsToPath(type: Class<*>, fields: List<String>): List<Path<*>> {
-        val targetPath = PathBuilder(type, type.simpleName.lowercase(Locale.getDefault()))
-
-        return fields.map { targetPath[it] }
-    }
-
     fun getClassForEntityString(entityName: String, entityManager: EntityManager): Class<*>? {
         return entityManager.metamodel.entities
             .firstOrNull { entityName == it.name }
             ?.bindableJavaType
-    }
-
-    fun convertPathToExpression(paths: Collection<Path<*>>?): Array<Expression<*>> {
-        return when {
-            paths.isNullOrEmpty() -> emptyArray()
-            else -> ArrayList<Expression<*>>(paths).toTypedArray()
-        }
     }
 
     fun getOperators(customOperators: List<RsqlOperator>?): Set<ComparisonOperator> {
@@ -41,7 +27,9 @@ object RsqlUtil {
         if (customOperators.isNullOrEmpty()) return operators
 
         customOperators.forEach { operator ->
-            operator.symbols.mapTo(operators) { ComparisonOperator(it, true) }
+            operator.symbols.mapTo(operators) {
+                ComparisonOperator(it, true)
+            }
         }
 
         return operators
@@ -59,20 +47,24 @@ object RsqlUtil {
         }
     }
 
-    fun parseSelectExpression(selectString: String?): List<String>? {
-        if (selectString.isNullOrBlank()) return null
+    fun parseSelectExpression(selectString: String?): Set<String> {
+        if (selectString.isNullOrBlank()) return emptySet()
 
-        var str = selectString.replace("\\s+".toRegex(), "")
+        val str = selectString.replace("\\s+".toRegex(), "").trim('(', ')')
 
-        if (str.startsWith("(")) str = str.substring(1, str.length - 1)
-
-        return listOf(*str.split(",".toRegex()).toTypedArray())
+        return str.split(',').distinct().toSet()
     }
 
-    fun parseSelect(selectString: String?, entityClass: Class<*>): List<Path<*>>? {
-        val selectFields = parseSelectExpression(selectString) ?: return null
+    fun parseSelect(selectString: String?, entityClass: Class<*>): Set<Path<*>> {
+        val selectFields = parseSelectExpression(selectString)
 
         return convertStringFieldsToPath(entityClass, selectFields)
+    }
+
+    fun convertStringFieldsToPath(type: Class<*>, fields: Set<String>): Set<Path<*>> {
+        val targetPath = PathBuilder(type, type.simpleName.lowercase(Locale.getDefault()))
+
+        return fields.mapNotNull { targetPath[it] }.toSet()
     }
 
     fun parseFieldSelector(rootClass: Class<*>, fieldSelector: String?): List<FieldMetadata> {
@@ -106,7 +98,7 @@ object RsqlUtil {
         val result: MutableMap<String, Order> = HashMap()
         val sortParams = parseSelectExpression(sort)
 
-        require(!(sortParams == null || sortParams.isEmpty())) { "Invalid expression" }
+        require(sortParams.isNotEmpty()) { "Invalid expression" }
 
         for (param in sortParams) {
             val dotLastIndex = param.lastIndexOfAny(charArrayOf('-', '.'))

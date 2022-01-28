@@ -47,9 +47,7 @@ object DateUtil {
         "MM-yyyy" to Regex("^\\d{1,2}-\\d{4}$", regexOptions),
     )
 
-    fun parse(dateString: String): Date? {
-        return parse(dateString, determineDateFormat(dateString) ?: return null)
-    }
+    fun parse(dateString: String): Date? = determineDateFormat(dateString)?.let { parse(dateString, it) }
 
     fun parse(dateString: String, dateFormat: String): Date? {
         val format = dateFormat.ifBlank { return null }
