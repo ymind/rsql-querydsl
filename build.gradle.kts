@@ -45,7 +45,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:2.6.2")
 
     // https://mvnrepository.com/artifact/com.h2database/h2
-    testImplementation("com.h2database:h2:2.0.204")
+    testImplementation("com.h2database:h2:2.1.210")
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
