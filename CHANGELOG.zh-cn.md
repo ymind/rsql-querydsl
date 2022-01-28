@@ -1,5 +1,37 @@
 # 更新日志
 
+## 1.1.0 (2022-01-28)
+
+### BREAKING CHANGES
+
+- rename `buildQuery` to `buildJPAQuery` ([27d5064d](https://github.com/ymind/rsql-querydsl/commit/27d5064dfab49f143d9059335d6eb26624b54c4c))
+- delete `QuerydslRsql<E>.fetchOne()` ([631d1c0b](https://github.com/ymind/rsql-querydsl/commit/631d1c0b174f9104ad5ed1e03f4f60f63a0da095))
+- delete `QuerydslRsql<E>.fetch()` ([3b35382e](https://github.com/ymind/rsql-querydsl/commit/3b35382ed6651599598e244ec58f811e992e1cc3))
+
+
+### Features
+
+- support multiple select expressions ([e646e208](https://github.com/ymind/rsql-querydsl/commit/e646e208056cc7639a973527bab1080a85b86492))
+
+
+### Chores
+
+- **deps**: bumped spring version to 2.6.2 ([be6d5870](https://github.com/ymind/rsql-querydsl/commit/be6d587054246cdfb18f09799b04965c6fecb414))
+- **deps**: bumped jackson-module-kotlin version to 2.13.1 ([d1dd4a80](https://github.com/ymind/rsql-querydsl/commit/d1dd4a806ebc539219662053ee08fb49b9c13b5c))
+- **deps**: bumped h2 version to 2.0.204 ([b7d44852](https://github.com/ymind/rsql-querydsl/commit/b7d44852921437a1113794df03e149eecbaa01f1))
+- **deps**: bumped h2 version to 2.1.210 ([511381a4](https://github.com/ymind/rsql-querydsl/commit/511381a4a96a79314ff2adfb819252f71fc78100))
+- **deps**: bumped spring version to 2.6.3 ([6569a302](https://github.com/ymind/rsql-querydsl/commit/6569a3025ff8948a0f7adc16e8b7bf3d5155bc5a))
+
+
+### Build System
+
+- **gradle**: bumped gradle wrapper version to 7.3.3 ([8c303e29](https://github.com/ymind/rsql-querydsl/commit/8c303e2975064fe963c758f47eb0793fd218aa39))
+- **kotlin**: bumped kotlin version from to 1.6.10 ([62e5a492](https://github.com/ymind/rsql-querydsl/commit/62e5a492df86a088a9c5802bc9f76d0bada9b4de))
+- **gradle/plugin**: bumped org.jlleitschuh.gradle.ktlint version to 10.2.1 ([a7585aa4](https://github.com/ymind/rsql-querydsl/commit/a7585aa4663dff20f28267387dfcc37ae9c1b01e))
+- **gradle/plugin**: bumped se.patrikerdes.use-latest-versions version to 0.2.18 ([d04b2337](https://github.com/ymind/rsql-querydsl/commit/d04b2337f617e02b31f85cccf49e2216309b2712))
+- **gradle/plugin**: bumped com.github.ben-manes.versions version to 0.41.0 ([57d3a0b6](https://github.com/ymind/rsql-querydsl/commit/57d3a0b60424cd53897ea92dce1036c9dd1a7bb6))
+
+
 ## 0.7.11 (2021-10-27)
 
 ### Code Refactoring
