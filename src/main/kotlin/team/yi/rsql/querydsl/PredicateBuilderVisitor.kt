@@ -3,20 +3,19 @@ package team.yi.rsql.querydsl
 import com.querydsl.core.types.Ops
 import com.querydsl.core.types.Predicate
 import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.core.types.dsl.PathBuilder
 import cz.jirutka.rsql.parser.ast.*
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
 class PredicateBuilderVisitor<E>(
-    private val rootClass: Class<E>,
+    private val rootPath: PathBuilder<E>,
     private val predicateBuilder: PredicateBuilder<E>,
 ) : RSQLVisitor<Predicate, Predicate> {
     override fun visit(node: AndNode, param: Predicate?): Predicate = getLogicalExpression(node, param, Ops.AND)
 
     override fun visit(node: OrNode, param: Predicate?): Predicate = getLogicalExpression(node, param, Ops.OR)
 
-    override fun visit(node: ComparisonNode, param: Predicate?): Predicate? {
-        return predicateBuilder.getExpression(rootClass, node, RsqlOperator(node.operator.symbol))
-    }
+    override fun visit(node: ComparisonNode, param: Predicate?): Predicate? = predicateBuilder.getExpression(rootPath, node, RsqlOperator(node.operator.symbol))
 
     private fun getLogicalExpression(node: LogicalNode, param: Predicate?, logicalOperator: Ops): BooleanExpression {
         val children = node.children.toMutableList()

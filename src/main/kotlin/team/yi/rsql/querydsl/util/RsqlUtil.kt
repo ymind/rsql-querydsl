@@ -47,24 +47,18 @@ object RsqlUtil {
         }
     }
 
+    fun <T> parseSelect(selectString: String, pathBuilder: PathBuilder<T>): List<Path<*>> {
+        val selectFields = parseSelectExpression(selectString)
+
+        return if (selectFields.isEmpty()) emptyList() else selectFields.map { pathBuilder[it] }
+    }
+
     fun parseSelectExpression(selectString: String?): List<String> {
         if (selectString.isNullOrBlank()) return emptyList()
 
         val str = selectString.replace("\\s+".toRegex(), "").trim('(', ')')
 
         return str.split(',').distinct()
-    }
-
-    fun parseSelect(selectString: String?, entityClass: Class<*>): List<Path<*>> {
-        val selectFields = parseSelectExpression(selectString)
-
-        return convertStringFieldsToPath(entityClass, selectFields)
-    }
-
-    fun convertStringFieldsToPath(type: Class<*>, fields: List<String>): List<Path<*>> {
-        val targetPath = PathBuilder(type, type.simpleName.lowercase(Locale.getDefault()))
-
-        return fields.mapNotNull { targetPath[it] }
     }
 
     fun parseFieldSelector(rootClass: Class<*>, fieldSelector: String?): List<FieldMetadata> {

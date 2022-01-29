@@ -9,24 +9,45 @@
 
 Integration RSQL query language and Querydsl framework.
 
+> __WARNING: plans to drop support for java and use kotlin entirely.__
+
 # Quick start
 
 ```kotlin
-val rsql = QuerydslRsql.Builder<Car>(entityManager)
-    .from("Car")
-    .where("active=isnull=1")
-    .build()
-val cars = rsql.fetch()
+@Test
+fun shouldReturnTupleWithLimitNumber() {
+    val variable = Car::class.java.simpleName.lowercase(Locale.getDefault())
+    val car = PathBuilder(Car::class.java, variable, PathBuilderValidator.PROPERTIES)
+    val selectFields = RsqlUtil.parseSelect("name,description", car).toTypedArray()
+    val select = Projections.bean(
+        Car::class.java,
+        car.getNumber("id", Long::class.java).add(1000).`as`("id"),
+        *selectFields,
+    )
+    val querydslRsql = QuerydslRsql.Builder<Car>(entityManager)
+        .select(select)
+        .from("Car")
+        .where("id=notnull='' and (name=like='%a%' or name=con='Béla2,Béla11')")
+        .sort("id.desc")
+        .limit(15L, 15)
+        .build()
+    val cars = querydslRsql.buildJPAQuery().fetch()
+
+    assertFalse(cars.isEmpty(), "Can't handle limit expression")
+    assertEquals(15, cars.size, "Can't handle limit expression")
+}
 
 // will generate SQL:
-//    select car0_.id          as id1_0_,
-//           car0_.active      as active2_0_,
-//           car0_.description as descript3_0_,
-//           car0_.engine_id   as engine_i6_0_,
-//           car0_.mfgdt       as mfgdt4_0_,
-//           car0_.name        as name5_0_
-//    from car car0_
-//    where car0_.active is null
+//     select car0_.id+? as col_0_0_, car0_.name as col_1_0_, car0_.description as col_2_0_ 
+//     from car car0_ 
+//     where (car0_.id is not null) and (car0_.name like ? escape '!' or car0_.name like ? escape '!') 
+//     order by car0_.id desc 
+//     limit ? 
+//     offset ?
+//
+//     binding parameter [1] as [BIGINT] - [1000]
+//     binding parameter [2] as [VARCHAR] - [%a%]
+//     binding parameter [3] as [VARCHAR] - [%Béla2,Béla11%]
 ```
 
 For more usage, please refer to https://ymind.github.io/rsql-querydsl
@@ -40,4 +61,5 @@ For more usage, please refer to https://ymind.github.io/rsql-querydsl
 This is open-sourced software licensed under the [MIT license][9].
 
 [6]: https://github.com/ymind
+
 [9]: https://opensource.org/licenses/MIT

@@ -5,7 +5,6 @@ import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.Path
 import com.querydsl.core.types.Predicate
 import com.querydsl.core.types.dsl.BooleanExpression
-import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.core.types.dsl.PathBuilder
 import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -35,23 +34,26 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val rsqlConfig: RsqlConfig<E>
 
     @Throws(RsqlException::class)
-    fun buildJPAQuery(): JPAQuery<*> = buildJPAQuery(entityClass.simpleName.lowercase(Locale.getDefault()))
+    fun buildJPAQuery(): JPAQuery<*> {
+        val fromPath = PathBuilder(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
+
+        return buildJPAQuery(fromPath)
+    }
 
     @Throws(RsqlException::class)
-    fun buildJPAQuery(variable: String): JPAQuery<*> = buildJPAQuery(variable, buildSelectExpressions())
+    fun buildJPAQuery(fromPath: PathBuilder<E>): JPAQuery<*> = buildJPAQuery(fromPath, buildSelectExpressions(fromPath))
 
     @Throws(RsqlException::class)
-    fun buildJPAQuery(variable: String, select: List<Expression<*>>?): JPAQuery<*> {
+    fun buildJPAQuery(fromPath: PathBuilder<E>, select: List<Expression<*>>?): JPAQuery<*> {
         return try {
             val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
-            val fromPath = PathBuilder(entityClass, variable)
-            val jpaQuery = queryFactory.from(fromPath).where(buildPredicate())
+            val jpaQuery = queryFactory.from(fromPath).where(buildPredicate(fromPath))
 
             if (!select.isNullOrEmpty()) jpaQuery.select(*select.toTypedArray())
             if (offset != null && offset >= 0) jpaQuery.offset(offset)
             if (limit != null && limit >= 1) jpaQuery.limit(limit)
 
-            buildOrder()?.let { jpaQuery.orderBy(*it.toTypedArray()) }
+            buildOrder(fromPath)?.let { jpaQuery.orderBy(*it.toTypedArray()) }
 
             jpaQuery
         } catch (ex: Exception) {
@@ -60,13 +62,13 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     }
 
     @Throws(RsqlException::class)
-    fun buildPredicate(): Predicate? {
-        entityClass.let {
+    fun buildPredicate(fromPath: PathBuilder<E>): Predicate? {
+        fromPath.type.let {
             if (where.isNullOrBlank()) return globalPredicate
 
             val operators = RsqlUtil.getOperators(rsqlConfig.operators)
             val rootNode = RSQLParser(operators).parse(where)
-            val predicate = rootNode.accept(PredicateBuilderVisitor(it, predicateBuilder))
+            val predicate = rootNode.accept(PredicateBuilderVisitor(fromPath, predicateBuilder))
 
             return when {
                 globalPredicate == null && predicate == null -> null
@@ -76,7 +78,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         }
     }
 
-    private fun buildOrder(): MutableList<OrderSpecifier<*>>? {
+    private fun buildOrder(fromPath: PathBuilder<E>): MutableList<OrderSpecifier<*>>? {
         val orderSpecifiers: MutableList<OrderSpecifier<*>> = mutableListOf()
 
         if (sort == null) {
@@ -85,7 +87,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             val sorts = RsqlUtil.parseSortExpression(sort)
 
             for (sortSelect in sorts.keys) {
-                val sortPath = getSortPath(RsqlUtil.parseFieldSelector(entityClass, sortSelect))
+                val sortPath = getSortPath(fromPath, RsqlUtil.parseFieldSelector(entityClass, sortSelect))
                 val path = sortPath as? Path<Comparable<*>>
                 val order = OrderSpecifier(sorts[sortSelect], path)
 
@@ -96,20 +98,22 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         return if (orderSpecifiers.isEmpty()) null else orderSpecifiers
     }
 
-    fun buildSelectExpressions(): List<Expression<*>> = this.selectExpressions ?: RsqlUtil.parseSelect(selectString, entityClass)
+    fun buildSelectExpressions(fromPath: PathBuilder<E>): List<Expression<*>> {
+        return this.selectExpressions ?: RsqlUtil.parseSelect(selectString ?: return emptyList(), fromPath)
+    }
 
     @Throws(TypeNotSupportedException::class)
-    private fun getSortPath(fieldMetadataList: List<FieldMetadata>): Expression<*> {
-        val rootPath = Expressions.path(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
+    private fun getSortPath(fromPath: PathBuilder<E>, fieldMetadataList: List<FieldMetadata>): Expression<*> {
         val processedPaths = mutableListOf<Expression<*>>()
         var typeHandler: SortFieldTypeHandler<E>
 
         for (i in fieldMetadataList.indices) {
             typeHandler = rsqlConfig.getSortFieldTypeHandler(fieldMetadataList[i])
 
-            val path = typeHandler.getPath(if (i == 0) rootPath else processedPaths[i - 1])
+            val parent = if (i == 0) fromPath else processedPaths[i - 1]
+            val path = typeHandler.getPath(parent) ?: continue
 
-            path?.let { processedPaths.add(it) }
+            processedPaths.add(path)
         }
 
         return processedPaths[processedPaths.size - 1]

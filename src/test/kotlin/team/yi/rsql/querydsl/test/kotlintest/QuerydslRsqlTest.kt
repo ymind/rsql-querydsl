@@ -2,7 +2,10 @@ package team.yi.rsql.querydsl.test.kotlintest
 
 import com.querydsl.core.Tuple
 import com.querydsl.core.types.Ops
+import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.Expressions
+import com.querydsl.core.types.dsl.PathBuilder
+import com.querydsl.core.types.dsl.PathBuilderValidator
 import cz.jirutka.rsql.parser.ast.ComparisonNode
 import cz.jirutka.rsql.parser.ast.NodesFactory
 import org.junit.jupiter.api.Assertions.*
@@ -14,6 +17,8 @@ import team.yi.rsql.querydsl.RsqlNodeInterceptor
 import team.yi.rsql.querydsl.model.Car
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.test.BaseRsqlTest
+import team.yi.rsql.querydsl.util.RsqlUtil
+import java.util.*
 import javax.persistence.EntityManager
 
 @Suppress("SpellCheckingInspection", "UNCHECKED_CAST")
@@ -258,19 +263,25 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReturnTupleWithLimitNumber() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(entityManager)
-            .select("name,description")
+        val variable = Car::class.java.simpleName.lowercase(Locale.getDefault())
+        val car = PathBuilder(Car::class.java, variable, PathBuilderValidator.PROPERTIES)
+        val selectFields = RsqlUtil.parseSelect("name,description", car).toTypedArray()
+        val select = Projections.bean(
+            Car::class.java,
+            car.getNumber("id", Long::class.java).add(1000).`as`("id"),
+            *selectFields,
+        )
+        val querydslRsql = QuerydslRsql.Builder<Car>(entityManager)
+            .select(select)
             .from("Car")
-            .where("id=notnull=''")
+            .where("id=notnull='' and (name=like='%a%' or name=con='Béla2,Béla11')")
             .sort("id.desc")
             .limit(15L, 15)
             .build()
-        val cars: List<Tuple> = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
+        val cars = querydslRsql.buildJPAQuery().fetch()
 
         assertFalse(cars.isEmpty(), "Can't handle limit expression")
         assertEquals(15, cars.size, "Can't handle limit expression")
-        assertEquals(2, cars[0].toArray().size, "More than two column")
-        assertTrue(cars[0].toArray()[0] == "Béla34" && cars[1].toArray()[0] == "Béla33", "Not in order")
     }
 
     @Test
