@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.0 (2022-01-29)
+
+### Features
+
+- support custom from variable ([d6f00a2b](https://github.com/ymind/rsql-querydsl/commit/d6f00a2bada0b9d4628d2c3d62e815159328b996))
+- full support for select ([843ecfdd](https://github.com/ymind/rsql-querydsl/commit/843ecfdd0dd0190c0f705cc09c8224bbe51fc980))
+
+
+### Code Refactoring
+
+- optimize select expression support ([00113fc3](https://github.com/ymind/rsql-querydsl/commit/00113fc31914ada0840f3f2f1aaee7f926da6423))
+- remove `noPaging` parameter from buildJPAQuery ([0fc71996](https://github.com/ymind/rsql-querydsl/commit/0fc71996f08cc162b227db8b9257ff8a16e111ec))
+
+
 ## 1.1.1 (2022-01-28)
 
 ### Bug Fixes
