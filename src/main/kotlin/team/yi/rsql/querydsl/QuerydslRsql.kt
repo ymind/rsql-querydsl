@@ -36,14 +36,18 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
     @JvmOverloads
     @Throws(RsqlException::class)
-    fun buildJPAQuery(noPaging: Boolean = false): JPAQuery<*> = buildJPAQuery(buildSelectExpressions(), noPaging)
+    fun buildJPAQuery(noPaging: Boolean = false): JPAQuery<*> = buildJPAQuery(entityClass.simpleName.lowercase(Locale.getDefault()), noPaging)
 
     @JvmOverloads
     @Throws(RsqlException::class)
-    fun buildJPAQuery(select: List<Expression<*>>?, noPaging: Boolean = false): JPAQuery<*> {
+    fun buildJPAQuery(variable: String, noPaging: Boolean = false): JPAQuery<*> = buildJPAQuery(variable, buildSelectExpressions(), noPaging)
+
+    @JvmOverloads
+    @Throws(RsqlException::class)
+    fun buildJPAQuery(variable: String, select: List<Expression<*>>?, noPaging: Boolean = false): JPAQuery<*> {
         return try {
             val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
-            val fromPath = PathBuilder(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
+            val fromPath = PathBuilder(entityClass, variable)
             val jpaQuery = queryFactory.from(fromPath).where(buildPredicate())
 
             if (!select.isNullOrEmpty()) jpaQuery.select(*select.toTypedArray())
