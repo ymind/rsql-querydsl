@@ -34,32 +34,24 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val orderSpecifiers: List<OrderSpecifier<*>>?
     private val rsqlConfig: RsqlConfig<E>
 
-    @JvmOverloads
     @Throws(RsqlException::class)
-    fun buildJPAQuery(noPaging: Boolean = false): JPAQuery<*> = buildJPAQuery(entityClass.simpleName.lowercase(Locale.getDefault()), noPaging)
+    fun buildJPAQuery(): JPAQuery<*> = buildJPAQuery(entityClass.simpleName.lowercase(Locale.getDefault()))
 
-    @JvmOverloads
     @Throws(RsqlException::class)
-    fun buildJPAQuery(variable: String, noPaging: Boolean = false): JPAQuery<*> = buildJPAQuery(variable, buildSelectExpressions(), noPaging)
+    fun buildJPAQuery(variable: String): JPAQuery<*> = buildJPAQuery(variable, buildSelectExpressions())
 
-    @JvmOverloads
     @Throws(RsqlException::class)
-    fun buildJPAQuery(variable: String, select: List<Expression<*>>?, noPaging: Boolean = false): JPAQuery<*> {
+    fun buildJPAQuery(variable: String, select: List<Expression<*>>?): JPAQuery<*> {
         return try {
             val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
             val fromPath = PathBuilder(entityClass, variable)
             val jpaQuery = queryFactory.from(fromPath).where(buildPredicate())
 
             if (!select.isNullOrEmpty()) jpaQuery.select(*select.toTypedArray())
+            if (offset != null && offset >= 0) jpaQuery.offset(offset)
+            if (limit != null && limit >= 1) jpaQuery.limit(limit)
 
-            if (!noPaging) {
-                offset?.let { jpaQuery.offset(it) }
-                limit?.let { jpaQuery.limit(it) }
-            }
-
-            val orderSpecifiers = buildOrder()
-
-            if (orderSpecifiers.isNotEmpty()) jpaQuery.orderBy(*orderSpecifiers)
+            buildOrder()?.let { jpaQuery.orderBy(*it.toTypedArray()) }
 
             jpaQuery
         } catch (ex: Exception) {
@@ -84,7 +76,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         }
     }
 
-    private fun buildOrder(): Array<OrderSpecifier<*>> {
+    private fun buildOrder(): MutableList<OrderSpecifier<*>>? {
         val orderSpecifiers: MutableList<OrderSpecifier<*>> = mutableListOf()
 
         if (sort == null) {
@@ -101,7 +93,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             }
         }
 
-        return orderSpecifiers.toTypedArray()
+        return if (orderSpecifiers.isEmpty()) null else orderSpecifiers
     }
 
     fun buildSelectExpressions(): List<Expression<*>> = this.selectExpressions ?: RsqlUtil.parseSelect(selectString, entityClass)
