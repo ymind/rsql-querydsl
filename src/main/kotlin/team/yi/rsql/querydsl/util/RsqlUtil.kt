@@ -19,7 +19,7 @@ object RsqlUtil {
     }
 
     fun getOperators(customOperators: List<RsqlOperator>?): Set<ComparisonOperator> {
-        val operators: MutableSet<ComparisonOperator> = Operator.lookup.keys
+        val operators = Operator.lookup.keys
             .asSequence()
             .map { ComparisonOperator(it, true) }
             .toMutableSet()
@@ -47,24 +47,24 @@ object RsqlUtil {
         }
     }
 
-    fun parseSelectExpression(selectString: String?): Set<String> {
-        if (selectString.isNullOrBlank()) return emptySet()
+    fun parseSelectExpression(selectString: String?): List<String> {
+        if (selectString.isNullOrBlank()) return emptyList()
 
         val str = selectString.replace("\\s+".toRegex(), "").trim('(', ')')
 
-        return str.split(',').distinct().toSet()
+        return str.split(',').distinct()
     }
 
-    fun parseSelect(selectString: String?, entityClass: Class<*>): Set<Path<*>> {
+    fun parseSelect(selectString: String?, entityClass: Class<*>): List<Path<*>> {
         val selectFields = parseSelectExpression(selectString)
 
         return convertStringFieldsToPath(entityClass, selectFields)
     }
 
-    fun convertStringFieldsToPath(type: Class<*>, fields: Set<String>): Set<Path<*>> {
+    fun convertStringFieldsToPath(type: Class<*>, fields: List<String>): List<Path<*>> {
         val targetPath = PathBuilder(type, type.simpleName.lowercase(Locale.getDefault()))
 
-        return fields.mapNotNull { targetPath[it] }.toSet()
+        return fields.mapNotNull { targetPath[it] }
     }
 
     fun parseFieldSelector(rootClass: Class<*>, fieldSelector: String?): List<FieldMetadata> {

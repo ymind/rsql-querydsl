@@ -24,8 +24,8 @@ import javax.persistence.EntityManager
 class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val predicateBuilder: PredicateBuilder<E>
     private val entityClass: Class<E>
-    private val select: String?
-    private val selectExpressions: List<Expression<*>>
+    private val selectString: String?
+    private var selectExpressions: List<Expression<*>>? = null
     private val where: String?
     private val globalPredicate: BooleanExpression?
     private val offset: Long?
@@ -36,21 +36,17 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
     @JvmOverloads
     @Throws(RsqlException::class)
-    fun buildJPAQuery(noPaging: Boolean = false): JPAQuery<*> = buildJPAQuery(buildSelectPath(), noPaging)
+    fun buildJPAQuery(noPaging: Boolean = false): JPAQuery<*> = buildJPAQuery(buildSelectExpressions(), noPaging)
 
     @JvmOverloads
     @Throws(RsqlException::class)
-    fun buildJPAQuery(selectFieldPath: Set<Expression<*>>?, noPaging: Boolean = false): JPAQuery<*> {
+    fun buildJPAQuery(select: List<Expression<*>>?, noPaging: Boolean = false): JPAQuery<*> {
         return try {
             val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
-            val fromPath = PathBuilder<Any?>(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
-            val predicate = buildPredicate()
+            val fromPath = PathBuilder(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
+            val jpaQuery = queryFactory.from(fromPath).where(buildPredicate())
 
-            val jpaQuery = if (selectFieldPath.isNullOrEmpty() && selectExpressions.isEmpty()) {
-                queryFactory.from(fromPath).where(predicate)
-            } else {
-                queryFactory.select(*(selectExpressions + selectFieldPath.orEmpty()).toTypedArray()).from(fromPath).where(predicate)
-            }
+            if (!select.isNullOrEmpty()) jpaQuery.select(*select.toTypedArray())
 
             if (!noPaging) {
                 offset?.let { jpaQuery.offset(it) }
@@ -104,7 +100,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         return orderSpecifiers.toTypedArray()
     }
 
-    fun buildSelectPath(): Set<Path<*>> = RsqlUtil.parseSelect(select, entityClass)
+    fun buildSelectExpressions(): List<Expression<*>> = this.selectExpressions ?: RsqlUtil.parseSelect(selectString, entityClass)
 
     @Throws(TypeNotSupportedException::class)
     private fun getSortPath(fieldMetadataList: List<FieldMetadata>): Expression<*> {
@@ -124,17 +120,17 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     }
 
     open class Builder<E> {
-        val rsqlConfig: RsqlConfig<E>
-        var entityClass: Class<E>? = null
-        var entityName: String? = null
-        var select: String? = null
-        var selectExpressions: List<Expression<*>> = emptyList()
-        var where: String? = null
-        var globalPredicate: BooleanExpression? = null
-        var offset: Long? = null
-        var limit: Long? = null
-        var sort: String? = null
-        var orderSpecifiers: List<OrderSpecifier<*>>? = null
+        internal val rsqlConfig: RsqlConfig<E>
+        internal var entityClass: Class<E>? = null
+        internal var entityName: String? = null
+        internal var selectString: String? = null
+        internal var selectExpressions: List<Expression<*>>? = null
+        internal var where: String? = null
+        internal var globalPredicate: BooleanExpression? = null
+        internal var offset: Long? = null
+        internal var limit: Long? = null
+        internal var sort: String? = null
+        internal var orderSpecifiers: List<OrderSpecifier<*>>? = null
 
         constructor(rsqlConfig: RsqlConfig<E>) {
             this.rsqlConfig = rsqlConfig
@@ -162,7 +158,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         private constructor(builder: Builder<E>) {
             this.entityClass = builder.entityClass
             this.entityName = builder.entityName
-            this.select = builder.select
+            this.selectString = builder.selectString
             this.selectExpressions = builder.selectExpressions
             this.where = builder.where
             this.globalPredicate = builder.globalPredicate
@@ -186,7 +182,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         }
 
         fun select(select: String?): SelectBuilder<E> {
-            this.select = select
+            this.selectString = select
 
             return SelectBuilder(this)
         }
@@ -286,7 +282,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             else -> null
         } ?: throw EntityNotFoundException("Can't find entity with name: $entityName", entityName)
 
-        this.select = builder.select
+        this.selectString = builder.selectString
         this.selectExpressions = builder.selectExpressions
         this.where = builder.where
         this.globalPredicate = builder.globalPredicate
