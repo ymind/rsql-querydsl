@@ -45,9 +45,14 @@ object DateUtil {
         "yyyy-MM" to Regex("^\\d{4}-\\d{1,2}\$", regexOptions),
         "MM.yyyy" to Regex("^\\d{1,2}\\.\\d{4}$", regexOptions),
         "MM-yyyy" to Regex("^\\d{1,2}-\\d{4}$", regexOptions),
+        "HH:mm:ss.SSS'Z'" to Regex("^\\d{1,2}:\\d{1,2}:\\d{1,2}\\.\\d{3}'?Z'?$", regexOptions),
+        "HH:mm:ss" to Regex("^\\d{1,2}:\\d{1,2}:\\d{1,2}$", regexOptions),
+        "HH:mm" to Regex("^\\d{1,2}:\\d{1,2}$", regexOptions),
     )
 
-    fun parse(dateString: String): Date? = determineDateFormat(dateString)?.let { parse(dateString, it) }
+    fun parse(dateString: String): Date? {
+        return parse(dateString, determineDateFormat(dateString) ?: return null)
+    }
 
     fun parse(dateString: String, dateFormat: String): Date? {
         val format = dateFormat.ifBlank { return null }
@@ -67,7 +72,8 @@ object DateUtil {
     }
 
     fun determineDateFormat(dateString: String): String? {
-        return DATE_FORMATS.filter { it.value.matches(dateString) }
+        return DATE_FORMATS.asSequence()
+            .filter { it.value.matches(dateString) }
             .map { it.key }
             .firstOrNull()
     }
