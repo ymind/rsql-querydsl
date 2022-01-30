@@ -19,7 +19,6 @@ import team.yi.rsql.querydsl.util.RsqlUtil
 import java.util.*
 import javax.persistence.EntityManager
 
-@Suppress("UNCHECKED_CAST", "unused", "MemberVisibilityCanBePrivate")
 class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val predicateBuilder: PredicateBuilder<E>
     private val entityClass: Class<E>
@@ -85,6 +84,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun buildOrder(fromPath: PathBuilder<E>): MutableList<OrderSpecifier<*>>? {
         val orderSpecifiers: MutableList<OrderSpecifier<*>> = mutableListOf()
 
@@ -105,6 +105,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         return if (orderSpecifiers.isEmpty()) null else orderSpecifiers
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun buildSelectExpressions(fromPath: PathBuilder<E>): List<Expression<*>> {
         return this.selectExpressions ?: RsqlUtil.parseSelect(selectString ?: return emptyList(), fromPath)
     }
@@ -222,6 +223,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             }
         }
 
+        @Suppress("unused", "MemberVisibilityCanBePrivate")
         class BuildBuilder<E>(builder: Builder<E>) : Builder<E>(builder) {
             fun globalPredicate(globalPredicate: BooleanExpression?): BuildBuilder<E> = this.also { super.globalPredicate = globalPredicate }
 
@@ -283,6 +285,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         val entityClass = builder.entityClass
         val entityName = builder.entityName
 
+        @Suppress("UNCHECKED_CAST")
         this.entityClass = when {
             entityClass != null -> entityClass
             entityName != null -> RsqlUtil.getClassForEntityString(entityName, rsqlConfig.entityManager) as Class<E>?

@@ -125,6 +125,7 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
             return this
         }
 
+        @Suppress("MemberVisibilityCanBePrivate")
         fun nodeInterceptor(nodeInterceptor: RsqlNodeInterceptor?): Builder<E> {
             nodeInterceptor?.let { this.nodeInterceptors.add(nodeInterceptor) }
 

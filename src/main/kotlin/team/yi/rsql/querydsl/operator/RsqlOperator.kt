@@ -7,8 +7,8 @@ class RsqlOperator(vararg val symbols: String) {
         if (this === other) return true
 
         return when (other) {
-            is Operator -> other.rsqlOperator.intersect(arrayListOf(*symbols)).isNotEmpty()
-            is RsqlOperator -> other.symbols.intersect(arrayListOf(*symbols)).isNotEmpty()
+            is Operator -> other.rsqlOperator.intersect(setOf(*symbols)).isNotEmpty()
+            is RsqlOperator -> other.symbols.intersect(setOf(*symbols)).isNotEmpty()
             else -> false
         }
     }
