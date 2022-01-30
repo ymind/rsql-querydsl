@@ -1,6 +1,11 @@
 # 更新日志
 
-## 1.3.0 (2022-01-29)
+## 1.3.3 (2022-01-30)
+
+### Bug Fixes
+
+- fix `Projections.*` not work in select expressions ([ed805716](https://github.com/ymind/rsql-querydsl/commit/ed80571663da64c9b8a97d02acde85f81feab120))
+
 
 ### Features
 
@@ -12,6 +17,12 @@
 
 - optimize select expression support ([00113fc3](https://github.com/ymind/rsql-querydsl/commit/00113fc31914ada0840f3f2f1aaee7f926da6423))
 - remove `noPaging` parameter from buildJPAQuery ([0fc71996](https://github.com/ymind/rsql-querydsl/commit/0fc71996f08cc162b227db8b9257ff8a16e111ec))
+- add time patterns for DateUtil ([5dca322b](https://github.com/ymind/rsql-querydsl/commit/5dca322bc180273c444776b2334f5a42d8b43329))
+
+
+### Chores
+
+- code cleanup ([464bc36d](https://github.com/ymind/rsql-querydsl/commit/464bc36df1172f2d07ff62779f3a64feb8c15786))
 
 
 ## 1.1.1 (2022-01-28)
