@@ -49,7 +49,14 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
             val jpaQuery = queryFactory.from(fromPath).where(buildPredicate(fromPath))
 
-            if (!select.isNullOrEmpty()) jpaQuery.select(*select.toTypedArray())
+            if (!select.isNullOrEmpty()) {
+                if (select.size == 1) {
+                    jpaQuery.select(select[0])
+                } else {
+                    jpaQuery.select(*select.toTypedArray())
+                }
+            }
+
             if (offset != null && offset >= 0) jpaQuery.offset(offset)
             if (limit != null && limit >= 1) jpaQuery.limit(limit)
 
@@ -200,7 +207,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
                 return FromBuilder(builder)
             }
 
-            fun from(entityClass: Class<E>?): FromBuilder<E> {
+            fun from(entityClass: Class<E>): FromBuilder<E> {
                 builder.entityClass = entityClass
 
                 return FromBuilder(builder)
