@@ -23,7 +23,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val predicateBuilder: PredicateBuilder<E>
     private val entityClass: Class<E>
     private val selectString: String?
-    private var selectExpressions: List<Expression<*>>? = null
+    private val selectExpressions: List<Expression<*>>?
     private val where: String?
     private val globalPredicate: BooleanExpression?
     private val offset: Long?

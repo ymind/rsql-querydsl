@@ -16,22 +16,23 @@ Integration RSQL query language and Querydsl framework.
 ```kotlin
 @Test
 fun shouldReturnTupleWithLimitNumber() {
-    val variable = Car::class.java.simpleName.lowercase(Locale.getDefault())
-    val car = PathBuilder(Car::class.java, variable, PathBuilderValidator.PROPERTIES)
-    val selectFields = RsqlUtil.parseSelect("name,description", car).toTypedArray()
+    val clazz = Car::class.java
+    val variable = clazz.simpleName.lowercase(Locale.getDefault())
+    val pathBuilder = PathBuilder(clazz, variable, PathBuilderValidator.PROPERTIES)
+    val selectFields = RsqlUtil.parseSelect("name,description", pathBuilder).toTypedArray()
     val select = Projections.bean(
-        Car::class.java,
-        car.getNumber("id", Long::class.java).add(1000).`as`("id"),
+        clazz,
+        pathBuilder.getNumber("id", Long::class.java).add(1000).`as`("id"),
         *selectFields,
     )
     val querydslRsql = QuerydslRsql.Builder<Car>(entityManager)
         .select(select)
-        .from("Car")
+        .from(clazz)
         .where("id=notnull='' and (name=like='%a%' or name=con='Béla2,Béla11')")
         .sort("id.desc")
         .limit(15L, 15)
         .build()
-    val cars = querydslRsql.buildJPAQuery().fetch()
+    val cars = querydslRsql.buildJPAQuery(pathBuilder).fetch()
 
     assertFalse(cars.isEmpty(), "Can't handle limit expression")
     assertEquals(15, cars.size, "Can't handle limit expression")
