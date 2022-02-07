@@ -9,7 +9,6 @@ import com.querydsl.core.types.dsl.PathBuilder
 import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import cz.jirutka.rsql.parser.RSQLParser
-import team.yi.rsql.querydsl.exception.EntityNotFoundException
 import team.yi.rsql.querydsl.exception.RsqlException
 import team.yi.rsql.querydsl.exception.TypeNotSupportedException
 import team.yi.rsql.querydsl.handler.FieldTypeHandler
@@ -21,7 +20,7 @@ import javax.persistence.EntityManager
 
 class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val predicateBuilder: PredicateBuilder<E>
-    private val entityClass: Class<E>
+    private val from: PathBuilder<E>?
     private val selectString: String?
     private val selectExpressions: List<Expression<*>>?
     private val where: String?
@@ -34,11 +33,30 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
     val pathFactory = PathFactory()
 
+    init {
+        this.rsqlConfig = builder.rsqlConfig
+        this.predicateBuilder = PredicateBuilder(rsqlConfig)
+
+        RsqlUtil.validateOperators(rsqlConfig.operators)
+
+        requireNotNull(rsqlConfig.entityManager) { "Entity manager cannot be null." }
+
+        this.from = buildFrom(builder.entityClass, builder.entityName)
+        this.selectString = builder.selectString
+        this.selectExpressions = builder.selectExpressions
+        this.where = builder.where
+        this.globalPredicate = builder.globalPredicate
+        this.offset = builder.offset
+        this.limit = builder.limit
+        this.sortString = builder.sort
+        this.sortExpressions = builder.orderSpecifiers
+    }
+
     @Throws(RsqlException::class)
     fun buildJPAQuery(): JPAQuery<*> {
-        val fromPath = pathFactory.create(entityClass)
+        requireNotNull(from)
 
-        return buildJPAQuery(fromPath)
+        return buildJPAQuery(from)
     }
 
     @Throws(RsqlException::class)
@@ -87,7 +105,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun buildOrder(fromPath: PathBuilder<E>): MutableList<OrderSpecifier<*>>? {
+    fun buildOrder(fromPath: PathBuilder<E>): MutableList<OrderSpecifier<*>>? {
         val orderSpecifiers: MutableList<OrderSpecifier<*>> = mutableListOf()
 
         if (sortString == null) {
@@ -127,6 +145,17 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         }
 
         return processedPaths[processedPaths.size - 1]
+    }
+
+    private fun buildFrom(entityClass: Class<E>?, entityName: String?): PathBuilder<E>? {
+        @Suppress("UNCHECKED_CAST")
+        val entityClazz = when {
+            entityClass != null -> entityClass
+            entityName != null -> RsqlUtil.getClassForEntityString(entityName, rsqlConfig.entityManager) as Class<E>?
+            else -> null
+        } ?: return null
+
+        return pathFactory.create(entityClazz)
     }
 
     open class Builder<E> {
@@ -179,50 +208,34 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             this.orderSpecifiers = builder.orderSpecifiers
         }
 
-        fun from(entityName: String?): FromBuilder<E> {
-            this.entityName = entityName
-
-            return FromBuilder(this)
-        }
-
-        fun from(entityClass: Class<E>?): FromBuilder<E> {
-            this.entityClass = entityClass
-
-            return FromBuilder(this)
-        }
-
-        fun select(select: String?): SelectBuilder<E> {
+        fun select(select: String?): BuildBuilder<E> {
             this.selectString = select
 
-            return SelectBuilder(this)
+            return BuildBuilder(this)
         }
 
-        fun select(vararg expression: Expression<*>?): SelectBuilder<E> {
-            selectExpressions = expression.filterNotNull().distinct()
+        fun select(vararg expression: Expression<*>?): BuildBuilder<E> {
+            this.selectExpressions = expression.filterNotNull().distinct()
 
-            return SelectBuilder(this)
+            return BuildBuilder(this)
         }
 
-        class SelectBuilder<E>(private val builder: Builder<E>) {
-            fun from(entityName: String?): FromBuilder<E> {
-                builder.entityName = entityName
+        fun from(entityName: String?): BuildBuilder<E> {
+            this.entityName = entityName
 
-                return FromBuilder(builder)
-            }
-
-            fun from(entityClass: Class<E>): FromBuilder<E> {
-                builder.entityClass = entityClass
-
-                return FromBuilder(builder)
-            }
+            return BuildBuilder(this)
         }
 
-        class FromBuilder<E>(private val builder: Builder<E>) {
-            fun where(where: String?): BuildBuilder<E> {
-                builder.where = where
+        fun from(entityClass: Class<E>?): BuildBuilder<E> {
+            this.entityClass = entityClass
 
-                return BuildBuilder(builder)
-            }
+            return BuildBuilder(this)
+        }
+
+        fun where(where: String?): BuildBuilder<E> {
+            this.where = where
+
+            return BuildBuilder(this)
         }
 
         @Suppress("unused", "MemberVisibilityCanBePrivate")
@@ -275,33 +288,5 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
             fun dateFormat(dateFormat: String): BuildBuilder<E> = this.also { super.rsqlConfig.dateFormat = dateFormat }
         }
-    }
-
-    init {
-        this.rsqlConfig = builder.rsqlConfig
-        this.predicateBuilder = PredicateBuilder(rsqlConfig)
-
-        RsqlUtil.validateOperators(rsqlConfig.operators)
-
-        requireNotNull(rsqlConfig.entityManager) { "Entity manager cannot be null." }
-
-        val entityClass = builder.entityClass
-        val entityName = builder.entityName
-
-        @Suppress("UNCHECKED_CAST")
-        this.entityClass = when {
-            entityClass != null -> entityClass
-            entityName != null -> RsqlUtil.getClassForEntityString(entityName, rsqlConfig.entityManager) as Class<E>?
-            else -> null
-        } ?: throw EntityNotFoundException("Can't find entity with name: $entityName", entityName)
-
-        this.selectString = builder.selectString
-        this.selectExpressions = builder.selectExpressions
-        this.where = builder.where
-        this.globalPredicate = builder.globalPredicate
-        this.offset = builder.offset
-        this.limit = builder.limit
-        this.sortString = builder.sort
-        this.sortExpressions = builder.orderSpecifiers
     }
 }

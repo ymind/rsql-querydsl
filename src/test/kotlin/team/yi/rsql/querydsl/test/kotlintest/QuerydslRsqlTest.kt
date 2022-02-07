@@ -274,7 +274,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
         )
         val querydslRsql = QuerydslRsql.Builder<Car>(entityManager)
             .select(select)
-            .from(clazz)
+            // .from(clazz)
             .where("id=notnull='' and (name=like='%a%' or name=con='Béla2,Béla11')")
             .sort("id.desc")
             .limit(15L, 15)
