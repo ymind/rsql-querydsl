@@ -208,39 +208,17 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             this.orderSpecifiers = builder.orderSpecifiers
         }
 
-        fun select(select: String?): BuildBuilder<E> {
-            this.selectString = select
+        fun select(select: String?): BuildBuilder<E> = BuildBuilder(this).apply { this.selectString = select }
+        fun select(vararg expression: Expression<*>?): BuildBuilder<E> = BuildBuilder(this).apply { this.selectExpressions = expression.filterNotNull().distinct() }
 
-            return BuildBuilder(this)
-        }
+        fun from(entityName: String?): BuildBuilder<E> = BuildBuilder(this).apply { this.entityName = entityName }
+        fun from(entityClass: Class<E>?): BuildBuilder<E> = BuildBuilder(this).apply { this.entityClass = entityClass }
 
-        fun select(vararg expression: Expression<*>?): BuildBuilder<E> {
-            this.selectExpressions = expression.filterNotNull().distinct()
-
-            return BuildBuilder(this)
-        }
-
-        fun from(entityName: String?): BuildBuilder<E> {
-            this.entityName = entityName
-
-            return BuildBuilder(this)
-        }
-
-        fun from(entityClass: Class<E>?): BuildBuilder<E> {
-            this.entityClass = entityClass
-
-            return BuildBuilder(this)
-        }
-
-        fun where(where: String?): BuildBuilder<E> {
-            this.where = where
-
-            return BuildBuilder(this)
-        }
+        fun where(where: String?): BuildBuilder<E> = BuildBuilder(this).apply { this.where = where }
 
         @Suppress("unused", "MemberVisibilityCanBePrivate")
         class BuildBuilder<E>(builder: Builder<E>) : Builder<E>(builder) {
-            fun globalPredicate(globalPredicate: BooleanExpression?): BuildBuilder<E> = this.also { super.globalPredicate = globalPredicate }
+            fun globalPredicate(globalPredicate: BooleanExpression?): BuildBuilder<E> = this.apply { super.globalPredicate = globalPredicate }
 
             @Throws(RsqlException::class)
             fun build(): QuerydslRsql<E> {
@@ -252,13 +230,13 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             }
 
             fun offset(offset: Int?): BuildBuilder<E> = offset(offset?.toLong())
-            fun offset(offset: Long?): BuildBuilder<E> = this.also { super.offset = offset }
+            fun offset(offset: Long?): BuildBuilder<E> = this.apply { super.offset = offset }
 
             fun limit(limit: Int?): BuildBuilder<E> = limit(limit?.toLong())
-            fun limit(limit: Long?): BuildBuilder<E> = this.also { super.limit = limit }
+            fun limit(limit: Long?): BuildBuilder<E> = this.apply { super.limit = limit }
 
             fun limit(offset: Int?, limit: Int?): BuildBuilder<E> = limit(offset?.toLong(), limit?.toLong())
-            fun limit(offset: Long?, limit: Long?): BuildBuilder<E> = this.also {
+            fun limit(offset: Long?, limit: Long?): BuildBuilder<E> = this.apply {
                 super.offset = offset
                 super.limit = limit
             }
@@ -266,27 +244,23 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             fun page(pageNumber: Int, pageSize: Int): BuildBuilder<E> = page(pageNumber.toLong(), pageSize.toLong())
             fun page(pageNumber: Int, pageSize: Long): BuildBuilder<E> = page(pageNumber.toLong(), pageSize)
 
-            fun page(pageNumber: Long, pageSize: Long): BuildBuilder<E> = this.also {
+            fun page(pageNumber: Long, pageSize: Long): BuildBuilder<E> = this.apply {
                 super.limit = pageSize
                 super.offset = pageNumber * pageSize
             }
 
-            fun sort(sort: String?): BuildBuilder<E> = this.also { super.sort = sort }
-            fun sort(vararg expression: OrderSpecifier<*>?): BuildBuilder<E> = this.also { super.orderSpecifiers = expression.filterNotNull().distinct() }
-            fun sort(orderSpecifiers: List<OrderSpecifier<*>>?): BuildBuilder<E> = this.also { super.orderSpecifiers = orderSpecifiers }
+            fun sort(sort: String?): BuildBuilder<E> = this.apply { super.sort = sort }
+            fun sort(vararg expression: OrderSpecifier<*>?): BuildBuilder<E> = this.apply { super.orderSpecifiers = expression.filterNotNull().distinct() }
+            fun sort(orderSpecifiers: List<OrderSpecifier<*>>?): BuildBuilder<E> = this.apply { super.orderSpecifiers = orderSpecifiers }
 
-            fun operator(vararg operator: RsqlOperator): BuildBuilder<E> = this.also { super.rsqlConfig.operators = operator.toList() }
-            fun operators(operators: List<RsqlOperator>): BuildBuilder<E> = this.also { super.rsqlConfig.operators = operators.toList() }
+            fun operator(vararg operator: RsqlOperator): BuildBuilder<E> = this.apply { super.rsqlConfig.operators = operator.toList() }
+            fun operators(operators: List<RsqlOperator>): BuildBuilder<E> = this.apply { super.rsqlConfig.operators = operators.toList() }
 
-            fun fieldTypeHandler(vararg typeHandler: Class<FieldTypeHandler<E>>): BuildBuilder<E> {
-                return this.also { super.rsqlConfig.addFieldTypeHandler(*typeHandler) }
-            }
+            fun fieldTypeHandler(vararg typeHandler: Class<FieldTypeHandler<E>>): BuildBuilder<E> = this.apply { super.rsqlConfig.addFieldTypeHandler(*typeHandler) }
 
-            fun sortFieldTypeHandler(vararg typeHandler: Class<SortFieldTypeHandler<E>>): BuildBuilder<E> {
-                return this.also { super.rsqlConfig.addSortFieldTypeHandler(*typeHandler) }
-            }
+            fun sortFieldTypeHandler(vararg typeHandler: Class<SortFieldTypeHandler<E>>): BuildBuilder<E> = this.apply { super.rsqlConfig.addSortFieldTypeHandler(*typeHandler) }
 
-            fun dateFormat(dateFormat: String): BuildBuilder<E> = this.also { super.rsqlConfig.dateFormat = dateFormat }
+            fun dateFormat(dateFormat: String): BuildBuilder<E> = this.apply { super.rsqlConfig.dateFormat = dateFormat }
         }
     }
 }

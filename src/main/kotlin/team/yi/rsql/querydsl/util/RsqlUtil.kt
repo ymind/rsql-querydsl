@@ -12,12 +12,14 @@ import javax.persistence.EntityManager
 
 @Suppress("MemberVisibilityCanBePrivate")
 object RsqlUtil {
+    @JvmStatic
     fun getClassForEntityString(entityName: String, entityManager: EntityManager): Class<*>? {
         return entityManager.metamodel.entities
             .firstOrNull { it.name == entityName }
             ?.bindableJavaType
     }
 
+    @JvmStatic
     fun getOperators(customOperators: List<RsqlOperator>?): Set<ComparisonOperator> {
         val operators = Operator.lookup.keys
             .asSequence()
@@ -35,6 +37,7 @@ object RsqlUtil {
         return operators
     }
 
+    @JvmStatic
     fun validateOperators(operators: List<RsqlOperator>) {
         operators.forEach { operator ->
             operator.symbols.forEach {
@@ -54,6 +57,7 @@ object RsqlUtil {
         return if (selectFields.isEmpty()) emptyList() else selectFields.map { pathBuilder[it] }
     }
 
+    @JvmStatic
     fun parseSelectExpression(selectString: String?): List<String> {
         if (selectString.isNullOrBlank()) return emptyList()
 
@@ -62,6 +66,7 @@ object RsqlUtil {
         return str.split(',').distinct()
     }
 
+    @JvmStatic
     fun parseFieldSelector(rootClass: Class<*>, fieldSelector: String?): List<FieldMetadata> {
         var field = fieldSelector
 
@@ -89,6 +94,7 @@ object RsqlUtil {
         return fieldMetadataList
     }
 
+    @JvmStatic
     fun parseSortExpression(sort: String?): Map<String, Order> {
         val result: MutableMap<String, Order> = HashMap()
         val sortParams = parseSelectExpression(sort)

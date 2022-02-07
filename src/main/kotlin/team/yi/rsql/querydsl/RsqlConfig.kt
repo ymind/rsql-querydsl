@@ -99,40 +99,30 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
         internal val nodeInterceptors = mutableListOf<RsqlNodeInterceptor>()
         internal var dateFormat: String? = null
 
-        fun operator(vararg operator: RsqlOperator): Builder<E> = this.also { this.operators = operator.toList() }
-        fun fieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler<*>>): Builder<E> = this.also { this.fieldTypeHandlers = typeHandler.toList() }
-        fun sortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler<*>>): Builder<E> = this.also { this.sortFieldTypeHandlers = typeHandler.toList() }
+        fun operator(vararg operator: RsqlOperator): Builder<E> = this.apply { this.operators = operator.toList() }
+
+        fun fieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler<*>>): Builder<E> = this.apply { this.fieldTypeHandlers = typeHandler.toList() }
+
+        fun sortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler<*>>): Builder<E> = this.apply { this.sortFieldTypeHandlers = typeHandler.toList() }
 
         @Suppress("UNCHECKED_CAST")
-        fun javaFieldTypeHandler(vararg typeHandler: Class<*>): Builder<E> = this.also {
+        fun javaFieldTypeHandler(vararg typeHandler: Class<*>): Builder<E> = this.apply {
             this.fieldTypeHandlers = typeHandler.mapNotNull { it as? Class<out FieldTypeHandler<*>> }
         }
 
-        @Suppress("UNCHECKED_CAST", "unused")
-        fun javaSortFieldTypeHandler(vararg typeHandler: Class<*>): Builder<E> = this.also {
+        @Suppress("UNCHECKED_CAST")
+        fun javaSortFieldTypeHandler(vararg typeHandler: Class<*>): Builder<E> = this.apply {
             this.sortFieldTypeHandlers = typeHandler.mapNotNull { it as? Class<out SortFieldTypeHandler<*>> }
         }
 
-        fun nodeInterceptors(nodeInterceptors: List<RsqlNodeInterceptor>?): Builder<E> {
-            nodeInterceptors?.let { this.nodeInterceptors.addAll(nodeInterceptors) }
+        fun nodeInterceptors(nodeInterceptors: List<RsqlNodeInterceptor>?): Builder<E> = this.apply { nodeInterceptors?.let { this.nodeInterceptors.addAll(nodeInterceptors) } }
 
-            return this
-        }
-
-        fun nodeInterceptor(block: () -> RsqlNodeInterceptor?): Builder<E> {
-            block()?.let { this.nodeInterceptor(it) }
-
-            return this
-        }
+        fun nodeInterceptor(block: () -> RsqlNodeInterceptor?): Builder<E> = this.apply { block()?.let { this.nodeInterceptor(it) } }
 
         @Suppress("MemberVisibilityCanBePrivate")
-        fun nodeInterceptor(nodeInterceptor: RsqlNodeInterceptor?): Builder<E> {
-            nodeInterceptor?.let { this.nodeInterceptors.add(nodeInterceptor) }
+        fun nodeInterceptor(nodeInterceptor: RsqlNodeInterceptor?): Builder<E> = this.apply { nodeInterceptor?.let { this.nodeInterceptors.add(nodeInterceptor) } }
 
-            return this
-        }
-
-        fun dateFormat(dateFormat: String?): Builder<E> = this.also { this.dateFormat = dateFormat }
+        fun dateFormat(dateFormat: String?): Builder<E> = this.apply { this.dateFormat = dateFormat }
 
         @Throws(RsqlException::class)
         fun build(): RsqlConfig<E> {
