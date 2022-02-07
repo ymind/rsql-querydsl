@@ -1,123 +1,87 @@
 package team.yi.rsql.querydsl
 
-import com.querydsl.codegen.*
-import com.querydsl.codegen.utils.model.TypeCategory
-import com.querydsl.core.types.dsl.*
-import java.lang.reflect.*
+import com.querydsl.codegen.EntityType
+import team.yi.rsql.querydsl.util.RsqlUtil
+import java.lang.reflect.Field
 
-@Suppress("MemberVisibilityCanBePrivate")
 class FieldMetadata {
-    val type: Class<*>?
-    var fieldSelector: String? = null
-        private set
-    var fieldSelectorIndex: Int? = null
-        private set
-    var field: Field? = null
-        private set
-    var parameterizedType: Class<*>? = null
-        private set
-    var collection: Boolean? = null
-        private set
-    var entityType: EntityType? = null
-        private set
-    var pathType: Class<*>? = null
-        private set
-    var parent: FieldMetadata? = null
-        private set
-    val collectionType: Class<*>?
-        get() = parameterizedType ?: type
+    val parent: FieldMetadata?
+    val field: Field?
+    val fieldSelector: String?
+    val clazz: Class<*>?
+    val parameterizedType: Class<*>?
+    val entityType: EntityType?
 
     constructor(type: Class<*>, parent: FieldMetadata?) {
-        this.type = type
+        this.fieldSelector = null
         this.parent = parent
+        this.field = null
+        this.clazz = type
+        this.parameterizedType = null
+        this.entityType = null
     }
 
     constructor(fieldSelector: String, parent: FieldMetadata) {
         this.fieldSelector = fieldSelector
-        this.fieldSelectorIndex = parseFieldSelector(fieldSelector)
         this.parent = parent
         this.field = getField(parent, fieldSelector)
-        this.type = getClass(this.field)
-        this.entityType = getEntityType(parameterizedType ?: type)
-        this.pathType = getPathType(entityType)
+        this.clazz = this.field?.type
+        this.parameterizedType = RsqlUtil.getParameterizedType(this.field)
+        this.entityType = RsqlUtil.getEntityType(parameterizedType ?: clazz)
     }
 
     constructor(fieldSelector: String, rootClass: Class<*>) {
         this.fieldSelector = fieldSelector
-        this.fieldSelectorIndex = parseFieldSelector(fieldSelector)
+        this.parent = null
         this.field = getField(rootClass, fieldSelector, this)
-        this.type = getClass(this.field)
-        this.entityType = getEntityType(parameterizedType ?: type)
-        this.pathType = getPathType(entityType)
-    }
-
-    private fun parseFieldSelector(fieldSelector: String): Int? {
-        return getListIndex(fieldSelector)?.also { this.fieldSelector = removeListIndex(fieldSelector) }
-    }
-
-    private fun getClass(field: Field?): Class<*>? {
-        return field?.let {
-            if (List::class.java.isAssignableFrom(it.type) || Set::class.java.isAssignableFrom(it.type)) {
-                this.collection = true
-
-                val listType = it.genericType as ParameterizedType
-
-                this.parameterizedType = listType.actualTypeArguments[0] as Class<*>
-            }
-
-            return it.type
-        }
+        this.clazz = this.field?.type
+        this.parameterizedType = RsqlUtil.getParameterizedType(this.field)
+        this.entityType = RsqlUtil.getEntityType(parameterizedType ?: clazz)
     }
 
     companion object {
-        fun getEntityType(entityClass: Class<*>?): EntityType? = entityClass?.let { TypeFactory().getEntityType(it) }
-
-        fun getPathType(entityType: EntityType?): Class<*> {
-            return when (entityType?.originalCategory) {
-                TypeCategory.COMPARABLE -> ComparablePath::class.java
-                TypeCategory.ENUM -> EnumPath::class.java
-                TypeCategory.DATE -> DatePath::class.java
-                TypeCategory.DATETIME -> DateTimePath::class.java
-                TypeCategory.TIME -> TimePath::class.java
-                TypeCategory.NUMERIC -> NumberPath::class.java
-                TypeCategory.STRING -> StringPath::class.java
-                TypeCategory.BOOLEAN -> BooleanPath::class.java
-                else -> EntityPathBase::class.java
-            }
-        }
-
-        fun getField(fieldMetadata: FieldMetadata, fieldName: String): Field? {
-            val clazz = fieldMetadata.parameterizedType ?: fieldMetadata.type
+        private fun getField(fieldMetadata: FieldMetadata, fieldName: String): Field? {
+            val clazz = fieldMetadata.parameterizedType ?: fieldMetadata.clazz
 
             return this.getField(clazz, fieldName, fieldMetadata)
         }
 
-        fun getField(clazz: Class<*>?, fieldName: String, fieldMetadata: FieldMetadata): Field? {
+        private fun getField(clazz: Class<*>?, fieldName: String, fieldMetadata: FieldMetadata): Field? {
             return clazz?.let {
                 try {
                     it.getDeclaredField(fieldName)
-                } catch (nsf: NoSuchFieldException) {
+                } catch (_: NoSuchFieldException) {
                     return if (it.superclass == null) null else getField(it.superclass, fieldName, fieldMetadata)
                 }
             }
         }
 
-        private fun getListIndex(fieldSelector: String): Int? {
-            val startIndex = fieldSelector.indexOf('[')
-            val endIndex = fieldSelector.indexOf(']')
+        @JvmStatic
+        fun parseFieldSelector(rootClass: Class<*>, fieldSelector: String?): List<FieldMetadata> {
+            var field = fieldSelector
 
-            return if (startIndex == -1 || endIndex == -1) null else fieldSelector.substring(startIndex + 1, endIndex).toInt()
-        }
+            field?.let {
+                if (it.startsWith("f{")) {
+                    val declares = it.substring(1).trim('{', '}').split('`')
 
-        private fun removeListIndex(fieldSelector: String): String {
-            val stringBuilder = StringBuilder(fieldSelector)
-            val startIndex = fieldSelector.indexOf('[')
-            val endIndex = fieldSelector.indexOf(']')
-
-            return when {
-                startIndex == -1 || endIndex == -1 -> fieldSelector
-                else -> stringBuilder.replace(startIndex, endIndex + 1, "").toString()
+                    field = declares[2]
+                }
             }
+
+            val nestedFields = field?.split(".").orEmpty()
+            val fieldMetadataList = mutableListOf<FieldMetadata>()
+
+            for (i in nestedFields.indices) {
+                val fieldMetadata: FieldMetadata = if (i == 0) {
+                    FieldMetadata(nestedFields[i], rootClass)
+                } else {
+                    FieldMetadata(nestedFields[i], fieldMetadataList[i - 1])
+                }
+
+                fieldMetadataList.add(fieldMetadata)
+            }
+
+            return fieldMetadataList
         }
     }
 }

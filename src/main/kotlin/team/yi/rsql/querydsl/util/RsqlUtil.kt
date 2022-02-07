@@ -1,17 +1,54 @@
 package team.yi.rsql.querydsl.util
 
+import com.querydsl.codegen.EntityType
+import com.querydsl.codegen.TypeFactory
+import com.querydsl.codegen.utils.model.TypeCategory
 import com.querydsl.core.types.Order
 import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.PathBuilder
+import com.querydsl.core.types.dsl.*
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
-import team.yi.rsql.querydsl.FieldMetadata
 import team.yi.rsql.querydsl.operator.Operator
 import team.yi.rsql.querydsl.operator.RsqlOperator
+import java.lang.reflect.Field
+import java.lang.reflect.ParameterizedType
 import java.util.*
 import javax.persistence.EntityManager
 
 @Suppress("MemberVisibilityCanBePrivate")
 object RsqlUtil {
+    @JvmStatic
+    fun getEntityType(entityClass: Class<*>?): EntityType? = entityClass?.let { TypeFactory().getEntityType(it) }
+
+    @JvmStatic
+    fun getPathType(entityType: EntityType?): Class<*>? {
+        if (entityType == null) return null
+
+        return when (entityType.originalCategory) {
+            TypeCategory.COMPARABLE -> ComparablePath::class.java
+            TypeCategory.ENUM -> EnumPath::class.java
+            TypeCategory.DATE -> DatePath::class.java
+            TypeCategory.DATETIME -> DateTimePath::class.java
+            TypeCategory.TIME -> TimePath::class.java
+            TypeCategory.NUMERIC -> NumberPath::class.java
+            TypeCategory.STRING -> StringPath::class.java
+            TypeCategory.BOOLEAN -> BooleanPath::class.java
+            else -> EntityPathBase::class.java
+        }
+    }
+
+    @JvmStatic
+    fun getParameterizedType(field: Field?): Class<*>? {
+        return field?.let {
+            if (Collection::class.java.isAssignableFrom(it.type)) {
+                val listType = it.genericType as ParameterizedType
+
+                return listType.actualTypeArguments[0] as Class<*>
+            }
+
+            return null
+        }
+    }
+
     @JvmStatic
     fun getClassForEntityString(entityName: String, entityManager: EntityManager): Class<*>? {
         return entityManager.metamodel.entities
@@ -64,34 +101,6 @@ object RsqlUtil {
         val str = selectString.replace("\\s+".toRegex(), "").trim('(', ')')
 
         return str.split(',').distinct()
-    }
-
-    @JvmStatic
-    fun parseFieldSelector(rootClass: Class<*>, fieldSelector: String?): List<FieldMetadata> {
-        var field = fieldSelector
-
-        field?.let {
-            if (it.startsWith("f{")) {
-                val declares = it.substring(1).trim('{', '}').split('`')
-
-                field = declares[2]
-            }
-        }
-
-        val nestedFields = field?.split(".").orEmpty()
-        val fieldMetadataList = mutableListOf<FieldMetadata>()
-
-        for (i in nestedFields.indices) {
-            val fieldMetadata: FieldMetadata = if (i == 0) {
-                FieldMetadata(nestedFields[i], rootClass)
-            } else {
-                FieldMetadata(nestedFields[i], fieldMetadataList[i - 1])
-            }
-
-            fieldMetadataList.add(fieldMetadata)
-        }
-
-        return fieldMetadataList
     }
 
     @JvmStatic

@@ -26,7 +26,7 @@ open class SimpleFieldTypeHandler<E>(
     }
 
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
-        return Expressions.path(fieldMetadata.type, parentPath as Path<*>?, fieldMetadata.fieldSelector)
+        return Expressions.path(fieldMetadata.clazz, parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }
 
     override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {

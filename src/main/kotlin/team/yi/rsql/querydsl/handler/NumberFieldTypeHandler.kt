@@ -38,7 +38,7 @@ class NumberFieldTypeHandler<E>(
     }
 
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
-        return Expressions.numberPath(fieldMetadata.type as Class<E>, parentPath as Path<*>?, fieldMetadata.fieldSelector)
+        return Expressions.numberPath(fieldMetadata.clazz as Class<E>, parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }
 
     override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
@@ -57,7 +57,7 @@ class NumberFieldTypeHandler<E>(
 
         val number = NumberUtils.createNumber(value)
 
-        return MathUtils.cast(number, fieldMetadata.type as Class<out E?>)
+        return MathUtils.cast(number, fieldMetadata.clazz as Class<out E?>)
     }
 
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {

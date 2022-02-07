@@ -11,6 +11,6 @@ class DefaultSortFieldTypeHandler<E>(
     override fun supports(type: Class<*>?): Boolean = true
 
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
-        return Expressions.path(fieldMetadata.type, parentPath as Path<*>?, fieldMetadata.fieldSelector)
+        return Expressions.path(fieldMetadata.clazz, parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }
 }

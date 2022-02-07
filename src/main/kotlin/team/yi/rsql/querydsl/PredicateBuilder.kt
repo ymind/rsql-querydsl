@@ -7,7 +7,6 @@ import cz.jirutka.rsql.parser.ast.ComparisonNode
 import team.yi.rsql.querydsl.exception.TypeNotSupportedException
 import team.yi.rsql.querydsl.handler.FieldTypeHandler
 import team.yi.rsql.querydsl.operator.RsqlOperator
-import team.yi.rsql.querydsl.util.RsqlUtil
 
 class PredicateBuilder<E>(private val rsqlConfig: RsqlConfig<E>) {
     @Throws(TypeNotSupportedException::class)
@@ -15,7 +14,7 @@ class PredicateBuilder<E>(private val rsqlConfig: RsqlConfig<E>) {
         val rootClass = rootPath.type
         val interceptor = rsqlConfig.nodeInterceptors.find { it.supports(rootClass, comparisonNode, operator) }
         val node = if (interceptor == null) comparisonNode else interceptor.visit(rootClass, comparisonNode, operator, rsqlConfig.nodesFactory) ?: return null
-        val fieldMetadataList = RsqlUtil.parseFieldSelector(rootClass, node.selector)
+        val fieldMetadataList = FieldMetadata.parseFieldSelector(rootClass, node.selector)
         val processedPaths = mutableListOf<Expression<*>>()
         var typeHandler: FieldTypeHandler<E>? = null
 

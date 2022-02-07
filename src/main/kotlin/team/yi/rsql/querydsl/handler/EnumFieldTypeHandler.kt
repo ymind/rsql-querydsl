@@ -26,7 +26,7 @@ class EnumFieldTypeHandler<E : Enum<E>>(
     }
 
     override fun getPath(parentPath: Expression<*>?): Expression<*>? {
-        val type = fieldMetadata.type as? Class<out E>
+        val type = fieldMetadata.clazz as? Class<out E>
 
         return Expressions.enumPath(type, parentPath as Path<*>?, fieldMetadata.fieldSelector)
     }
@@ -35,7 +35,7 @@ class EnumFieldTypeHandler<E : Enum<E>>(
         if (values.isEmpty()) return null
 
         return values
-            .map { if (it.isNullOrBlank()) null else Expressions.asEnum(java.lang.Enum.valueOf(fieldMetadata.type as Class<E>, it)) }
+            .map { if (it.isNullOrBlank()) null else Expressions.asEnum(java.lang.Enum.valueOf(fieldMetadata.clazz as Class<E>, it)) }
             .toList()
     }
 }

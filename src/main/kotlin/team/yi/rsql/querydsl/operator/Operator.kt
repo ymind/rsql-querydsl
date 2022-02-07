@@ -1,7 +1,5 @@
 package team.yi.rsql.querydsl.operator
 
-import java.util.*
-
 @Suppress("SpellCheckingInspection")
 enum class Operator(vararg val rsqlOperator: String) {
     ISNULL("=isnull=", "=isNull="),
@@ -43,7 +41,7 @@ enum class Operator(vararg val rsqlOperator: String) {
     AFTER("=after=");
 
     companion object {
-        val lookup: MutableMap<String, Operator> = HashMap()
+        val lookup = mutableMapOf<String, Operator>()
 
         operator fun get(operator: String): Operator? = lookup[operator]
 

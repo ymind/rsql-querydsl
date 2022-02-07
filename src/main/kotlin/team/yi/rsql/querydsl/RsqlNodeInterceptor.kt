@@ -1,7 +1,8 @@
 package team.yi.rsql.querydsl
 
 import cz.jirutka.rsql.parser.UnknownOperatorException
-import cz.jirutka.rsql.parser.ast.*
+import cz.jirutka.rsql.parser.ast.ComparisonNode
+import cz.jirutka.rsql.parser.ast.NodesFactory
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
 @FunctionalInterface

@@ -58,7 +58,7 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
 
     @Suppress("UNCHECKED_CAST")
     fun getFieldTypeHandler(node: ComparisonNode, fieldMetadata: FieldMetadata): FieldTypeHandler<E> {
-        return getFieldTypeHandler(fieldMetadata.type, node, RsqlOperator(node.operator.symbol), fieldMetadata)
+        return getFieldTypeHandler(fieldMetadata.clazz, node, RsqlOperator(node.operator.symbol), fieldMetadata)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -79,7 +79,7 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
 
     @Suppress("UNCHECKED_CAST")
     fun getSortFieldTypeHandler(fieldMetadata: FieldMetadata): SortFieldTypeHandler<E> {
-        val type = fieldMetadata.type
+        val type = fieldMetadata.clazz
 
         for (typeHandler in sortFieldTypeHandlers) {
             val handler = typeHandler.getDeclaredConstructor(
