@@ -28,8 +28,8 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val globalPredicate: BooleanExpression?
     private val offset: Long?
     private val limit: Long?
-    private val sort: String?
-    private val orderSpecifiers: List<OrderSpecifier<*>>?
+    private val sortString: String?
+    private val sortExpressions: List<OrderSpecifier<*>>?
     private val rsqlConfig: RsqlConfig<E>
 
     val pathFactory = PathFactory()
@@ -90,13 +90,13 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private fun buildOrder(fromPath: PathBuilder<E>): MutableList<OrderSpecifier<*>>? {
         val orderSpecifiers: MutableList<OrderSpecifier<*>> = mutableListOf()
 
-        if (sort == null) {
-            this.orderSpecifiers?.let { orderSpecifiers.addAll(it) }
+        if (sortString == null) {
+            this.sortExpressions?.let { orderSpecifiers.addAll(it) }
         } else {
-            val sorts = RsqlUtil.parseSortExpression(sort)
+            val sorts = RsqlUtil.parseSortExpression(sortString)
 
             for (sortSelect in sorts.keys) {
-                val sortPath = getSortPath(fromPath, RsqlUtil.parseFieldSelector(entityClass, sortSelect))
+                val sortPath = getSortPath(fromPath, RsqlUtil.parseFieldSelector(fromPath.type, sortSelect))
                 val path = sortPath as? Path<Comparable<*>>
                 val order = OrderSpecifier(sorts[sortSelect], path)
 
@@ -259,6 +259,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             }
 
             fun sort(sort: String?): BuildBuilder<E> = this.also { super.sort = sort }
+            fun sort(vararg expression: OrderSpecifier<*>?): BuildBuilder<E> = this.also { super.orderSpecifiers = expression.filterNotNull().distinct() }
             fun sort(orderSpecifiers: List<OrderSpecifier<*>>?): BuildBuilder<E> = this.also { super.orderSpecifiers = orderSpecifiers }
 
             fun operator(vararg operator: RsqlOperator): BuildBuilder<E> = this.also { super.rsqlConfig.operators = operator.toList() }
@@ -300,7 +301,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         this.globalPredicate = builder.globalPredicate
         this.offset = builder.offset
         this.limit = builder.limit
-        this.sort = builder.sort
-        this.orderSpecifiers = builder.orderSpecifiers
+        this.sortString = builder.sort
+        this.sortExpressions = builder.orderSpecifiers
     }
 }
