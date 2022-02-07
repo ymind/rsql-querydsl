@@ -17,10 +17,9 @@ Integration RSQL query language and Querydsl framework.
 @Test
 fun shouldReturnTupleWithLimitNumber() {
     val clazz = Car::class.java
-    val variable = clazz.simpleName.lowercase(Locale.getDefault())
-    val pathBuilder = PathBuilder(clazz, variable, PathBuilderValidator.PROPERTIES)
+    val pathBuilder = pathFactory.create(clazz)
     val selectFields = RsqlUtil.parseSelect("name,description", pathBuilder).toTypedArray()
-    val select = Projections.bean(
+    val select: QBean<Car> = Projections.bean(
         clazz,
         pathBuilder.getNumber("id", Long::class.java).add(1000).`as`("id"),
         *selectFields,
@@ -39,7 +38,9 @@ fun shouldReturnTupleWithLimitNumber() {
 }
 
 // will generate SQL:
-//     select car0_.id+? as col_0_0_, car0_.name as col_1_0_, car0_.description as col_2_0_ 
+//     select car0_.id+? as col_0_0_, 
+//            car0_.name as col_1_0_, 
+//            car0_.description as col_2_0_ 
 //     from car car0_ 
 //     where (car0_.id is not null) and (car0_.name like ? escape '!' or car0_.name like ? escape '!') 
 //     order by car0_.id desc 

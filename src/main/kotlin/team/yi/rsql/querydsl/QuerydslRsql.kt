@@ -15,8 +15,8 @@ import team.yi.rsql.querydsl.exception.TypeNotSupportedException
 import team.yi.rsql.querydsl.handler.FieldTypeHandler
 import team.yi.rsql.querydsl.handler.SortFieldTypeHandler
 import team.yi.rsql.querydsl.operator.RsqlOperator
+import team.yi.rsql.querydsl.util.PathFactory
 import team.yi.rsql.querydsl.util.RsqlUtil
-import java.util.*
 import javax.persistence.EntityManager
 
 class QuerydslRsql<E> private constructor(builder: Builder<E>) {
@@ -32,9 +32,11 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val orderSpecifiers: List<OrderSpecifier<*>>?
     private val rsqlConfig: RsqlConfig<E>
 
+    val pathFactory = PathFactory()
+
     @Throws(RsqlException::class)
     fun buildJPAQuery(): JPAQuery<*> {
-        val fromPath = PathBuilder(entityClass, entityClass.simpleName.lowercase(Locale.getDefault()))
+        val fromPath = pathFactory.create(entityClass)
 
         return buildJPAQuery(fromPath)
     }

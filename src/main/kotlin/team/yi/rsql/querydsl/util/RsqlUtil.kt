@@ -14,7 +14,7 @@ import javax.persistence.EntityManager
 object RsqlUtil {
     fun getClassForEntityString(entityName: String, entityManager: EntityManager): Class<*>? {
         return entityManager.metamodel.entities
-            .firstOrNull { entityName == it.name }
+            .firstOrNull { it.name == entityName }
             ?.bindableJavaType
     }
 
@@ -47,6 +47,7 @@ object RsqlUtil {
         }
     }
 
+    @JvmStatic
     fun <T> parseSelect(selectString: String, pathBuilder: PathBuilder<T>): List<Path<*>> {
         val selectFields = parseSelectExpression(selectString)
 

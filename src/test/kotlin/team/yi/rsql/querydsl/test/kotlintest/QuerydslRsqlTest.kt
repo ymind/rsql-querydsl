@@ -3,9 +3,8 @@ package team.yi.rsql.querydsl.test.kotlintest
 import com.querydsl.core.Tuple
 import com.querydsl.core.types.Ops
 import com.querydsl.core.types.Projections
+import com.querydsl.core.types.QBean
 import com.querydsl.core.types.dsl.Expressions
-import com.querydsl.core.types.dsl.PathBuilder
-import com.querydsl.core.types.dsl.PathBuilderValidator
 import cz.jirutka.rsql.parser.ast.ComparisonNode
 import cz.jirutka.rsql.parser.ast.NodesFactory
 import org.junit.jupiter.api.Assertions.*
@@ -17,14 +16,16 @@ import team.yi.rsql.querydsl.RsqlNodeInterceptor
 import team.yi.rsql.querydsl.model.Car
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.test.BaseRsqlTest
+import team.yi.rsql.querydsl.util.PathFactory
 import team.yi.rsql.querydsl.util.RsqlUtil
-import java.util.*
 import javax.persistence.EntityManager
 
 @Suppress("SpellCheckingInspection", "UNCHECKED_CAST")
 class QuerydslRsqlTest : BaseRsqlTest() {
     @Autowired
     private lateinit var entityManager: EntityManager
+
+    private val pathFactory = PathFactory()
 
     @Test
     fun shouldReadRsqlConfig() {
@@ -264,10 +265,9 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     @Test
     fun shouldReturnTupleWithLimitNumber() {
         val clazz = Car::class.java
-        val variable = clazz.simpleName.lowercase(Locale.getDefault())
-        val pathBuilder = PathBuilder(clazz, variable, PathBuilderValidator.PROPERTIES)
+        val pathBuilder = pathFactory.create(clazz)
         val selectFields = RsqlUtil.parseSelect("name,description", pathBuilder).toTypedArray()
-        val select = Projections.bean(
+        val select: QBean<Car> = Projections.bean(
             clazz,
             pathBuilder.getNumber("id", Long::class.java).add(1000).`as`("id"),
             *selectFields,
