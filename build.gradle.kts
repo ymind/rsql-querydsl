@@ -18,7 +18,7 @@ plugins {
     // https://plugins.gradle.org/plugin/se.patrikerdes.use-latest-versions
     id("se.patrikerdes.use-latest-versions") version "0.2.18"
     // https://plugins.gradle.org/plugin/com.github.ben-manes.versions
-    id("com.github.ben-manes.versions") version "0.41.0"
+    id("com.github.ben-manes.versions") version "0.42.0"
 }
 
 group = "team.yi.rsql"
