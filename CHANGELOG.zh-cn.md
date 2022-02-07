@@ -1,5 +1,30 @@
 # 更新日志
 
+## 1.5.3 (2022-02-07)
+
+### Features
+
+- add PathFactory ([cc35befa](https://github.com/ymind/rsql-querydsl/commit/cc35befa4e2bdbe91597bb816778c2be817623d8))
+- allow set from clause when build JPA query ([be9c5475](https://github.com/ymind/rsql-querydsl/commit/be9c54755840ff4839c8c689543214e687e4bdef))
+
+
+### Code Refactoring
+
+- normalize sort property naming ([dbbe6148](https://github.com/ymind/rsql-querydsl/commit/dbbe614848b1660e19a01feef2be8ca1fac5b748))
+- refactor FieldMetadata ([e4625c4c](https://github.com/ymind/rsql-querydsl/commit/e4625c4ccca559c85701da071a1f515c7ff6562c))
+
+
+### Chores
+
+- code cleanup ([962655f1](https://github.com/ymind/rsql-querydsl/commit/962655f17b8c735242e97167adf9bfe42fb0f849))
+- code cleanup ([6a01bdca](https://github.com/ymind/rsql-querydsl/commit/6a01bdca5fa441839741cf8d3124b78a52a8e912))
+
+
+### Build System
+
+- **gradle/plugin**: bumped com.github.ben-manes.versions version to 0.42.0 ([09292b03](https://github.com/ymind/rsql-querydsl/commit/09292b03f10c655b5bea5f010b2edc1ad35162b2))
+
+
 ## 1.3.3 (2022-01-30)
 
 ### Bug Fixes
