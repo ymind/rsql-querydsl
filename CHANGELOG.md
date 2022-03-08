@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.5.6 (2022-03-08)
+
+### Code Refactoring
+
+- support covariance for fieldTypeHandler ([f55b1033](https://github.com/ymind/rsql-querydsl/commit/f55b1033e6d4da70339349873d7d8fd1eb06fbd6))
+
+
+### Chores
+
+- **deps**: bumped spring version to 2.6.4 ([34d16f01](https://github.com/ymind/rsql-querydsl/commit/34d16f01a858d1932e940bf37a9c5f53905e8295))
+
+
+### Build System
+
+- **gradle**: bumped gradle wrapper version to 7.4 ([ed478227](https://github.com/ymind/rsql-querydsl/commit/ed478227b5832156101b11a75e6ea85d1ba7548b))
+
+
 ## 1.5.3 (2022-02-07)
 
 ### Features
