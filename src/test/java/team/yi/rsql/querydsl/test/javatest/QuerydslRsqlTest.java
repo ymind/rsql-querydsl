@@ -34,7 +34,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
     @Autowired
     private EntityManager entityManager;
 
-    private PathFactory pathFactory = new PathFactory();
+    private final PathFactory pathFactory = new PathFactory();
 
     @Test
     public void shouldReadRsqlConfig() {
