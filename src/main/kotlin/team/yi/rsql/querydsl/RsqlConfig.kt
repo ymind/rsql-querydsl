@@ -48,11 +48,11 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
         builder.sortFieldTypeHandlers?.let { sortFieldTypeHandlers.addAll(it) }
     }
 
-    fun addFieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler<E>>) {
+    fun addFieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler<*>>) {
         this.fieldTypeHandlers.addAll(typeHandler)
     }
 
-    fun addSortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler<E>>) {
+    fun addSortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler<*>>) {
         this.sortFieldTypeHandlers.addAll(typeHandler)
     }
 

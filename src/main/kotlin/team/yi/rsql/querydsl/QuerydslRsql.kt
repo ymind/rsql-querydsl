@@ -256,11 +256,11 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             fun operator(vararg operator: RsqlOperator): BuildBuilder<E> = this.apply { super.rsqlConfig.operators = operator.toList() }
             fun operators(operators: List<RsqlOperator>): BuildBuilder<E> = this.apply { super.rsqlConfig.operators = operators.toList() }
 
-            fun fieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler<E>>): BuildBuilder<E> = this.apply {
+            fun fieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler<*>>): BuildBuilder<E> = this.apply {
                 super.rsqlConfig.addFieldTypeHandler(*typeHandler)
             }
 
-            fun sortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler<E>>): BuildBuilder<E> = this.apply {
+            fun sortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler<*>>): BuildBuilder<E> = this.apply {
                 super.rsqlConfig.addSortFieldTypeHandler(*typeHandler)
             }
 
