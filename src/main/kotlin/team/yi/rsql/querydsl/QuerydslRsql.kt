@@ -180,8 +180,8 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         constructor(
             entityManager: EntityManager,
             operators: List<RsqlOperator>? = null,
-            fieldTypeHandlers: List<Class<FieldTypeHandler<E>>>? = null,
-            sortFieldTypeHandlers: List<Class<SortFieldTypeHandler<E>>>? = null,
+            fieldTypeHandlers: List<Class<FieldTypeHandler<*>>>? = null,
+            sortFieldTypeHandlers: List<Class<SortFieldTypeHandler<*>>>? = null,
             nodeInterceptors: List<RsqlNodeInterceptor>? = null,
             dateFormat: String? = null,
         ) : this(
