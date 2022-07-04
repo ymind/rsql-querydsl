@@ -39,6 +39,7 @@ class StringFieldTypeHandler<E>(
         }
     }
 
+    @Suppress("ComplexMethod")
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as StringExpression
         val right = values.orEmpty().distinct().map { it as Expression<String?>? }

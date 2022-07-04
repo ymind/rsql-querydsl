@@ -1,16 +1,13 @@
 package team.yi.rsql.querydsl.util
 
-import com.querydsl.codegen.EntityType
-import com.querydsl.codegen.TypeFactory
+import com.querydsl.codegen.*
 import com.querydsl.codegen.utils.model.TypeCategory
-import com.querydsl.core.types.Order
-import com.querydsl.core.types.Path
+import com.querydsl.core.types.*
 import com.querydsl.core.types.dsl.*
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
+import team.yi.rsql.querydsl.operator.*
 import team.yi.rsql.querydsl.operator.Operator
-import team.yi.rsql.querydsl.operator.RsqlOperator
-import java.lang.reflect.Field
-import java.lang.reflect.ParameterizedType
+import java.lang.reflect.*
 import java.util.*
 import javax.persistence.EntityManager
 
@@ -78,10 +75,10 @@ object RsqlUtil {
     fun validateOperators(operators: List<RsqlOperator>) {
         operators.forEach { operator ->
             operator.symbols.forEach {
-                try {
+                runCatching {
                     ComparisonOperator(it, true)
-                } catch (ex: IllegalArgumentException) {
-                    throw IllegalArgumentException("Invalid operator symbol: '$it' Operator ${ex.message}")
+                }.onFailure { ex ->
+                    throw IllegalArgumentException("Invalid operator symbol: '$it' Operator ${ex.message}", ex)
                 }
             }
         }
@@ -110,7 +107,7 @@ object RsqlUtil {
 
         require(sortParams.isNotEmpty()) { "Invalid expression" }
 
-        for (param in sortParams) {
+        sortParams.forEach { param ->
             val dotLastIndex = param.lastIndexOfAny(charArrayOf('-', '.'))
 
             require(dotLastIndex != -1) { "Invalid expression" }

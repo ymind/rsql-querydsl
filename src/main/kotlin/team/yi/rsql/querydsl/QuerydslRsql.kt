@@ -113,7 +113,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         } else {
             val sorts = RsqlUtil.parseSortExpression(sortString)
 
-            for (sortSelect in sorts.keys) {
+            sorts.keys.forEach { sortSelect ->
                 val sortPath = getSortPath(fromPath, FieldMetadata.parseFieldSelector(fromPath.type, sortSelect))
                 val path = sortPath as? Path<Comparable<*>>
                 val order = OrderSpecifier(sorts[sortSelect], path)

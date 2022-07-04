@@ -57,18 +57,16 @@ object DateUtil {
     fun parse(dateString: String, dateFormat: String): Date? {
         val format = dateFormat.ifBlank { return null }
 
-        return try {
+        return runCatching {
             val sdf = SimpleDateFormat(format)
             sdf.isLenient = false
 
             sdf.parse(dateString.replace("'?", "'"))
-        } catch (e: Exception) {
-            try {
+        }.onFailure {
+            runCatching {
                 Date.from(Instant.parse(dateString))
-            } catch (ex: Exception) {
-                null
             }
-        }
+        }.getOrNull()
     }
 
     fun determineDateFormat(dateString: String): String? {

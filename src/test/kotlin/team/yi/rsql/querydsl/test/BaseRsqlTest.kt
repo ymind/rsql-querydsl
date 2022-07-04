@@ -1,20 +1,14 @@
 package team.yi.rsql.querydsl.test
 
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import team.yi.rsql.querydsl.model.Car
-import team.yi.rsql.querydsl.model.Engine
-import team.yi.rsql.querydsl.model.Screw
-import team.yi.rsql.querydsl.model.ScrewType
-import team.yi.rsql.querydsl.repository.CarRepository
-import team.yi.rsql.querydsl.repository.EngineRepository
-import team.yi.rsql.querydsl.repository.ScrewRepository
+import team.yi.rsql.querydsl.model.*
+import team.yi.rsql.querydsl.repository.*
 import java.security.SecureRandom
 import java.util.*
 
-@Suppress("SpellCheckingInspection")
+@Suppress("SpellCheckingInspection", "UnnecessaryAbstractClass")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 abstract class BaseRsqlTest {

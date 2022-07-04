@@ -32,7 +32,7 @@ class CustomFieldTypeHandler<E>(
         return values.map { Expressions.asSimple(it) }
     }
 
-    @Suppress("INCOMPATIBLE_ENUM_COMPARISON", "UNCHECKED_CAST")
+    @Suppress("INCOMPATIBLE_ENUM_COMPARISON", "UNCHECKED_CAST", "ComplexMethod")
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as StringExpression
         val right = values.orEmpty().distinct().map { it as StringExpression }.toTypedArray()

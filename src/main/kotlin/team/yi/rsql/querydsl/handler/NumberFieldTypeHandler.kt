@@ -1,22 +1,17 @@
 package team.yi.rsql.querydsl.handler
 
-import com.querydsl.core.types.Expression
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.BooleanExpression
-import com.querydsl.core.types.dsl.Expressions
-import com.querydsl.core.types.dsl.NumberExpression
+import com.querydsl.core.types.*
+import com.querydsl.core.types.dsl.*
 import com.querydsl.core.util.MathUtils
 import cz.jirutka.rsql.parser.ast.ComparisonNode
 import org.apache.commons.lang3.math.NumberUtils
-import team.yi.rsql.querydsl.FieldMetadata
-import team.yi.rsql.querydsl.RsqlConfig
+import team.yi.rsql.querydsl.*
+import team.yi.rsql.querydsl.operator.*
 import team.yi.rsql.querydsl.operator.Operator
-import team.yi.rsql.querydsl.operator.RsqlOperator
-import java.math.BigDecimal
-import java.math.BigInteger
+import java.math.*
 
 @Suppress("UNCHECKED_CAST")
-class NumberFieldTypeHandler<E>(
+open class NumberFieldTypeHandler<E>(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,

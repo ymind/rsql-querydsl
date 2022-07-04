@@ -22,11 +22,10 @@ class PredicateBuilderVisitor<E>(
         val firstNode = children.removeAt(0)
         var predicate = firstNode.accept(this, param) as BooleanExpression
 
-        for (subNode in children) {
-            val subPredicate = subNode.accept(this, param) as BooleanExpression
-
-            predicate = combineLogicalExpression(logicalOperator, predicate, subPredicate)
-        }
+        children
+            .asSequence()
+            .map { it.accept(this, param) as BooleanExpression }
+            .forEach { predicate = combineLogicalExpression(logicalOperator, predicate, it) }
 
         return predicate
     }

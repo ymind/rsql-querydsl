@@ -20,6 +20,7 @@ class RsqlOperator(vararg val symbols: String) {
         @JvmStatic
         val notEquals = RsqlOperator(*Operator.NOTEQUALS.rsqlOperator)
 
+        @Suppress("ObjectPropertyNaming")
         @JvmStatic
         val `in` = RsqlOperator(*Operator.IN.rsqlOperator)
 
