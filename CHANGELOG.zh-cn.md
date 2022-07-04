@@ -1,5 +1,12 @@
 # 更新日志
 
+## 1.6.1 (2022-07-04)
+
+### Bug Fixes
+
+- allow any type for fieldTypeHandlers and sortFieldTypeHandlers ([68935279](https://github.com/ymind/rsql-querydsl/commit/68935279974f4e003a4f0b8fc3aef67daebeba48))
+
+
 ## 1.6.0 (2022-07-04)
 
 ### Code Refactoring

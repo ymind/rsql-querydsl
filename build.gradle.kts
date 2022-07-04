@@ -27,7 +27,7 @@ plugins {
 }
 
 group = "team.yi.rsql"
-version = "1.6.0"
+version = "1.6.1"
 description = "Integration RSQL query language and Querydsl framework."
 
 java {
@@ -98,8 +98,8 @@ tasks {
         toRef = "master"
         strategy = team.yi.tools.semanticgitlog.VersionStrategy.slow
 
-        minorTypes = "feat,refactor,perf,fix,revert"
-        patchTypes = "chore,docs,build"
+        minorTypes = "feat,refactor,perf,revert"
+        patchTypes = "chore,docs,build,fix"
 
         issueUrlTemplate = "https://github.com/ymind/rsql-querydsl/issues/:issueId"
         commitUrlTemplate = "https://github.com/ymind/rsql-querydsl/commit/:commitId"
@@ -135,8 +135,8 @@ tasks {
         strategy = team.yi.tools.semanticgitlog.VersionStrategy.slow
         derivedVersionMark = "NEXT_VERSION:=="
 
-        minorTypes = "feat,refactor,perf,fix,revert"
-        patchTypes = "chore,docs,build"
+        minorTypes = "feat,refactor,perf,revert"
+        patchTypes = "chore,docs,build,fix"
 
         commitLocales = mapOf(
             "en" to file("${project.rootDir}/config/gitlog/commit-locales.md"),
