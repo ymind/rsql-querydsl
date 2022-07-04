@@ -50,7 +50,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.1")
 
     // https://mvnrepository.com/artifact/com.h2database/h2
-    testImplementation("com.h2database:h2:2.1.210")
+    testImplementation("com.h2database:h2:2.1.214")
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
