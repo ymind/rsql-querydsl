@@ -53,7 +53,7 @@ dependencies {
     testImplementation("com.h2database:h2:2.1.214")
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
 
     // https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api
     api("javax.persistence:javax.persistence-api:2.2")
