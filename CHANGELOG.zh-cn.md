@@ -1,5 +1,32 @@
 # 更新日志
 
+## 1.6.0 (2022-07-04)
+
+### Code Refactoring
+
+- allow any type for fieldTypeHandlers and sortFieldTypeHandlers ([de4dc237](https://github.com/ymind/rsql-querydsl/commit/de4dc237138da533fed753587a8fafaa24e6a2dd))
+
+
+### Chores
+
+- **deps**: bumped spring version to 2.7.1 ([76a6a9b3](https://github.com/ymind/rsql-querydsl/commit/76a6a9b370f36855e47dc5aff0b8b9835ef4ff51))
+- **deps**: bumped h2 version to 2.1.214 ([a5364817](https://github.com/ymind/rsql-querydsl/commit/a5364817529df2d69cd444a203d5dfceb5a5464c))
+- **deps**: bumped jackson-module-kotlin version to 2.13.3 ([0b366298](https://github.com/ymind/rsql-querydsl/commit/0b3662988c262bc728e5375909a7e14cd05c4f18))
+
+
+### Styles
+
+- code cleanup ([00564962](https://github.com/ymind/rsql-querydsl/commit/005649627d8967b595386f234997a8d3b962eedb))
+
+
+### Build System
+
+- **gradle**: bumped gradle wrapper version to 7.4.2 ([e28f4fd2](https://github.com/ymind/rsql-querydsl/commit/e28f4fd2bf8ad1b8b4ed4d91f0745602e90f9bc9))
+- **kotlin**: bumped kotlin version from to 1.7.0 ([6b71d15d](https://github.com/ymind/rsql-querydsl/commit/6b71d15d28f2db0cbfcd58d59f4170ccd8fec4c4))
+- **gradle/plugin**: bumped org.jlleitschuh.gradle.ktlint version to 10.3.0 ([ee56f2b9](https://github.com/ymind/rsql-querydsl/commit/ee56f2b9ad3ea11fa8c812d70177cf60cb9d2bc8))
+- **gradle/plugin**: add io.gitlab.arturbosch.detekt version 1.21.0-RC1 ([93a39ee5](https://github.com/ymind/rsql-querydsl/commit/93a39ee5f169fcf78aa8d0590a3de3239e9372ba))
+
+
 ## 1.5.6 (2022-03-08)
 
 ### Code Refactoring
@@ -49,6 +76,18 @@
 - fix `Projections.*` not work in select expressions ([ed805716](https://github.com/ymind/rsql-querydsl/commit/ed80571663da64c9b8a97d02acde85f81feab120))
 
 
+### Code Refactoring
+
+- add time patterns for DateUtil ([5dca322b](https://github.com/ymind/rsql-querydsl/commit/5dca322bc180273c444776b2334f5a42d8b43329))
+
+
+### Chores
+
+- code cleanup ([464bc36d](https://github.com/ymind/rsql-querydsl/commit/464bc36df1172f2d07ff62779f3a64feb8c15786))
+
+
+## 1.3.0 (2022-01-29)
+
 ### Features
 
 - support custom from variable ([d6f00a2b](https://github.com/ymind/rsql-querydsl/commit/d6f00a2bada0b9d4628d2c3d62e815159328b996))
@@ -59,12 +98,6 @@
 
 - optimize select expression support ([00113fc3](https://github.com/ymind/rsql-querydsl/commit/00113fc31914ada0840f3f2f1aaee7f926da6423))
 - remove `noPaging` parameter from buildJPAQuery ([0fc71996](https://github.com/ymind/rsql-querydsl/commit/0fc71996f08cc162b227db8b9257ff8a16e111ec))
-- add time patterns for DateUtil ([5dca322b](https://github.com/ymind/rsql-querydsl/commit/5dca322bc180273c444776b2334f5a42d8b43329))
-
-
-### Chores
-
-- code cleanup ([464bc36d](https://github.com/ymind/rsql-querydsl/commit/464bc36df1172f2d07ff62779f3a64feb8c15786))
 
 
 ## 1.1.1 (2022-01-28)
