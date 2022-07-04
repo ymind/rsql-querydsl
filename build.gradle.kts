@@ -22,6 +22,8 @@ plugins {
 
     // https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+    // https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt
+    id("io.gitlab.arturbosch.detekt") version "1.21.0-RC1"
 }
 
 group = "team.yi.rsql"
@@ -69,6 +71,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0-RC1")
 }
 
 tasks {
@@ -146,6 +150,13 @@ ktlint {
         exclude("**/generated/**")
         include("**/kotlin/**")
     }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("$rootDir/config/detekt/detekt.yml")
+    baseline = file("$rootDir/config/detekt/baseline.xml")
 }
 
 tasks.register("bumpVersion") {
