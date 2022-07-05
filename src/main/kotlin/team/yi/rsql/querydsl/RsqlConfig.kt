@@ -1,59 +1,25 @@
 package team.yi.rsql.querydsl
 
-import cz.jirutka.rsql.parser.ast.ComparisonNode
-import cz.jirutka.rsql.parser.ast.NodesFactory
-import team.yi.rsql.querydsl.exception.RsqlException
-import team.yi.rsql.querydsl.exception.TypeNotSupportedException
+import cz.jirutka.rsql.parser.ast.*
+import team.yi.rsql.querydsl.exception.*
 import team.yi.rsql.querydsl.handler.*
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.RsqlUtil
 import javax.persistence.EntityManager
 
 class RsqlConfig<E> private constructor(builder: Builder<E>) {
-    private val fieldTypeHandlers: MutableList<Class<out FieldTypeHandler<*>>>
-    private val sortFieldTypeHandlers: MutableList<Class<out SortFieldTypeHandler<*>>>
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    val defaultFieldTypeHandlers: List<Class<out FieldTypeHandler<*>>>
-        get() = listOf(
-            NumberFieldTypeHandler::class.java,
-            EnumFieldTypeHandler::class.java,
-            StringFieldTypeHandler::class.java,
-            CharacterFieldTypeHandler::class.java,
-            DateTimeFieldTypeHandler::class.java,
-            BooleanFieldTypeHandler::class.java,
-            ListFieldTypeHandler::class.java,
-            SetFieldTypeHandler::class.java,
-            CollectionFieldTypeHandler::class.java,
-            SimpleFieldTypeHandler::class.java,
-        )
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    val defaultSortFieldTypeHandlers: List<Class<out SortFieldTypeHandler<*>>>
-        get() = listOf(
-            DefaultSortFieldTypeHandler::class.java,
-        )
+    val fieldTypeHandlers: List<Class<out FieldTypeHandler<*>>>
+    val sortFieldTypeHandlers: List<Class<out SortFieldTypeHandler<*>>>
 
     val entityManager: EntityManager = builder.entityManager
-    var operators: List<RsqlOperator> = builder.operators.orEmpty()
+    val operators: List<RsqlOperator> = builder.operators
     val nodesFactory: NodesFactory = NodesFactory(RsqlUtil.getOperators(operators))
-    val nodeInterceptors = builder.nodeInterceptors
-    var dateFormat: String? = builder.dateFormat
+    val nodeInterceptors: MutableList<RsqlNodeInterceptor> = builder.nodeInterceptors
+    val dateFormat: String? = builder.dateFormat
 
     init {
-        fieldTypeHandlers = defaultFieldTypeHandlers.toMutableList()
-        sortFieldTypeHandlers = defaultSortFieldTypeHandlers.toMutableList()
-
-        builder.fieldTypeHandlers?.let { fieldTypeHandlers.addAll(it) }
-        builder.sortFieldTypeHandlers?.let { sortFieldTypeHandlers.addAll(it) }
-    }
-
-    fun addFieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler<*>>) {
-        this.fieldTypeHandlers.addAll(typeHandler)
-    }
-
-    fun addSortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler<*>>) {
-        this.sortFieldTypeHandlers.addAll(typeHandler)
+        fieldTypeHandlers = RsqlConstants.defaultFieldTypeHandlers + builder.fieldTypeHandlers
+        sortFieldTypeHandlers = RsqlConstants.defaultSortFieldTypeHandlers + builder.sortFieldTypeHandlers
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -93,26 +59,26 @@ class RsqlConfig<E> private constructor(builder: Builder<E>) {
     }
 
     class Builder<E>(var entityManager: EntityManager) {
-        internal var operators: List<RsqlOperator>? = null
-        internal var fieldTypeHandlers: List<Class<out FieldTypeHandler<*>>>? = null
-        internal var sortFieldTypeHandlers: List<Class<out SortFieldTypeHandler<*>>>? = null
+        internal var operators = mutableListOf<RsqlOperator>()
+        internal var fieldTypeHandlers = mutableListOf<Class<out FieldTypeHandler<*>>>()
+        internal var sortFieldTypeHandlers = mutableListOf<Class<out SortFieldTypeHandler<*>>>()
         internal val nodeInterceptors = mutableListOf<RsqlNodeInterceptor>()
         internal var dateFormat: String? = null
 
-        fun operator(vararg operator: RsqlOperator): Builder<E> = this.apply { this.operators = operator.toList() }
+        fun operator(vararg operator: RsqlOperator): Builder<E> = this.apply { this.operators += operator }
 
-        fun fieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler<*>>): Builder<E> = this.apply { this.fieldTypeHandlers = typeHandler.toList() }
+        fun fieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler<*>>): Builder<E> = this.apply { this.fieldTypeHandlers += typeHandler }
 
-        fun sortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler<*>>): Builder<E> = this.apply { this.sortFieldTypeHandlers = typeHandler.toList() }
+        fun sortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler<*>>): Builder<E> = this.apply { this.sortFieldTypeHandlers += typeHandler }
 
         @Suppress("UNCHECKED_CAST")
         fun javaFieldTypeHandler(vararg typeHandler: Class<*>): Builder<E> = this.apply {
-            this.fieldTypeHandlers = typeHandler.mapNotNull { it as? Class<out FieldTypeHandler<*>> }
+            this.fieldTypeHandlers += typeHandler.mapNotNull { it as? Class<out FieldTypeHandler<*>> }
         }
 
         @Suppress("UNCHECKED_CAST")
         fun javaSortFieldTypeHandler(vararg typeHandler: Class<*>): Builder<E> = this.apply {
-            this.sortFieldTypeHandlers = typeHandler.mapNotNull { it as? Class<out SortFieldTypeHandler<*>> }
+            this.sortFieldTypeHandlers += typeHandler.mapNotNull { it as? Class<out SortFieldTypeHandler<*>> }
         }
 
         fun nodeInterceptors(nodeInterceptors: List<RsqlNodeInterceptor>?): Builder<E> = this.apply { nodeInterceptors?.let { this.nodeInterceptors.addAll(nodeInterceptors) } }
