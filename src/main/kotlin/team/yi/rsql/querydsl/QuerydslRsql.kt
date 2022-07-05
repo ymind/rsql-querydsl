@@ -252,19 +252,6 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             fun sort(sort: String?): BuildBuilder<E> = this.apply { super.sort = sort }
             fun sort(vararg expression: OrderSpecifier<*>?): BuildBuilder<E> = this.apply { super.orderSpecifiers = expression.filterNotNull().distinct() }
             fun sort(orderSpecifiers: List<OrderSpecifier<*>>?): BuildBuilder<E> = this.apply { super.orderSpecifiers = orderSpecifiers }
-
-            fun operator(vararg operator: RsqlOperator): BuildBuilder<E> = this.apply { super.rsqlConfig.operators = operator.toList() }
-            fun operators(operators: List<RsqlOperator>): BuildBuilder<E> = this.apply { super.rsqlConfig.operators = operators.toList() }
-
-            fun fieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler<*>>): BuildBuilder<E> = this.apply {
-                super.rsqlConfig.addFieldTypeHandler(*typeHandler)
-            }
-
-            fun sortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler<*>>): BuildBuilder<E> = this.apply {
-                super.rsqlConfig.addSortFieldTypeHandler(*typeHandler)
-            }
-
-            fun dateFormat(dateFormat: String): BuildBuilder<E> = this.apply { super.rsqlConfig.dateFormat = dateFormat }
         }
     }
 }
