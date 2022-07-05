@@ -1,14 +1,14 @@
 package team.yi.rsql.querydsl
 
 import com.querydsl.core.types.Expression
-import com.querydsl.core.types.dsl.BooleanExpression
-import com.querydsl.core.types.dsl.PathBuilder
+import com.querydsl.core.types.dsl.*
 import cz.jirutka.rsql.parser.ast.ComparisonNode
 import team.yi.rsql.querydsl.exception.TypeNotSupportedException
 import team.yi.rsql.querydsl.handler.FieldTypeHandler
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
-class PredicateBuilder<E>(private val rsqlConfig: RsqlConfig<E>) {
+class PredicateBuilder<E>(private val rsqlConfig: RsqlConfig) {
+    @Suppress("UNCHECKED_CAST")
     @Throws(TypeNotSupportedException::class)
     fun getExpression(rootPath: PathBuilder<E>, comparisonNode: ComparisonNode, operator: RsqlOperator): BooleanExpression? {
         val rootClass = rootPath.type
@@ -16,7 +16,7 @@ class PredicateBuilder<E>(private val rsqlConfig: RsqlConfig<E>) {
         val node = if (interceptor == null) comparisonNode else interceptor.visit(rootClass, comparisonNode, operator, rsqlConfig.nodesFactory) ?: return null
         val fieldMetadataList = FieldMetadata.parseFieldSelector(rootClass, node.selector)
         val processedPaths = mutableListOf<Expression<*>>()
-        var typeHandler: FieldTypeHandler<E>? = null
+        var typeHandler: FieldTypeHandler? = null
 
         for (i in fieldMetadataList.indices) {
             typeHandler = rsqlConfig.getFieldTypeHandler(node, fieldMetadataList[i])

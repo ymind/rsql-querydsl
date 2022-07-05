@@ -10,12 +10,12 @@ import team.yi.rsql.querydsl.RsqlConfig
 import team.yi.rsql.querydsl.handler.FieldTypeHandler
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
-class CarNameFieldTypeHandler<E>(
+class CarNameFieldTypeHandler(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
-    override val rsqlConfig: RsqlConfig<E>,
-) : FieldTypeHandler<E> {
+    override val rsqlConfig: RsqlConfig,
+) : FieldTypeHandler {
     override fun supports(type: Class<*>?): Boolean {
         return node.selector == "customField"
     }

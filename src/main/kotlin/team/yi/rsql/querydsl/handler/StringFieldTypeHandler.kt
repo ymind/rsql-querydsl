@@ -16,7 +16,7 @@ class StringFieldTypeHandler<E>(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
-    override val rsqlConfig: RsqlConfig<E>,
+    override val rsqlConfig: RsqlConfig,
 ) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
     override fun supports(type: Class<*>?): Boolean {
         return supportsType(

@@ -11,9 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import cz.jirutka.rsql.parser.RSQLParser
 import team.yi.rsql.querydsl.exception.RsqlException
 import team.yi.rsql.querydsl.exception.TypeNotSupportedException
-import team.yi.rsql.querydsl.handler.FieldTypeHandler
 import team.yi.rsql.querydsl.handler.SortFieldTypeHandler
-import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.PathFactory
 import team.yi.rsql.querydsl.util.RsqlUtil
 import javax.persistence.EntityManager
@@ -29,7 +27,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val limit: Long?
     private val sortString: String?
     private val sortExpressions: List<OrderSpecifier<*>>?
-    private val rsqlConfig: RsqlConfig<E>
+    private val rsqlConfig: RsqlConfig
 
     val pathFactory = PathFactory()
 
@@ -130,10 +128,11 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         return this.selectExpressions ?: RsqlUtil.parseSelect(selectString ?: return emptyList(), fromPath)
     }
 
+    @Suppress("UNCHECKED_CAST")
     @Throws(TypeNotSupportedException::class)
     private fun getSortPath(fromPath: PathBuilder<E>, fieldMetadataList: List<FieldMetadata>): Expression<*> {
         val processedPaths = mutableListOf<Expression<*>>()
-        var typeHandler: SortFieldTypeHandler<E>
+        var typeHandler: SortFieldTypeHandler
 
         for (i in fieldMetadataList.indices) {
             typeHandler = rsqlConfig.getSortFieldTypeHandler(fieldMetadataList[i])
@@ -159,7 +158,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     }
 
     open class Builder<E> {
-        internal val rsqlConfig: RsqlConfig<E>
+        internal val rsqlConfig: RsqlConfig
         internal var entityClass: Class<E>? = null
         internal var entityName: String? = null
         internal var selectString: String? = null
@@ -171,27 +170,14 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         internal var sort: String? = null
         internal var orderSpecifiers: List<OrderSpecifier<*>>? = null
 
-        constructor(rsqlConfig: RsqlConfig<E>) {
+        constructor(rsqlConfig: RsqlConfig) {
             this.rsqlConfig = rsqlConfig
         }
 
-        constructor(entityManager: EntityManager) : this(entityManager, null, null)
-
         constructor(
             entityManager: EntityManager,
-            operators: List<RsqlOperator>? = null,
-            fieldTypeHandlers: List<Class<FieldTypeHandler<*>>>? = null,
-            sortFieldTypeHandlers: List<Class<SortFieldTypeHandler<*>>>? = null,
-            nodeInterceptors: List<RsqlNodeInterceptor>? = null,
-            dateFormat: String? = null,
         ) : this(
-            RsqlConfig.Builder<E>(entityManager)
-                .operator(*(operators ?: emptyList()).toTypedArray())
-                .fieldTypeHandler(*(fieldTypeHandlers ?: emptyList()).toTypedArray())
-                .sortFieldTypeHandler(*(sortFieldTypeHandlers ?: emptyList()).toTypedArray())
-                .nodeInterceptors(nodeInterceptors)
-                .dateFormat(dateFormat)
-                .build()
+            RsqlConfig.Builder(entityManager).build()
         )
 
         private constructor(builder: Builder<E>) {

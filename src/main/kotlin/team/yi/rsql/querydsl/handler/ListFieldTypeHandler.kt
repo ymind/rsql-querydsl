@@ -11,7 +11,7 @@ class ListFieldTypeHandler<E>(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
-    override val rsqlConfig: RsqlConfig<E>,
+    override val rsqlConfig: RsqlConfig,
 ) : CollectionFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) {
     override fun supports(type: Class<*>?): Boolean {
         return if (type == null) false else DefaultTypeSystem().isListType(type)

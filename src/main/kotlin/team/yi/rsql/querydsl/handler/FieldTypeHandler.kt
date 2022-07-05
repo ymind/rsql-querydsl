@@ -8,11 +8,11 @@ import team.yi.rsql.querydsl.FieldMetadata
 import team.yi.rsql.querydsl.RsqlConfig
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
-interface FieldTypeHandler<E> {
+interface FieldTypeHandler {
     val node: ComparisonNode
     val operator: RsqlOperator
     val fieldMetadata: FieldMetadata
-    val rsqlConfig: RsqlConfig<E>
+    val rsqlConfig: RsqlConfig
 
     fun supports(type: Class<*>?): Boolean
     fun getPath(parentPath: Expression<*>?): Expression<*>?

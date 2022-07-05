@@ -38,8 +38,8 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldReadRsqlConfig() {
-        RsqlConfig<Car> config = new RsqlConfig.Builder<Car>(this.entityManager).build();
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<>(config)
+        RsqlConfig config = new RsqlConfig.Builder(this.entityManager).build();
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(config)
             .from(Car.class)
             .where("description=notempty=''")
             .build();
@@ -52,7 +52,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldRewriteQueryWithRsqlNodeInterceptor() {
-        RsqlConfig<Car> config = new RsqlConfig.Builder<Car>(this.entityManager)
+        RsqlConfig config = new RsqlConfig.Builder(this.entityManager)
             .nodeInterceptor(() -> new RsqlNodeInterceptor() {
                 @Override
                 public <E> boolean supports(@NotNull Class<E> rootClass, @NotNull ComparisonNode comparisonNode, @NotNull RsqlOperator operator) {
@@ -68,15 +68,11 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
                 ) throws UnknownOperatorException {
                     List<String> arguments = Collections.singletonList("");
 
-                    return nodesFactory.createComparisonNode(
-                        "=isnull=",
-                        comparisonNode.getSelector(),
-                        arguments
-                    );
+                    return nodesFactory.createComparisonNode("=isnull=", comparisonNode.getSelector(), arguments);
                 }
             })
             .build();
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<>(config)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(config)
             .from(Car.class)
             .where("description=notempty=''")
             .build();

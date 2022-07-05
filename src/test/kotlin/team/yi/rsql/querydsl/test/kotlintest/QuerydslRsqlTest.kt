@@ -29,8 +29,8 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReadRsqlConfig() {
-        val config = RsqlConfig.Builder<Car>(entityManager).build()
-        val rsql = QuerydslRsql.Builder(config)
+        val config = RsqlConfig.Builder(entityManager).build()
+        val rsql = QuerydslRsql.Builder<Car>(config)
             .from(Car::class.java)
             .where("description=notempty=''")
             .build()
@@ -46,7 +46,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldRewriteQueryWithRsqlNodeInterceptor() {
-        val config = RsqlConfig.Builder<Car>(entityManager)
+        val config = RsqlConfig.Builder(entityManager)
             .nodeInterceptor {
                 object : RsqlNodeInterceptor {
                     override fun <E> supports(rootClass: Class<E>, comparisonNode: ComparisonNode, operator: RsqlOperator): Boolean {
@@ -61,7 +61,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
                 }
             }
             .build()
-        val rsql = QuerydslRsql.Builder(config)
+        val rsql = QuerydslRsql.Builder<Car>(config)
             .from(Car::class.java)
             .where("description=notempty=''")
             .build()

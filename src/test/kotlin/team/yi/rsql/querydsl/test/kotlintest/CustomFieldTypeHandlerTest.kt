@@ -19,11 +19,11 @@ class CustomFieldTypeHandlerTest : BaseRsqlTest() {
 
     @Test
     fun shouldReadRsqlConfigWithOperator() {
-        val config = RsqlConfig.Builder<Car>(entityManager)
+        val config = RsqlConfig.Builder(entityManager)
             .operator(RsqlOperator("=customnotempty="))
             .fieldTypeHandler(CustomFieldTypeHandler::class.java)
             .build()
-        val rsql = QuerydslRsql.Builder(config)
+        val rsql = QuerydslRsql.Builder<Car>(config)
             .from("Car")
             .where("description=customnotempty=''")
             .build()
@@ -40,10 +40,10 @@ class CustomFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldNotFindCustomOperator() {
         assertThrows(RsqlException::class.java) {
-            val config = RsqlConfig.Builder<Car>(entityManager)
+            val config = RsqlConfig.Builder(entityManager)
                 .fieldTypeHandler(CustomFieldTypeHandler::class.java)
                 .build()
-            val rsql = QuerydslRsql.Builder(config)
+            val rsql = QuerydslRsql.Builder<Car>(config)
                 .from("Car")
                 .where("description=customnotempty=''")
                 .build()
@@ -54,10 +54,10 @@ class CustomFieldTypeHandlerTest : BaseRsqlTest() {
 
     @Test
     fun shouldReadRsqlConfigWithFieldTypeHandler() {
-        val config = RsqlConfig.Builder<Car>(entityManager)
+        val config = RsqlConfig.Builder(entityManager)
             .fieldTypeHandler(CustomFieldTypeHandler::class.java)
             .build()
-        val rsql = QuerydslRsql.Builder(config)
+        val rsql = QuerydslRsql.Builder<Car>(config)
             .from("Car")
             .where("description=notempty=''")
             .build()

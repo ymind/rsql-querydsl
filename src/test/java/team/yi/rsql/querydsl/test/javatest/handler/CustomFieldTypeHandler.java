@@ -15,13 +15,13 @@ import team.yi.rsql.querydsl.operator.RsqlOperator;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("ALL")
-public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
+public class CustomFieldTypeHandler<E> implements FieldTypeHandler {
     private ComparisonNode node;
     private RsqlOperator operator;
     private FieldMetadata fieldMetadata;
-    private RsqlConfig<E> rsqlConfig;
+    private RsqlConfig rsqlConfig;
 
+    @NotNull
     @Override
     public ComparisonNode getNode() {
         return this.node;
@@ -31,6 +31,7 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
         this.node = node;
     }
 
+    @NotNull
     @Override
     public RsqlOperator getOperator() {
         return this.operator;
@@ -52,11 +53,11 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
 
     @NotNull
     @Override
-    public RsqlConfig<E> getRsqlConfig() {
+    public RsqlConfig getRsqlConfig() {
         return this.rsqlConfig;
     }
 
-    public void setRsqlConfig(final RsqlConfig<E> rsqlConfig) {
+    public void setRsqlConfig(final RsqlConfig rsqlConfig) {
         this.rsqlConfig = rsqlConfig;
     }
 
@@ -75,11 +76,11 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
     @Nullable
     @Override
     public Collection<Expression<?>> getValue(
-        final List<String> values,
-        final Path<?> rootPath,
+        @NotNull final List<String> values,
+        @NotNull final Path<?> rootPath,
         final FieldMetadata fm
     ) {
-        if (values == null || values.isEmpty()) return null;
+        if (values.isEmpty()) return null;
 
         return values.stream().map(Expressions::asSimple).collect(Collectors.toList());
     }
@@ -95,6 +96,9 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler<E> {
         if (this.operator == null) return null;
 
         StringExpression left = (StringExpression) path;
+
+        if (left == null) return null;
+
         StringExpression[] right = (values == null ? new ArrayList<StringExpression>() : values).stream()
             .map(x -> (StringExpression) x)
             .toArray(StringExpression[]::new);

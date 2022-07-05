@@ -15,7 +15,7 @@ open class NumberFieldTypeHandler<E>(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
-    override val rsqlConfig: RsqlConfig<E>,
+    override val rsqlConfig: RsqlConfig,
 ) : SimpleFieldTypeHandler<E>(node, operator, fieldMetadata, rsqlConfig) where E : Number, E : Comparable<E> {
     override fun supports(type: Class<*>?): Boolean {
         return supportsType(

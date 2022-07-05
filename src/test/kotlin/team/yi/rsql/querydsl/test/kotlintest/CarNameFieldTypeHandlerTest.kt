@@ -16,10 +16,10 @@ class CarNameFieldTypeHandlerTest : BaseRsqlTest() {
 
     @Test
     fun shouldReadRsqlConfigWithFieldTypeHandler() {
-        val config = RsqlConfig.Builder<Car>(entityManager)
+        val config = RsqlConfig.Builder(entityManager)
             .fieldTypeHandler(CarNameFieldTypeHandler::class.java)
             .build()
-        val rsql = QuerydslRsql.Builder(config)
+        val rsql = QuerydslRsql.Builder<Car>(config)
             .from("Car")
             // NOTE: this operator and value will not work
             .where("customField=eq='xxx'")

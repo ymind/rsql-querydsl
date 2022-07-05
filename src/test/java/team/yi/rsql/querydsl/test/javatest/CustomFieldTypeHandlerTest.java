@@ -22,11 +22,11 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
 
     @Test
     public void shouldReadRsqlConfigWithOperator() {
-        RsqlConfig<Car> config = new RsqlConfig.Builder<Car>(this.entityManager)
+        RsqlConfig config = new RsqlConfig.Builder(this.entityManager)
             .operator(new RsqlOperator("=customnotempty="))
             .javaFieldTypeHandler(CustomFieldTypeHandler.class)
             .build();
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<>(config)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(config)
             .from("Car")
             .where("description=customnotempty=''")
             .build();
@@ -40,10 +40,10 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldNotFindCustomOperator() {
         assertThrows(RsqlException.class, () -> {
-            RsqlConfig<Car> config = new RsqlConfig.Builder<Car>(this.entityManager)
+            RsqlConfig config = new RsqlConfig.Builder(this.entityManager)
                 .javaFieldTypeHandler(CustomFieldTypeHandler.class)
                 .build();
-            QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<>(config)
+            QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(config)
                 .from("Car")
                 .where("description=customnotempty=''")
                 .build();
@@ -54,10 +54,10 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
 
     @Test
     public void shouldReadRsqlConfigWithFieldTypeHandler() {
-        RsqlConfig<Car> config = new RsqlConfig.Builder<Car>(this.entityManager)
+        RsqlConfig config = new RsqlConfig.Builder(this.entityManager)
             .javaFieldTypeHandler(CustomFieldTypeHandler.class)
             .build();
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<>(config)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(config)
             .from("Car")
             .where("description=notempty=''")
             .build();

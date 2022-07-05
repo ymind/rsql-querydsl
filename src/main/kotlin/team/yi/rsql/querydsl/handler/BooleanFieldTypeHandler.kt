@@ -15,7 +15,7 @@ class BooleanFieldTypeHandler(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,
     override val fieldMetadata: FieldMetadata,
-    override val rsqlConfig: RsqlConfig<Boolean>,
+    override val rsqlConfig: RsqlConfig,
 ) : ComparableFieldTypeHandler<Boolean>(node, operator, fieldMetadata, rsqlConfig) {
     override fun supports(type: Class<*>?): Boolean {
         return supportsType(
