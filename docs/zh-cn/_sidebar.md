@@ -1,6 +1,6 @@
 - [概述](/zh-cn/)
 - **入门**
-  - [开始](/zh-cn/quickstart)
+    - [开始](/zh-cn/quickstart)
 - **Links**
 - [更新日志](/zh-cn/changelog)
-- [![Github](https://icongram.jgog.in/simple/github.svg?color=808080&size=16)Github](https://github.com/ymind/rsql-querydsl)
+- [Github](https://github.com/ymind/rsql-querydsl)

@@ -27,7 +27,8 @@ abstract class BaseRsqlTest {
     protected lateinit var entityManager: EntityManager
 
     @Suppress("LeakingThis")
-    protected val rsqlConfig: RsqlConfig = RsqlConfig.Builder(entityManager).build()
+    protected val rsqlConfig: RsqlConfig
+        get() = RsqlConfig.Builder(entityManager).build()
 
     @BeforeAll
     fun initData() {
