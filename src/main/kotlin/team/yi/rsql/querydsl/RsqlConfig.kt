@@ -18,8 +18,8 @@ class RsqlConfig private constructor(builder: Builder) {
     val dateFormat: String? = builder.dateFormat
 
     init {
-        fieldTypeHandlers = RsqlConstants.defaultFieldTypeHandlers + builder.fieldTypeHandlers
-        sortFieldTypeHandlers = RsqlConstants.defaultSortFieldTypeHandlers + builder.sortFieldTypeHandlers
+        fieldTypeHandlers = builder.fieldTypeHandlers + RsqlConstants.defaultFieldTypeHandlers
+        sortFieldTypeHandlers = builder.sortFieldTypeHandlers + RsqlConstants.defaultSortFieldTypeHandlers
     }
 
     fun getFieldTypeHandler(node: ComparisonNode, fieldMetadata: FieldMetadata): FieldTypeHandler {

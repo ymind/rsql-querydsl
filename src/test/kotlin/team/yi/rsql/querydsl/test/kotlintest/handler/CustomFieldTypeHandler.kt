@@ -29,7 +29,7 @@ class CustomFieldTypeHandler(
     override fun getValue(values: List<String?>, rootPath: Path<*>, fm: FieldMetadata?): Collection<Expression<out Any?>?>? {
         if (values.isEmpty()) return null
 
-        return values.map { Expressions.asSimple(it) }
+        return values.map { Expressions.asString(it) }
     }
 
     @Suppress("INCOMPATIBLE_ENUM_COMPARISON", "UNCHECKED_CAST", "ComplexMethod")

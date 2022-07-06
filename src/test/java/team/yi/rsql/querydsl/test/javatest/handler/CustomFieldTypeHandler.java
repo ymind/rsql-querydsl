@@ -15,20 +15,23 @@ import team.yi.rsql.querydsl.operator.RsqlOperator;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CustomFieldTypeHandler<E> implements FieldTypeHandler {
-    private ComparisonNode node;
-    private RsqlOperator operator;
-    private FieldMetadata fieldMetadata;
-    private RsqlConfig rsqlConfig;
+public class CustomFieldTypeHandler implements FieldTypeHandler {
+    private final ComparisonNode node;
+    private final RsqlOperator operator;
+    private final FieldMetadata fieldMetadata;
+    private final RsqlConfig rsqlConfig;
+
+    public CustomFieldTypeHandler(final ComparisonNode node, final RsqlOperator operator, final FieldMetadata fieldMetadata, final RsqlConfig rsqlConfig) {
+        this.node = node;
+        this.operator = operator;
+        this.fieldMetadata = fieldMetadata;
+        this.rsqlConfig = rsqlConfig;
+    }
 
     @NotNull
     @Override
     public ComparisonNode getNode() {
         return this.node;
-    }
-
-    public void setNode(final ComparisonNode node) {
-        this.node = node;
     }
 
     @NotNull
@@ -37,28 +40,16 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler {
         return this.operator;
     }
 
-    public void setOperator(final RsqlOperator operator) {
-        this.operator = operator;
-    }
-
     @NotNull
     @Override
     public FieldMetadata getFieldMetadata() {
         return this.fieldMetadata;
     }
 
-    public void setFieldMetadata(final FieldMetadata fieldMetadata) {
-        this.fieldMetadata = fieldMetadata;
-    }
-
     @NotNull
     @Override
     public RsqlConfig getRsqlConfig() {
         return this.rsqlConfig;
-    }
-
-    public void setRsqlConfig(final RsqlConfig rsqlConfig) {
-        this.rsqlConfig = rsqlConfig;
     }
 
     @Override
@@ -82,7 +73,7 @@ public class CustomFieldTypeHandler<E> implements FieldTypeHandler {
     ) {
         if (values.isEmpty()) return null;
 
-        return values.stream().map(Expressions::asSimple).collect(Collectors.toList());
+        return values.stream().map(Expressions::asString).collect(Collectors.toList());
     }
 
     @Nullable
