@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.8.0 (2022-07-06)
+
+### Bug Fixes
+
+- **test**: custom field type handler not work ([a369cb68](https://github.com/ymind/rsql-querydsl/commit/a369cb680a8d0325e5f50186b0569d85efbba0b9))
+
+
+### Code Refactoring
+
+- remove invokes to RsqlConfig from QuerydslRsql.Builder() ([56bc4618](https://github.com/ymind/rsql-querydsl/commit/56bc46183b891c419a14fbbb3d1b6420d361d54a))
+- optimize RsqlConfig ([d41975e4](https://github.com/ymind/rsql-querydsl/commit/d41975e4275519d31ab4bf63e12b1e4507ae727a))
+- remove generic type parameter from RsqlConfig ([d8bafcd8](https://github.com/ymind/rsql-querydsl/commit/d8bafcd89027d740b4952a86a00cabd02e76b125))
+- remove EntityManager from QuerydslRsql.Builder() ([e6f8d836](https://github.com/ymind/rsql-querydsl/commit/e6f8d836cc3c6bbbbda5169ebb5e60fccc31e693))
+
+
+### Styles
+
+- code cleanup ([3a5d57d5](https://github.com/ymind/rsql-querydsl/commit/3a5d57d5320f052bbd0465c41f8d2a49db6dd20b))
+
+
 ## 1.6.1 (2022-07-04)
 
 ### Bug Fixes
