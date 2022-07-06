@@ -2,28 +2,22 @@ package team.yi.rsql.querydsl.test.kotlintest
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import team.yi.rsql.querydsl.QuerydslRsql
-import team.yi.rsql.querydsl.RsqlConfig
+import team.yi.rsql.querydsl.*
 import team.yi.rsql.querydsl.exception.RsqlException
 import team.yi.rsql.querydsl.model.Car
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.test.BaseRsqlTest
 import team.yi.rsql.querydsl.test.kotlintest.handler.CustomFieldTypeHandler
-import javax.persistence.EntityManager
 
 @Suppress("SpellCheckingInspection")
 class CustomFieldTypeHandlerTest : BaseRsqlTest() {
-    @Autowired
-    private lateinit var entityManager: EntityManager
-
     @Test
     fun shouldReadRsqlConfigWithOperator() {
-        val config = RsqlConfig.Builder(entityManager)
+        val rsqlConfig = RsqlConfig.Builder(entityManager)
             .operator(RsqlOperator("=customnotempty="))
             .fieldTypeHandler(CustomFieldTypeHandler::class.java)
             .build()
-        val rsql = QuerydslRsql.Builder<Car>(config)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("description=customnotempty=''")
             .build()
@@ -40,10 +34,10 @@ class CustomFieldTypeHandlerTest : BaseRsqlTest() {
     @Test
     fun shouldNotFindCustomOperator() {
         assertThrows(RsqlException::class.java) {
-            val config = RsqlConfig.Builder(entityManager)
+            val rsqlConfig = RsqlConfig.Builder(entityManager)
                 .fieldTypeHandler(CustomFieldTypeHandler::class.java)
                 .build()
-            val rsql = QuerydslRsql.Builder<Car>(config)
+            val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
                 .from("Car")
                 .where("description=customnotempty=''")
                 .build()
@@ -54,10 +48,10 @@ class CustomFieldTypeHandlerTest : BaseRsqlTest() {
 
     @Test
     fun shouldReadRsqlConfigWithFieldTypeHandler() {
-        val config = RsqlConfig.Builder(entityManager)
+        val rsqlConfig = RsqlConfig.Builder(entityManager)
             .fieldTypeHandler(CustomFieldTypeHandler::class.java)
             .build()
-        val rsql = QuerydslRsql.Builder<Car>(config)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("description=notempty=''")
             .build()

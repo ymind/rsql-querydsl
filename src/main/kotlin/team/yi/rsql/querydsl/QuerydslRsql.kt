@@ -1,20 +1,12 @@
 package team.yi.rsql.querydsl
 
-import com.querydsl.core.types.Expression
-import com.querydsl.core.types.OrderSpecifier
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.Predicate
-import com.querydsl.core.types.dsl.BooleanExpression
-import com.querydsl.core.types.dsl.PathBuilder
-import com.querydsl.jpa.impl.JPAQuery
-import com.querydsl.jpa.impl.JPAQueryFactory
+import com.querydsl.core.types.*
+import com.querydsl.core.types.dsl.*
+import com.querydsl.jpa.impl.*
 import cz.jirutka.rsql.parser.RSQLParser
-import team.yi.rsql.querydsl.exception.RsqlException
-import team.yi.rsql.querydsl.exception.TypeNotSupportedException
+import team.yi.rsql.querydsl.exception.*
 import team.yi.rsql.querydsl.handler.SortFieldTypeHandler
-import team.yi.rsql.querydsl.util.PathFactory
-import team.yi.rsql.querydsl.util.RsqlUtil
-import javax.persistence.EntityManager
+import team.yi.rsql.querydsl.util.*
 
 class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val predicateBuilder: PredicateBuilder<E>
@@ -28,8 +20,6 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     private val sortString: String?
     private val sortExpressions: List<OrderSpecifier<*>>?
     private val rsqlConfig: RsqlConfig
-
-    val pathFactory = PathFactory()
 
     init {
         this.rsqlConfig = builder.rsqlConfig
@@ -174,12 +164,6 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             this.rsqlConfig = rsqlConfig
         }
 
-        constructor(
-            entityManager: EntityManager,
-        ) : this(
-            RsqlConfig.Builder(entityManager).build()
-        )
-
         private constructor(builder: Builder<E>) {
             this.entityClass = builder.entityClass
             this.entityName = builder.entityName
@@ -239,5 +223,10 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             fun sort(vararg expression: OrderSpecifier<*>?): BuildBuilder<E> = this.apply { super.orderSpecifiers = expression.filterNotNull().distinct() }
             fun sort(orderSpecifiers: List<OrderSpecifier<*>>?): BuildBuilder<E> = this.apply { super.orderSpecifiers = orderSpecifiers }
         }
+    }
+
+    companion object {
+        @JvmField
+        val pathFactory = PathFactory()
     }
 }

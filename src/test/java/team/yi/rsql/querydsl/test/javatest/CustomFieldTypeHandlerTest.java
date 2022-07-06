@@ -1,7 +1,6 @@
 package team.yi.rsql.querydsl.test.javatest;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import team.yi.rsql.querydsl.QuerydslRsql;
 import team.yi.rsql.querydsl.RsqlConfig;
 import team.yi.rsql.querydsl.exception.RsqlException;
@@ -10,23 +9,19 @@ import team.yi.rsql.querydsl.operator.RsqlOperator;
 import team.yi.rsql.querydsl.test.BaseRsqlTest;
 import team.yi.rsql.querydsl.test.javatest.handler.CustomFieldTypeHandler;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
-    @Autowired
-    private EntityManager entityManager;
-
     @Test
     public void shouldReadRsqlConfigWithOperator() {
-        RsqlConfig config = new RsqlConfig.Builder(this.entityManager)
+        RsqlConfig rsqlConfig = new RsqlConfig.Builder(this.entityManager)
             .operator(new RsqlOperator("=customnotempty="))
             .javaFieldTypeHandler(CustomFieldTypeHandler.class)
             .build();
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(config)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("description=customnotempty=''")
             .build();
@@ -40,10 +35,10 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
     @Test
     public void shouldNotFindCustomOperator() {
         assertThrows(RsqlException.class, () -> {
-            RsqlConfig config = new RsqlConfig.Builder(this.entityManager)
+            RsqlConfig rsqlConfig = new RsqlConfig.Builder(this.entityManager)
                 .javaFieldTypeHandler(CustomFieldTypeHandler.class)
                 .build();
-            QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(config)
+            QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(rsqlConfig)
                 .from("Car")
                 .where("description=customnotempty=''")
                 .build();
@@ -54,10 +49,10 @@ public class CustomFieldTypeHandlerTest extends BaseRsqlTest {
 
     @Test
     public void shouldReadRsqlConfigWithFieldTypeHandler() {
-        RsqlConfig config = new RsqlConfig.Builder(this.entityManager)
+        RsqlConfig rsqlConfig = new RsqlConfig.Builder(this.entityManager)
             .javaFieldTypeHandler(CustomFieldTypeHandler.class)
             .build();
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(config)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("description=notempty=''")
             .build();

@@ -1,8 +1,7 @@
 package team.yi.rsql.querydsl.util
 
 import com.querydsl.codegen.utils.StringUtils
-import com.querydsl.core.types.dsl.PathBuilder
-import com.querydsl.core.types.dsl.PathBuilderValidator
+import com.querydsl.core.types.dsl.*
 import java.util.concurrent.ConcurrentHashMap
 
 class PathFactory constructor(private val suffix: String = "") {

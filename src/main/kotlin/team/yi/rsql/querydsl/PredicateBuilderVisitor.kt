@@ -1,9 +1,7 @@
 package team.yi.rsql.querydsl
 
-import com.querydsl.core.types.Ops
-import com.querydsl.core.types.Predicate
-import com.querydsl.core.types.dsl.BooleanExpression
-import com.querydsl.core.types.dsl.PathBuilder
+import com.querydsl.core.types.*
+import com.querydsl.core.types.dsl.*
 import cz.jirutka.rsql.parser.ast.*
 import team.yi.rsql.querydsl.operator.RsqlOperator
 

@@ -1,20 +1,14 @@
 package team.yi.rsql.querydsl.test.kotlintest
 
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.*
 import team.yi.rsql.querydsl.QuerydslRsql
 import team.yi.rsql.querydsl.model.Car
 import team.yi.rsql.querydsl.test.BaseRsqlTest
-import javax.persistence.EntityManager
 
 class StringFieldTypeHandlerTest : BaseRsqlTest() {
-    @Autowired
-    private lateinit var entityManager: EntityManager
-
     @Test
     fun shouldHandleLike() {
-        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("name=like=%la3%")
             .build()

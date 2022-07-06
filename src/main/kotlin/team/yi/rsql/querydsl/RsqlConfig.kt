@@ -55,6 +55,7 @@ class RsqlConfig private constructor(builder: Builder) {
         throw TypeNotSupportedException("Type is not supported: $type")
     }
 
+    @Suppress("unused")
     class Builder(var entityManager: EntityManager) {
         internal var operators = mutableListOf<RsqlOperator>()
         internal var fieldTypeHandlers = mutableListOf<Class<out FieldTypeHandler>>()
@@ -82,7 +83,6 @@ class RsqlConfig private constructor(builder: Builder) {
 
         fun nodeInterceptor(block: () -> RsqlNodeInterceptor?): Builder = this.apply { block()?.let { this.nodeInterceptor(it) } }
 
-        @Suppress("MemberVisibilityCanBePrivate")
         fun nodeInterceptor(nodeInterceptor: RsqlNodeInterceptor?): Builder = this.apply { nodeInterceptor?.let { this.nodeInterceptors.add(nodeInterceptor) } }
 
         fun dateFormat(dateFormat: String?): Builder = this.apply { this.dateFormat = dateFormat }

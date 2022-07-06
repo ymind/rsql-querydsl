@@ -1,36 +1,22 @@
 package team.yi.rsql.querydsl.test.kotlintest
 
 import com.querydsl.core.Tuple
-import com.querydsl.core.types.Ops
-import com.querydsl.core.types.Projections
-import com.querydsl.core.types.QBean
+import com.querydsl.core.types.*
 import com.querydsl.core.types.dsl.Expressions
-import cz.jirutka.rsql.parser.ast.ComparisonNode
-import cz.jirutka.rsql.parser.ast.NodesFactory
+import cz.jirutka.rsql.parser.ast.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import team.yi.rsql.querydsl.QuerydslRsql
-import team.yi.rsql.querydsl.RsqlConfig
-import team.yi.rsql.querydsl.RsqlNodeInterceptor
+import team.yi.rsql.querydsl.*
 import team.yi.rsql.querydsl.model.Car
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.test.BaseRsqlTest
-import team.yi.rsql.querydsl.util.PathFactory
 import team.yi.rsql.querydsl.util.RsqlUtil
-import javax.persistence.EntityManager
 
 @Suppress("SpellCheckingInspection", "UNCHECKED_CAST")
 class QuerydslRsqlTest : BaseRsqlTest() {
-    @Autowired
-    private lateinit var entityManager: EntityManager
-
-    private val pathFactory = PathFactory()
-
     @Test
     fun shouldReadRsqlConfig() {
-        val config = RsqlConfig.Builder(entityManager).build()
-        val rsql = QuerydslRsql.Builder<Car>(config)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from(Car::class.java)
             .where("description=notempty=''")
             .build()
@@ -46,7 +32,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldRewriteQueryWithRsqlNodeInterceptor() {
-        val config = RsqlConfig.Builder(entityManager)
+        val rsqlConfig = RsqlConfig.Builder(entityManager)
             .nodeInterceptor {
                 object : RsqlNodeInterceptor {
                     override fun <E> supports(rootClass: Class<E>, comparisonNode: ComparisonNode, operator: RsqlOperator): Boolean {
@@ -61,7 +47,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
                 }
             }
             .build()
-        val rsql = QuerydslRsql.Builder<Car>(config)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from(Car::class.java)
             .where("description=notempty=''")
             .build()
@@ -76,7 +62,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldHandleMultiLevelQuery() {
-        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("engine.screws.name=con='name'")
             .build()
@@ -92,7 +78,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReturnEmptyListHandleMultiLevelQuery() {
-        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("engine.screws.name=con='Eszti'")
             .build()
@@ -105,7 +91,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldHandleSelectFromString() {
-        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("id=notnull=''")
             .build()
@@ -121,7 +107,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldHandleSelectFromClass() {
-        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("id=notnull=''")
             .build()
@@ -137,7 +123,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldHandleNotNullDate() {
-        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("mfgdt=notnull=''")
             .build()
@@ -153,7 +139,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldHandleDateRange() {
-        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("mfgdt>='2000-01-01 00:01:02' and mfgdt<='6666-12-31 23:59:59'")
             .build()
@@ -169,7 +155,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldHandleNumberIn() {
-        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("id=in=(3,6,9)")
             .build()
@@ -185,7 +171,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldHandleNumberInSingleValue() {
-        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("id=in=(3)")
             .build()
@@ -201,7 +187,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldHandleNumberNotInSingleValue() {
-        val rsql = QuerydslRsql.Builder<Car>(entityManager)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             .where("id=out=(3)")
             .build()
@@ -217,7 +203,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReturnTupleWithSelectExpression() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(entityManager)
+        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(rsqlConfig)
             .select("name,description")
             .from("Car")
             .where("id=notnull=''")
@@ -231,7 +217,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReturnTupleInDescOrder() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(entityManager)
+        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(rsqlConfig)
             .select("name,description")
             .from("Car")
             .where("id=notnull=''")
@@ -247,7 +233,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReturnTupleWithPageNumber() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(entityManager)
+        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(rsqlConfig)
             .select("name,description")
             .from("Car")
             .where("id=notnull=''")
@@ -265,14 +251,14 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     @Test
     fun shouldReturnTupleWithLimitNumber() {
         val clazz = Car::class.java
-        val pathBuilder = pathFactory.create(clazz)
+        val pathBuilder = QuerydslRsql.pathFactory.create(clazz)
         val selectFields = RsqlUtil.parseSelect("name,description", pathBuilder).toTypedArray()
         val select: QBean<Car> = Projections.bean(
             clazz,
             pathBuilder.getNumber("id", Long::class.java).add(1000).`as`("id"),
             *selectFields,
         )
-        val querydslRsql = QuerydslRsql.Builder<Car>(entityManager)
+        val querydslRsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .select(select)
             // .from(clazz)
             .where("id=notnull='' and (name=like='%a%' or name=con='Béla2,Béla11')")
@@ -287,7 +273,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReturnAllActived() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(entityManager)
+        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(rsqlConfig)
             .select("name,description,active")
             .from("Car")
             .where("id=notnull=''")

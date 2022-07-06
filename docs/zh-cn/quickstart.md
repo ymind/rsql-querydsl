@@ -1,7 +1,8 @@
 # 开始
 
 ```kotlin
-val rsql = QuerydslRsql.Builder<Car>(entityManager)
+val rsqlConfig = RsqlConfig.Builder(entityManager).build()
+val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
     .from("Car")
     .where("active=isnull=1")
     .build()

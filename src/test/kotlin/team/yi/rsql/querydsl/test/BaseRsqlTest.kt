@@ -3,10 +3,12 @@ package team.yi.rsql.querydsl.test
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import team.yi.rsql.querydsl.RsqlConfig
 import team.yi.rsql.querydsl.model.*
 import team.yi.rsql.querydsl.repository.*
 import java.security.SecureRandom
 import java.util.*
+import javax.persistence.EntityManager
 
 @Suppress("SpellCheckingInspection", "UnnecessaryAbstractClass")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -20,6 +22,12 @@ abstract class BaseRsqlTest {
 
     @Autowired
     private lateinit var engineRepository: EngineRepository
+
+    @Autowired
+    protected lateinit var entityManager: EntityManager
+
+    @Suppress("LeakingThis")
+    protected val rsqlConfig: RsqlConfig = RsqlConfig.Builder(entityManager).build()
 
     @BeforeAll
     fun initData() {

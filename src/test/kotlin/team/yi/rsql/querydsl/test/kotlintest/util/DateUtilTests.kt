@@ -1,7 +1,6 @@
 package team.yi.rsql.querydsl.test.kotlintest.util
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import team.yi.rsql.querydsl.util.DateUtil

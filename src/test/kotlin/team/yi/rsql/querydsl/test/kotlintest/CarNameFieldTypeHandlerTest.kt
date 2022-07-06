@@ -1,25 +1,18 @@
 package team.yi.rsql.querydsl.test.kotlintest
 
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import team.yi.rsql.querydsl.QuerydslRsql
-import team.yi.rsql.querydsl.RsqlConfig
+import org.junit.jupiter.api.*
+import team.yi.rsql.querydsl.*
 import team.yi.rsql.querydsl.model.Car
 import team.yi.rsql.querydsl.test.BaseRsqlTest
 import team.yi.rsql.querydsl.test.kotlintest.handler.CarNameFieldTypeHandler
-import javax.persistence.EntityManager
 
 class CarNameFieldTypeHandlerTest : BaseRsqlTest() {
-    @Autowired
-    private lateinit var entityManager: EntityManager
-
     @Test
     fun shouldReadRsqlConfigWithFieldTypeHandler() {
-        val config = RsqlConfig.Builder(entityManager)
+        val rsqlConfig = RsqlConfig.Builder(entityManager)
             .fieldTypeHandler(CarNameFieldTypeHandler::class.java)
             .build()
-        val rsql = QuerydslRsql.Builder<Car>(config)
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")
             // NOTE: this operator and value will not work
             .where("customField=eq='xxx'")

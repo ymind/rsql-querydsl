@@ -24,7 +24,8 @@ fun shouldReturnTupleWithLimitNumber() {
         pathBuilder.getNumber("id", Long::class.java).add(1000).`as`("id"),
         *selectFields,
     )
-    val querydslRsql = QuerydslRsql.Builder<Car>(entityManager)
+    val rsqlConfig = RsqlConfig.Builder(entityManager).build()
+    val querydslRsql = QuerydslRsql.Builder<Car>(rsqlConfig)
         .select(select)
         // .from(clazz)
         .where("id=notnull='' and (name=like='%a%' or name=con='Béla2,Béla11')")

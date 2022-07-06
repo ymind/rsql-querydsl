@@ -1,9 +1,7 @@
 package team.yi.rsql.querydsl.test.javatest;
 
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.QBean;
+import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import cz.jirutka.rsql.parser.UnknownOperatorException;
@@ -11,35 +9,22 @@ import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.NodesFactory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import team.yi.rsql.querydsl.QuerydslRsql;
-import team.yi.rsql.querydsl.RsqlConfig;
-import team.yi.rsql.querydsl.RsqlNodeInterceptor;
+import team.yi.rsql.querydsl.*;
 import team.yi.rsql.querydsl.model.Car;
 import team.yi.rsql.querydsl.operator.RsqlOperator;
 import team.yi.rsql.querydsl.test.BaseRsqlTest;
-import team.yi.rsql.querydsl.util.PathFactory;
 import team.yi.rsql.querydsl.util.RsqlUtil;
 
-import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class QuerydslRsqlTest extends BaseRsqlTest {
-    @Autowired
-    private EntityManager entityManager;
-
-    private final PathFactory pathFactory = new PathFactory();
-
     @Test
     public void shouldReadRsqlConfig() {
-        RsqlConfig config = new RsqlConfig.Builder(this.entityManager).build();
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(config)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(getRsqlConfig())
             .from(Car.class)
             .where("description=notempty=''")
             .build();
@@ -52,7 +37,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldRewriteQueryWithRsqlNodeInterceptor() {
-        RsqlConfig config = new RsqlConfig.Builder(this.entityManager)
+        RsqlConfig rsqlConfig = new RsqlConfig.Builder(this.entityManager)
             .nodeInterceptor(() -> new RsqlNodeInterceptor() {
                 @Override
                 public <E> boolean supports(@NotNull Class<E> rootClass, @NotNull ComparisonNode comparisonNode, @NotNull RsqlOperator operator) {
@@ -72,7 +57,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
                 }
             })
             .build();
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(config)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(rsqlConfig)
             .from(Car.class)
             .where("description=notempty=''")
             .build();
@@ -84,7 +69,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldHandleMultiLevelQuery() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.getRsqlConfig())
             .from("Car")
             .where("engine.screws.name=con='name'")
             .build();
@@ -97,7 +82,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldReturnEmptyListHandleMultiLevelQuery() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.getRsqlConfig())
             .from("Car")
             .where("engine.screws.name=con='Eszti'")
             .build();
@@ -109,7 +94,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldHandleSelectFromString() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.getRsqlConfig())
             .from("Car")
             .where("id=notnull=''")
             .build();
@@ -122,7 +107,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldHandleSelectFromClass() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.getRsqlConfig())
             .from("Car")
             .where("id=notnull=''")
             .build();
@@ -135,7 +120,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldHandleNotNullDate() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.getRsqlConfig())
             .from("Car")
             .where("mfgdt=notnull=''")
             .build();
@@ -148,7 +133,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldHandleNumberIn() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.getRsqlConfig())
             .from("Car")
             .where("id=in=(3,6,9)")
             .build();
@@ -161,7 +146,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldReturnTupleWithSelectExpression() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.getRsqlConfig())
             .select("name,description")
             .from("Car")
             .where("id=notnull=''")
@@ -178,7 +163,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldReturnTupleInDescOrder() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.getRsqlConfig())
             .select("name,description")
             .from("Car")
             .where("id=notnull=''")
@@ -197,7 +182,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
 
     @Test
     public void shouldReturnTupleWithPageNumber() {
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.getRsqlConfig())
             .select("name,description")
             .from("Car")
             .where("id=notnull=''")
@@ -218,7 +203,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
     @Test
     public void shouldReturnTupleWithLimitNumber() {
         Class<Car> clazz = Car.class;
-        PathBuilder<Car> pathBuilder = pathFactory.create(clazz);
+        PathBuilder<Car> pathBuilder = QuerydslRsql.pathFactory.create(clazz);
         List<Expression<?>> selectFields = RsqlUtil.parseSelect("name,description", pathBuilder)
             .stream()
             .map(x -> (Expression<?>) x)
@@ -231,7 +216,7 @@ public class QuerydslRsqlTest extends BaseRsqlTest {
             clazz,
             selectFields.toArray(new Expression[0])
         );
-        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.entityManager)
+        QuerydslRsql<Car> rsql = new QuerydslRsql.Builder<Car>(this.getRsqlConfig())
             .select(select)
             .from(clazz)
             .where("id=notnull='' and (name=like='%a%' or name=con='Béla2,Béla11')")
