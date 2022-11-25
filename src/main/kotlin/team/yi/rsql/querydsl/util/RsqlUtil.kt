@@ -5,18 +5,15 @@ import com.querydsl.codegen.utils.model.TypeCategory
 import com.querydsl.core.types.*
 import com.querydsl.core.types.dsl.*
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
+import jakarta.persistence.EntityManager
 import team.yi.rsql.querydsl.operator.*
 import team.yi.rsql.querydsl.operator.Operator
 import java.lang.reflect.*
 import java.util.*
-import javax.persistence.EntityManager
 
-@Suppress("MemberVisibilityCanBePrivate")
 object RsqlUtil {
-    @JvmStatic
     fun getEntityType(entityClass: Class<*>?): EntityType? = entityClass?.let { TypeFactory().getEntityType(it) }
 
-    @JvmStatic
     fun getPathType(entityType: EntityType?): Class<*>? {
         if (entityType == null) return null
 
@@ -33,7 +30,6 @@ object RsqlUtil {
         }
     }
 
-    @JvmStatic
     fun getParameterizedType(field: Field?): Class<*>? {
         return field?.let {
             if (Collection::class.java.isAssignableFrom(it.type)) {
@@ -46,14 +42,12 @@ object RsqlUtil {
         }
     }
 
-    @JvmStatic
     fun getClassForEntityString(entityName: String, entityManager: EntityManager): Class<*>? {
         return entityManager.metamodel.entities
             .firstOrNull { it.name == entityName }
             ?.bindableJavaType
     }
 
-    @JvmStatic
     fun getOperators(customOperators: List<RsqlOperator>?): Set<ComparisonOperator> {
         val operators = Operator.lookup.keys
             .asSequence()
@@ -71,7 +65,6 @@ object RsqlUtil {
         return operators
     }
 
-    @JvmStatic
     fun validateOperators(operators: List<RsqlOperator>) {
         operators.forEach { operator ->
             operator.symbols.forEach {
@@ -84,14 +77,29 @@ object RsqlUtil {
         }
     }
 
-    @JvmStatic
     fun <T> parseSelect(selectString: String, pathBuilder: PathBuilder<T>): List<Path<*>> {
         val selectFields = parseSelectExpression(selectString)
 
-        return if (selectFields.isEmpty()) emptyList() else selectFields.map { pathBuilder[it] }
+        return if (selectFields.isEmpty()) {
+            emptyList()
+        } else {
+            selectFields.map {
+                val field = kotlin.runCatching {
+                    pathBuilder.type.getDeclaredField(it)
+                }.getOrNull() ?: return@map pathBuilder[it]
+
+                if (field.type == List::class.java) {
+                    val parameterizedType = field.genericType as ParameterizedType
+                    val actualTypeArgument = parameterizedType.actualTypeArguments.first()
+
+                    return@map pathBuilder.getList(it, actualTypeArgument as Class<*>)
+                }
+
+                return@map pathBuilder[it]
+            }
+        }
     }
 
-    @JvmStatic
     fun parseSelectExpression(selectString: String?): List<String> {
         if (selectString.isNullOrBlank()) return emptyList()
 
@@ -100,7 +108,6 @@ object RsqlUtil {
         return str.split(',').distinct()
     }
 
-    @JvmStatic
     fun parseSortExpression(sort: String?): Map<String, Order> {
         val result: MutableMap<String, Order> = HashMap()
         val sortParams = parseSelectExpression(sort)

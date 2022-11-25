@@ -19,7 +19,7 @@ fun shouldReturnTupleWithLimitNumber() {
     val clazz = Car::class.java
     val pathBuilder = pathFactory.create(clazz)
     val selectFields = RsqlUtil.parseSelect("name,description", pathBuilder).toTypedArray()
-    val select: QBean<Car> = Projections.bean(
+    val select = Projections.bean(
         clazz,
         pathBuilder.getNumber("id", Long::class.java).add(1000).`as`("id"),
         *selectFields,

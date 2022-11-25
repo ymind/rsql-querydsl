@@ -1,5 +1,26 @@
 # 更新日志
 
+## 1.9.2 (2022-12-28)
+
+### Code Refactoring
+
+- **test**: drop java tests ([8f6a2812](https://github.com/ymind/rsql-querydsl/commit/8f6a28125d99a6057c760878d3682f32e82d9041))
+
+
+### Chores
+
+- **deps**: bumped spring version to 3.0.1 ([6c6f4521](https://github.com/ymind/rsql-querydsl/commit/6c6f4521f7833546c53dc9a29946101e779f0d84))
+
+
+### Build System
+
+- **gradle**: bumped gradle wrapper version to 7.5.1 ([fb6c22e7](https://github.com/ymind/rsql-querydsl/commit/fb6c22e7c1d8d5190580e9e7f38c7ea8cbd99463))
+- **gradle:plugin**: remove ktlint plugin ([7cddf171](https://github.com/ymind/rsql-querydsl/commit/7cddf171994e046a53ba664c5d3ebbfb9f885054))
+- **gradle:plugin**: bumped io.gitlab.arturbosch.detekt version to 1.22.0 ([c07c4173](https://github.com/ymind/rsql-querydsl/commit/c07c4173ee567111d28840f65f505df8dfd9ebe8))
+- **gradle:plugin**: bumped com.github.ben-manes.versions version to 0.44.0 ([586c08e3](https://github.com/ymind/rsql-querydsl/commit/586c08e337afc1b46594f9971010a6e02a20782d))
+- **kotlin**: bumped kotlin version from to 1.7.21 ([bbfee842](https://github.com/ymind/rsql-querydsl/commit/bbfee842e4fba6fc5f313f063a8897c526d1e7f5))
+
+
 ## 1.8.0 (2022-07-06)
 
 ### Bug Fixes

@@ -3,12 +3,10 @@ package team.yi.rsql.querydsl
 import com.querydsl.core.types.Expression
 import com.querydsl.core.types.dsl.*
 import cz.jirutka.rsql.parser.ast.ComparisonNode
-import team.yi.rsql.querydsl.exception.TypeNotSupportedException
 import team.yi.rsql.querydsl.handler.FieldTypeHandler
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
 class PredicateBuilder<E>(private val rsqlConfig: RsqlConfig) {
-    @Throws(TypeNotSupportedException::class)
     fun getExpression(rootPath: PathBuilder<E>, comparisonNode: ComparisonNode, operator: RsqlOperator): BooleanExpression? {
         val rootClass = rootPath.type
         val interceptor = rsqlConfig.nodeInterceptors.find { it.supports(rootClass, comparisonNode, operator) }

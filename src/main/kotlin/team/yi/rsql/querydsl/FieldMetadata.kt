@@ -51,12 +51,15 @@ class FieldMetadata {
                 try {
                     it.getDeclaredField(fieldName)
                 } catch (_: NoSuchFieldException) {
-                    return if (it.superclass == null) null else getField(it.superclass, fieldName, fieldMetadata)
+                    return if (it.superclass == null) {
+                        null
+                    } else {
+                        getField(it.superclass, fieldName, fieldMetadata)
+                    }
                 }
             }
         }
 
-        @JvmStatic
         fun parseFieldSelector(rootClass: Class<*>, fieldSelector: String?): List<FieldMetadata> {
             var field = fieldSelector
 

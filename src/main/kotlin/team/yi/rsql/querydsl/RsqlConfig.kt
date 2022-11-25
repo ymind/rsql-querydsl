@@ -1,11 +1,11 @@
 package team.yi.rsql.querydsl
 
 import cz.jirutka.rsql.parser.ast.*
+import jakarta.persistence.EntityManager
 import team.yi.rsql.querydsl.exception.*
 import team.yi.rsql.querydsl.handler.*
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.RsqlUtil
-import javax.persistence.EntityManager
 
 class RsqlConfig private constructor(builder: Builder) {
     val fieldTypeHandlers: List<Class<out FieldTypeHandler>>
@@ -45,9 +45,7 @@ class RsqlConfig private constructor(builder: Builder) {
         val type = fieldMetadata.clazz
 
         sortFieldTypeHandlers.forEach { typeHandler ->
-            val handler = typeHandler.getDeclaredConstructor(
-                FieldMetadata::class.java,
-            ).newInstance(fieldMetadata)
+            val handler = typeHandler.getDeclaredConstructor(FieldMetadata::class.java).newInstance(fieldMetadata)
 
             if (handler.supports(type)) return handler
         }
@@ -69,16 +67,6 @@ class RsqlConfig private constructor(builder: Builder) {
 
         fun sortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler>): Builder = this.apply { this.sortFieldTypeHandlers += typeHandler }
 
-        @Suppress("UNCHECKED_CAST")
-        fun javaFieldTypeHandler(vararg typeHandler: Class<*>): Builder = this.apply {
-            this.fieldTypeHandlers += typeHandler.mapNotNull { it as? Class<out FieldTypeHandler> }
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        fun javaSortFieldTypeHandler(vararg typeHandler: Class<*>): Builder = this.apply {
-            this.sortFieldTypeHandlers += typeHandler.mapNotNull { it as? Class<out SortFieldTypeHandler> }
-        }
-
         fun nodeInterceptors(nodeInterceptors: List<RsqlNodeInterceptor>?): Builder = this.apply { nodeInterceptors?.let { this.nodeInterceptors.addAll(nodeInterceptors) } }
 
         fun nodeInterceptor(block: () -> RsqlNodeInterceptor?): Builder = this.apply { block()?.let { this.nodeInterceptor(it) } }
@@ -87,7 +75,6 @@ class RsqlConfig private constructor(builder: Builder) {
 
         fun dateFormat(dateFormat: String?): Builder = this.apply { this.dateFormat = dateFormat }
 
-        @Throws(RsqlException::class)
         fun build(): RsqlConfig {
             return try {
                 RsqlConfig(this)

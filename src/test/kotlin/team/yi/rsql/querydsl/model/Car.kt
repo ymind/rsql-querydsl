@@ -2,8 +2,8 @@
 
 package team.yi.rsql.querydsl.model
 
+import jakarta.persistence.*
 import java.util.*
-import javax.persistence.*
 
 @Suppress("unused")
 @Entity

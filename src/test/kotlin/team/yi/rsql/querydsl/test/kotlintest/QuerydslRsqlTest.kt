@@ -208,7 +208,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .from("Car")
             .where("id=notnull=''")
             .build()
-        val cars: List<Tuple> = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
+        val cars = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
 
         assertFalse(cars.isEmpty(), "Can't handle select expression")
         assertEquals(50, cars.size, "Can't handle select expression correctly")
@@ -223,7 +223,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .where("id=notnull=''")
             .sort("id.desc")
             .build()
-        val cars: List<Tuple> = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
+        val cars = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
 
         assertFalse(cars.isEmpty(), "Can't handle select expression")
         assertEquals(50, cars.size, "Can't handle select expression correctly")
@@ -240,7 +240,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .sort("id.desc")
             .page(1, 15)
             .build()
-        val cars: List<Tuple> = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
+        val cars = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
 
         assertFalse(cars.isEmpty(), "Can't handle page expression")
         assertEquals(15, cars.size, "Can't handle page expression")
@@ -252,7 +252,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     fun shouldReturnTupleWithLimitNumber() {
         val clazz = Car::class.java
         val pathBuilder = QuerydslRsql.pathFactory.create(clazz)
-        val selectFields = RsqlUtil.parseSelect("name,description", pathBuilder).toTypedArray()
+        val selectFields = RsqlUtil.parseSelect("name,description,engine", pathBuilder).toTypedArray()
         val select: QBean<Car> = Projections.bean(
             clazz,
             pathBuilder.getNumber("id", Long::class.java).add(1000).`as`("id"),
@@ -280,7 +280,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
             .globalPredicate(Expressions.booleanOperation(Ops.EQ, Expressions.booleanPath("active"), Expressions.asBoolean(true)))
             .sort("id.desc")
             .build()
-        val cars: List<Tuple> = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
+        val cars = querydslRsql.buildJPAQuery().fetch() as List<Tuple>
 
         assertFalse(cars.isEmpty(), "Can't handle limit expression")
         assertTrue(cars.stream().allMatch { it.toArray()[2] as Boolean }, "Can't handle globalPredicate")

@@ -40,20 +40,19 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         this.sortExpressions = builder.orderSpecifiers
     }
 
-    @Throws(RsqlException::class)
     fun buildJPAQuery(): JPAQuery<*> {
         requireNotNull(from)
 
         return buildJPAQuery(from)
     }
 
-    @Throws(RsqlException::class)
     fun buildJPAQuery(fromPath: PathBuilder<E>): JPAQuery<*> = buildJPAQuery(fromPath, buildSelectExpressions(fromPath))
 
-    @Throws(RsqlException::class)
     fun buildJPAQuery(fromPath: PathBuilder<E>, select: List<Expression<*>>?): JPAQuery<*> {
         return try {
-            val queryFactory = JPAQueryFactory(rsqlConfig.entityManager)
+            val entityManager = rsqlConfig.entityManager
+            val templates = JPAProvider.getTemplates(entityManager)
+            val queryFactory = JPAQueryFactory(templates, entityManager)
             val jpaQuery = queryFactory.from(fromPath).where(buildPredicate(fromPath))
 
             if (!select.isNullOrEmpty()) {
@@ -75,7 +74,6 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         }
     }
 
-    @Throws(RsqlException::class)
     fun buildPredicate(fromPath: PathBuilder<E>): Predicate? {
         fromPath.type.let {
             if (where.isNullOrBlank()) return globalPredicate
@@ -94,7 +92,7 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
     @Suppress("UNCHECKED_CAST")
     fun buildOrder(fromPath: PathBuilder<E>): MutableList<OrderSpecifier<*>>? {
-        val orderSpecifiers: MutableList<OrderSpecifier<*>> = mutableListOf()
+        val orderSpecifiers = mutableListOf<OrderSpecifier<*>>()
 
         if (sortString == null) {
             this.sortExpressions?.let { orderSpecifiers.addAll(it) }
@@ -113,12 +111,10 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         return if (orderSpecifiers.isEmpty()) null else orderSpecifiers
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
     fun buildSelectExpressions(fromPath: PathBuilder<E>): List<Expression<*>> {
         return this.selectExpressions ?: RsqlUtil.parseSelect(selectString ?: return emptyList(), fromPath)
     }
 
-    @Throws(TypeNotSupportedException::class)
     private fun getSortPath(fromPath: PathBuilder<E>, fieldMetadataList: List<FieldMetadata>): Expression<*> {
         val processedPaths = mutableListOf<Expression<*>>()
         var typeHandler: SortFieldTypeHandler
@@ -185,11 +181,9 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
 
         fun where(where: String?): BuildBuilder<E> = BuildBuilder(this).apply { this.where = where }
 
-        @Suppress("unused", "MemberVisibilityCanBePrivate")
         class BuildBuilder<E>(builder: Builder<E>) : Builder<E>(builder) {
             fun globalPredicate(globalPredicate: BooleanExpression?): BuildBuilder<E> = this.apply { super.globalPredicate = globalPredicate }
 
-            @Throws(RsqlException::class)
             fun build(): QuerydslRsql<E> {
                 return try {
                     QuerydslRsql(this)
@@ -225,7 +219,6 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
     }
 
     companion object {
-        @JvmField
         val pathFactory = PathFactory()
     }
 }

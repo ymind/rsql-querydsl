@@ -14,17 +14,13 @@ class RsqlOperator(vararg val symbols: String) {
     }
 
     companion object {
-        @JvmStatic
         val equals = RsqlOperator(*Operator.EQUALS.rsqlOperator)
 
-        @JvmStatic
         val notEquals = RsqlOperator(*Operator.NOTEQUALS.rsqlOperator)
 
         @Suppress("ObjectPropertyNaming")
-        @JvmStatic
         val `in` = RsqlOperator(*Operator.IN.rsqlOperator)
 
-        @JvmStatic
         val notIn = RsqlOperator(*Operator.NOTIN.rsqlOperator)
     }
 }

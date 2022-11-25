@@ -25,12 +25,12 @@ plugins {
 }
 
 group = "team.yi.rsql"
-version = "1.8.0"
+version = "1.9.2"
 description = "Integration RSQL query language and Querydsl framework."
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 
     withJavadocJar()
     withSourcesJar()
@@ -42,24 +42,24 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.1") {
-        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-    }
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.1")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.1")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.1")
 
     // https://mvnrepository.com/artifact/com.h2database/h2
     testImplementation("com.h2database:h2:2.1.214")
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.1")
 
     // https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api
     api("javax.persistence:javax.persistence-api:2.2")
+    // https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
+    api("jakarta.persistence:jakarta.persistence-api:3.1.0")
 
     // https://mvnrepository.com/artifact/com.querydsl/querydsl-apt
-    api("com.querydsl:querydsl-jpa:5.0.0")
+    api("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     api("com.querydsl:querydsl-codegen:5.0.0")
-    kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
+    kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     api("org.apache.commons:commons-lang3:3.12.0")
@@ -78,7 +78,7 @@ tasks {
     test { useJUnitPlatform() }
 
     val kotlinSettings: KotlinCompile.() -> Unit = {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = JavaVersion.VERSION_17.majorVersion
         kotlinOptions.freeCompilerArgs += listOf(
             "-Xjsr305=strict"
         )
