@@ -21,7 +21,7 @@ plugins {
     id("com.github.ben-manes.versions") version "0.42.0"
 
     // https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt
-    id("io.gitlab.arturbosch.detekt") version "1.21.0-RC1"
+    id("io.gitlab.arturbosch.detekt") version "1.22.0"
 }
 
 group = "team.yi.rsql"
@@ -70,7 +70,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0-RC1")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${detekt.toolVersion}")
 }
 
 tasks {
