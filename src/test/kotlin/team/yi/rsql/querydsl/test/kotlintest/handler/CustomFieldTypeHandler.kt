@@ -28,7 +28,7 @@ class CustomFieldTypeHandler(
         return values.map { Expressions.asString(it) }
     }
 
-    @Suppress("INCOMPATIBLE_ENUM_COMPARISON", "UNCHECKED_CAST", "ComplexMethod")
+    @Suppress("ComplexMethod")
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as StringExpression
         val right = values.orEmpty().distinct().map { it as StringExpression }.toTypedArray()
@@ -38,7 +38,9 @@ class CustomFieldTypeHandler(
                 RsqlOperator.notIn -> RsqlOperator.notEquals
                 else -> operator
             }
-        } else operator
+        } else {
+            operator
+        }
 
         return when {
             op.equals(Operator.EQUALS_IGNORECASE) -> left.equalsIgnoreCase(right[0])

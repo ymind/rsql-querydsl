@@ -8,7 +8,6 @@ import team.yi.rsql.querydsl.handler.FieldTypeHandler
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
 class PredicateBuilder<E>(private val rsqlConfig: RsqlConfig) {
-    @Suppress("UNCHECKED_CAST")
     @Throws(TypeNotSupportedException::class)
     fun getExpression(rootPath: PathBuilder<E>, comparisonNode: ComparisonNode, operator: RsqlOperator): BooleanExpression? {
         val rootClass = rootPath.type

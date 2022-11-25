@@ -39,7 +39,9 @@ open class SimpleFieldTypeHandler<E>(
                 RsqlOperator.notIn -> RsqlOperator.notEquals
                 else -> operator
             }
-        } else operator
+        } else {
+            operator
+        }
 
         return when {
             op.equals(Operator.ISNULL) -> left.isNull

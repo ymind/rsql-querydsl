@@ -46,7 +46,6 @@ open class NumberFieldTypeHandler<E>(
         }.toList()
     }
 
-    @Suppress("ProtectedInFinal")
     protected fun toNumber(value: String?): E? {
         if (value.isNullOrBlank()) return null
 

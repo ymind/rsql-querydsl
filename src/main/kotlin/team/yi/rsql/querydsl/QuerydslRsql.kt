@@ -118,7 +118,6 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
         return this.selectExpressions ?: RsqlUtil.parseSelect(selectString ?: return emptyList(), fromPath)
     }
 
-    @Suppress("UNCHECKED_CAST")
     @Throws(TypeNotSupportedException::class)
     private fun getSortPath(fromPath: PathBuilder<E>, fieldMetadataList: List<FieldMetadata>): Expression<*> {
         val processedPaths = mutableListOf<Expression<*>>()

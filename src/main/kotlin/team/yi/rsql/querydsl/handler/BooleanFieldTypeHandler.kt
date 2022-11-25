@@ -7,7 +7,6 @@ import team.yi.rsql.querydsl.*
 import team.yi.rsql.querydsl.operator.*
 import team.yi.rsql.querydsl.operator.Operator
 
-@Suppress("UNCHECKED_CAST")
 class BooleanFieldTypeHandler(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,

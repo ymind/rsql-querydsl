@@ -20,8 +20,6 @@ plugins {
     // https://plugins.gradle.org/plugin/com.github.ben-manes.versions
     id("com.github.ben-manes.versions") version "0.42.0"
 
-    // https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint
-    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
     // https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt
     id("io.gitlab.arturbosch.detekt") version "1.21.0-RC1"
 }
@@ -144,19 +142,6 @@ tasks {
         )
 
         outputs.upToDateWhen { false }
-    }
-}
-
-ktlint {
-    debug.set(false)
-    outputToConsole.set(true)
-    outputColorName.set("RED")
-    ignoreFailures.set(true)
-    enableExperimentalRules.set(true)
-
-    filter {
-        exclude("**/generated/**")
-        include("**/kotlin/**")
     }
 }
 

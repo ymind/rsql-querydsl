@@ -10,7 +10,7 @@ import java.security.SecureRandom
 import java.util.*
 import javax.persistence.EntityManager
 
-@Suppress("SpellCheckingInspection", "UnnecessaryAbstractClass")
+@Suppress("UnnecessaryAbstractClass")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 abstract class BaseRsqlTest {

@@ -5,7 +5,6 @@ import cz.jirutka.rsql.parser.ast.ComparisonNode
 import team.yi.rsql.querydsl.*
 import team.yi.rsql.querydsl.operator.RsqlOperator
 
-@Suppress("UNCHECKED_CAST")
 class SetFieldTypeHandler<E>(
     override val node: ComparisonNode,
     override val operator: RsqlOperator,
