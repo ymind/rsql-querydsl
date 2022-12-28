@@ -9,8 +9,6 @@
 
 Integration RSQL query language and Querydsl framework.
 
-> __WARNING: plans to drop support for java and use kotlin entirely.__
-
 # Quick start
 
 ```kotlin
