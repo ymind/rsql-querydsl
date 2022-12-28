@@ -5,7 +5,6 @@ import com.querydsl.core.types.*
 import com.querydsl.core.types.dsl.*
 import cz.jirutka.rsql.parser.ast.ComparisonNode
 import team.yi.rsql.querydsl.*
-import team.yi.rsql.querydsl.exception.TypeNotSupportedException
 import team.yi.rsql.querydsl.operator.RsqlOperator
 import team.yi.rsql.querydsl.util.RsqlUtil
 
@@ -37,15 +36,13 @@ open class CollectionFieldTypeHandler<E>(
         val fieldMetadata = fm ?: this.fieldMetadata
 
         collectionType?.let {
-            val fmd = FieldMetadata(it, fieldMetadata)
+            val metadata = FieldMetadata(it, fieldMetadata)
 
-            try {
-                val typeHandler = rsqlConfig.getFieldTypeHandler(it, node, operator, fmd)
+            return kotlin.runCatching {
+                val typeHandler = rsqlConfig.getFieldTypeHandler(it, node, operator, metadata)
 
-                return typeHandler.getValue(values, rootPath, fmd)
-            } catch (e: TypeNotSupportedException) {
-                e.printStackTrace()
-            }
+                typeHandler.getValue(values, rootPath, metadata)
+            }.getOrNull()
         }
 
         return null
