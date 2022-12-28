@@ -109,7 +109,7 @@ object RsqlUtil {
     }
 
     fun parseSortExpression(sort: String?): Map<String, Order> {
-        val result: MutableMap<String, Order> = HashMap()
+        val result = mutableMapOf<String, Order>()
         val sortParams = parseSelectExpression(sort)
 
         require(sortParams.isNotEmpty()) { "Invalid expression" }

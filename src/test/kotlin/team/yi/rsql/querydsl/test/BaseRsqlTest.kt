@@ -45,10 +45,10 @@ abstract class BaseRsqlTest {
             screw.size = randomNum.toLong()
 
             val savedScrew = screwRepository.save(screw)
-            val screws: MutableList<Screw> = mutableListOf(savedScrew)
+            val screws = mutableListOf(savedScrew)
 
             val savedScrew2 = screwRepository.save(screw)
-            val screws2: MutableList<Screw> = mutableListOf(savedScrew2)
+            val screws2 = mutableListOf(savedScrew2)
 
             val engine = Engine()
             engine.name = "Engine $randomNum"

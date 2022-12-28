@@ -75,7 +75,7 @@ class FieldMetadata {
             val fieldMetadataList = mutableListOf<FieldMetadata>()
 
             for (i in nestedFields.indices) {
-                val fieldMetadata: FieldMetadata = if (i == 0) {
+                val fieldMetadata = if (i == 0) {
                     FieldMetadata(nestedFields[i], rootClass)
                 } else {
                     FieldMetadata(nestedFields[i], fieldMetadataList[i - 1])

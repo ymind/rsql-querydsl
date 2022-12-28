@@ -203,7 +203,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReturnTupleWithSelectExpression() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(rsqlConfig)
+        val querydslRsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .select("name,description")
             .from("Car")
             .where("id=notnull=''")
@@ -217,7 +217,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReturnTupleInDescOrder() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(rsqlConfig)
+        val querydslRsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .select("name,description")
             .from("Car")
             .where("id=notnull=''")
@@ -233,7 +233,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReturnTupleWithPageNumber() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(rsqlConfig)
+        val querydslRsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .select("name,description")
             .from("Car")
             .where("id=notnull=''")
@@ -253,7 +253,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
         val clazz = Car::class.java
         val pathBuilder = QuerydslRsql.pathFactory.create(clazz)
         val selectFields = RsqlUtil.parseSelect("name,description,engine", pathBuilder).toTypedArray()
-        val select: QBean<Car> = Projections.bean(
+        val select = Projections.bean(
             clazz,
             pathBuilder.getNumber("id", Long::class.java).add(1000).`as`("id"),
             *selectFields,
@@ -273,7 +273,7 @@ class QuerydslRsqlTest : BaseRsqlTest() {
 
     @Test
     fun shouldReturnAllActived() {
-        val querydslRsql: QuerydslRsql<*> = QuerydslRsql.Builder<Car>(rsqlConfig)
+        val querydslRsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .select("name,description,active")
             .from("Car")
             .where("id=notnull=''")
