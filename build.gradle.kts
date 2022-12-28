@@ -93,7 +93,7 @@ tasks {
     changelog {
         group = "publishing"
 
-        toRef = "master"
+        toRef = "main"
         strategy = team.yi.tools.semanticgitlog.VersionStrategy.slow
 
         minorTypes = "feat,refactor,perf,revert"
@@ -129,7 +129,7 @@ tasks {
     derive {
         group = "publishing"
 
-        toRef = "master"
+        toRef = "main"
         strategy = team.yi.tools.semanticgitlog.VersionStrategy.slow
         derivedVersionMark = "NEXT_VERSION:=="
 

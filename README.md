@@ -1,9 +1,9 @@
-![rsql-querydsl](https://github.com/ymind/rsql-querydsl/workflows/rsql-querydsl/badge.svg?branch=master)
+![rsql-querydsl](https://github.com/ymind/rsql-querydsl/workflows/rsql-querydsl/badge.svg?branch=main)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ymind/rsql-querydsl)](https://github.com/ymind/rsql-querydsl/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/team.yi.rsql/rsql-querydsl)](https://search.maven.org/artifact/team.yi.rsql/rsql-querydsl)
 [![Semantic Versioning 2.0.0](https://img.shields.io/badge/Semantic%20Versioning-2.0.0-brightgreen)](https://semver.org/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![GitHub](https://img.shields.io/github/license/ymind/rsql-querydsl)](https://github.com/ymind/rsql-querydsl/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/ymind/rsql-querydsl)](https://github.com/ymind/rsql-querydsl/blob/main/LICENSE)
 
 # rsql-querydsl
 

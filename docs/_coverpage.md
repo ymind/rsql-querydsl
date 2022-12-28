@@ -14,7 +14,7 @@
 [Getting Started](en-us/)
 [GitHub](https://github.com/ymind/rsql-querydsl)
 
-[10]: https://github.com/ymind/rsql-querydsl/workflows/rsql-querydsl/badge.svg?branch=master
+[10]: https://github.com/ymind/rsql-querydsl/workflows/rsql-querydsl/badge.svg?branch=main
 [11]: https://github.com/ymind/rsql-querydsl/actions
 [20]: https://img.shields.io/github/v/release/ymind/rsql-querydsl
 [21]: https://github.com/ymind/rsql-querydsl/releases
@@ -25,4 +25,4 @@
 [50]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
 [51]: https://conventionalcommits.org
 [60]: https://img.shields.io/github/license/ymind/rsql-querydsl
-[61]: https://github.com/ymind/rsql-querydsl/blob/master/LICENSE
+[61]: https://github.com/ymind/rsql-querydsl/blob/main/LICENSE

@@ -9,12 +9,20 @@
 
 ### Chores
 
-- **deps**: bumped spring version to 3.0.1 ([6c6f4521](https://github.com/ymind/rsql-querydsl/commit/6c6f4521f7833546c53dc9a29946101e779f0d84))
+- **deps**: bumped spring version to 3.0.1 ([a5d3da5f](https://github.com/ymind/rsql-querydsl/commit/a5d3da5f1571775184290553db4b47911d9de330))
+- no longer print stack trace when TypeNotSupportedException occurred ([1fd80544](https://github.com/ymind/rsql-querydsl/commit/1fd805446ba0522c679f84b633d0be9c617e4e80))
+
+
+### Styles
+
+- code cleanup ([3e7152bc](https://github.com/ymind/rsql-querydsl/commit/3e7152bcaf1254bfd957ffa7ce61562320836f39))
 
 
 ### Build System
 
+- **github:actions**: fix github actions ([5864ee73](https://github.com/ymind/rsql-querydsl/commit/5864ee7376c1499ee346b791a59ccdee32c28537))
 - **gradle**: bumped gradle wrapper version to 7.5.1 ([fb6c22e7](https://github.com/ymind/rsql-querydsl/commit/fb6c22e7c1d8d5190580e9e7f38c7ea8cbd99463))
+- **gradle**: bumped gradle wrapper version to 7.6 ([775303b1](https://github.com/ymind/rsql-querydsl/commit/775303b1f79300eaf94668a08337164e2635fdd4))
 - **gradle:plugin**: remove ktlint plugin ([7cddf171](https://github.com/ymind/rsql-querydsl/commit/7cddf171994e046a53ba664c5d3ebbfb9f885054))
 - **gradle:plugin**: bumped io.gitlab.arturbosch.detekt version to 1.22.0 ([c07c4173](https://github.com/ymind/rsql-querydsl/commit/c07c4173ee567111d28840f65f505df8dfd9ebe8))
 - **gradle:plugin**: bumped com.github.ben-manes.versions version to 0.44.0 ([586c08e3](https://github.com/ymind/rsql-querydsl/commit/586c08e337afc1b46594f9971010a6e02a20782d))

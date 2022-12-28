@@ -1,1 +1,1 @@
-[remoteMarkdownUrl](https://raw.githubusercontent.com/ymind/rsql-querydsl/master/CHANGELOG.md)
+[remoteMarkdownUrl](https://raw.githubusercontent.com/ymind/rsql-querydsl/main/CHANGELOG.md)

@@ -11,21 +11,25 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     if: startsWith(github.event.head_commit.message, 'bumped version to ') != true
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3.9.0
       with:
-        java-version: 1.8
+        java-version: 17
+        distribution: 'temurin'
 
     - name: Cache dependencies
-      uses: actions/cache@v1
+      uses: actions/cache@v3.2.2
       with:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
@@ -40,21 +44,25 @@ jobs:
   test:
     needs: [ build ]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     if: startsWith(github.event.head_commit.message, 'bumped version to ') != true
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3.9.0
       with:
-        java-version: 1.8
+        java-version: 17
+        distribution: 'temurin'
 
     - name: Cache dependencies
-      uses: actions/cache@v1
+      uses: actions/cache@v3.2.2
       with:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
@@ -69,21 +77,25 @@ jobs:
   deploy_snapshot:
     needs: [ build, test ]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
-    if: (github.ref == 'refs/heads/master') && startsWith(github.event.head_commit.message, 'release:') != true
+    if: (github.ref == 'refs/heads/main') && startsWith(github.event.head_commit.message, 'release:') != true
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3.9.0
       with:
-        java-version: 1.8
+        java-version: 17
+        distribution: 'temurin'
 
     - name: Cache dependencies
-      uses: actions/cache@v1
+      uses: actions/cache@v3.2.2
       with:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
@@ -114,21 +126,25 @@ jobs:
   deploy_release:
     needs: [ build, test ]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     if: startsWith(github.ref, 'refs/tags/') && startsWith(github.event.head_commit.message, 'release')
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3.9.0
       with:
-        java-version: 1.8
+        java-version: 17
+        distribution: 'temurin'
 
     - name: Cache dependencies
-      uses: actions/cache@v1
+      uses: actions/cache@v3.2.2
       with:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
