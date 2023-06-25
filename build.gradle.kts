@@ -37,6 +37,12 @@ java {
 }
 
 repositories {
+    mavenLocal()
+
+    maven("https://repo.huaweicloud.com/repository/maven/")
+    maven("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/")
+    maven("https://ymind-maven.pkg.coding.net/repository/emtboot/public/")
+
     mavenCentral()
 }
 
@@ -49,7 +55,7 @@ dependencies {
     testImplementation("com.h2database:h2:2.1.214")
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.1")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 
     // https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api
     api("javax.persistence:javax.persistence-api:2.2")
