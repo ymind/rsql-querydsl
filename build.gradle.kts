@@ -13,7 +13,7 @@ plugins {
     kotlin("plugin.jpa")
 
     // https://plugins.gradle.org/plugin/team.yi.semantic-gitlog
-    id("team.yi.semantic-gitlog") version "0.5.17"
+    id("team.yi.semantic-gitlog") version "0.6.5"
 
     // https://plugins.gradle.org/plugin/se.patrikerdes.use-latest-versions
     id("se.patrikerdes.use-latest-versions") version "0.2.18"
