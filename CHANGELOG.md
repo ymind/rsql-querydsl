@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.10.0 (2023-06-25)
+
+### Features
+
+- support temporal field types ([7d6f3972](https://github.com/ymind/rsql-querydsl/commit/7d6f3972bdded2f223d48a14c4d962ebcb2e09aa))
+
+
+### Chores
+
+- **deps**: bumped jackson-module-kotlin version to 2.15.2 ([ece64d00](https://github.com/ymind/rsql-querydsl/commit/ece64d005cf9ae34c0857d583fd5c43014a29260))
+- **deps**: bumped spring version to 3.0.1 ([d7dc7ede](https://github.com/ymind/rsql-querydsl/commit/d7dc7edefc98b7a6e4b028a3b3748b31ddfaf79f))
+- **gradle**: bumped team.yi.semantic-gitlog version to 0.6.5 ([cf8f713a](https://github.com/ymind/rsql-querydsl/commit/cf8f713acf776b8141a3d2e8e2d71387cc6fe6b7))
+
+
+### Build System
+
+- **gradle**: bumped gradle wrapper version to 8.1.1 ([0cd14dc0](https://github.com/ymind/rsql-querydsl/commit/0cd14dc0fb2008906ceb7084020049fbdecb27ef))
+- **gradle:plugin**: bumped com.github.ben-manes.versions version to 0.47.0 ([153db702](https://github.com/ymind/rsql-querydsl/commit/153db702154140cb1153b6060c97153b8266af24))
+- **gradle:plugin**: bumped io.gitlab.arturbosch.detekt version to 1.23.0 ([f1193df5](https://github.com/ymind/rsql-querydsl/commit/f1193df5adaa5961350ce936853b11fa6b195758))
+- **kotlin**: bumped kotlin version from to 1.8.22 ([de7ce9fd](https://github.com/ymind/rsql-querydsl/commit/de7ce9fdde3f9cb65f2b6c1aa8b249c2e05c78cb))
+
+
 ## 1.9.2 (2022-12-28)
 
 ### Code Refactoring
