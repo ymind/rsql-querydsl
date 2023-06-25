@@ -48,8 +48,8 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.1")
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.1")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.1")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.1")
 
     // https://mvnrepository.com/artifact/com.h2database/h2
     testImplementation("com.h2database:h2:2.1.214")
