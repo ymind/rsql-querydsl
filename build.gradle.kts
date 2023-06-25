@@ -21,7 +21,7 @@ plugins {
     id("com.github.ben-manes.versions") version "0.47.0"
 
     // https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt
-    id("io.gitlab.arturbosch.detekt") version "1.22.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.0"
 }
 
 group = "team.yi.rsql"
@@ -154,7 +154,8 @@ tasks {
 detekt {
     buildUponDefaultConfig = true
     allRules = false
-    config = files("$rootDir/config/detekt/detekt.yml")
+    autoCorrect = true
+    config.from(files("$rootDir/config/detekt/detekt.yml"))
     baseline = file("$rootDir/config/detekt/baseline.xml")
 }
 
