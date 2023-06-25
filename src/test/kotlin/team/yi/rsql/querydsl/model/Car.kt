@@ -1,6 +1,7 @@
 package team.yi.rsql.querydsl.model
 
 import jakarta.persistence.*
+import java.time.LocalDateTime
 import java.util.*
 
 @Suppress("unused", "SpellCheckingInspection")
@@ -21,6 +22,9 @@ class Car {
 
     @Column
     var mfgdt: Date? = null
+
+    @Column(name = "created_at")
+    var createdAt: LocalDateTime? = null
 
     @OneToOne(fetch = FetchType.LAZY)
     var engine: Engine? = null

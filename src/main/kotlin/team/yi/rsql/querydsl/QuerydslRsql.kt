@@ -4,7 +4,7 @@ import com.querydsl.core.types.*
 import com.querydsl.core.types.dsl.*
 import com.querydsl.jpa.impl.*
 import cz.jirutka.rsql.parser.RSQLParser
-import team.yi.rsql.querydsl.exception.*
+import team.yi.rsql.querydsl.exception.RsqlException
 import team.yi.rsql.querydsl.handler.SortFieldTypeHandler
 import team.yi.rsql.querydsl.util.*
 
@@ -173,16 +173,30 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             this.orderSpecifiers = builder.orderSpecifiers
         }
 
-        fun select(select: String?): BuildBuilder<E> = BuildBuilder(this).apply { this.selectString = select }
-        fun select(vararg expression: Expression<*>?): BuildBuilder<E> = BuildBuilder(this).apply { this.selectExpressions = expression.filterNotNull().distinct() }
+        fun select(select: String?): BuildBuilder<E> = BuildBuilder(this).apply {
+            this.selectString = select
+        }
 
-        fun from(entityName: String?): BuildBuilder<E> = BuildBuilder(this).apply { this.entityName = entityName }
-        fun from(entityClass: Class<E>?): BuildBuilder<E> = BuildBuilder(this).apply { this.entityClass = entityClass }
+        fun select(vararg expression: Expression<*>?): BuildBuilder<E> = BuildBuilder(this).apply {
+            this.selectExpressions = expression.filterNotNull().distinct()
+        }
 
-        fun where(where: String?): BuildBuilder<E> = BuildBuilder(this).apply { this.where = where }
+        fun from(entityName: String?): BuildBuilder<E> = BuildBuilder(this).apply {
+            this.entityName = entityName
+        }
+
+        fun from(entityClass: Class<E>?): BuildBuilder<E> = BuildBuilder(this).apply {
+            this.entityClass = entityClass
+        }
+
+        fun where(where: String?): BuildBuilder<E> = BuildBuilder(this).apply {
+            this.where = where
+        }
 
         class BuildBuilder<E>(builder: Builder<E>) : Builder<E>(builder) {
-            fun globalPredicate(globalPredicate: BooleanExpression?): BuildBuilder<E> = this.apply { super.globalPredicate = globalPredicate }
+            fun globalPredicate(globalPredicate: BooleanExpression?): BuildBuilder<E> = this.apply {
+                super.globalPredicate = globalPredicate
+            }
 
             fun build(): QuerydslRsql<E> {
                 return try {
@@ -213,8 +227,13 @@ class QuerydslRsql<E> private constructor(builder: Builder<E>) {
             }
 
             fun sort(sort: String?): BuildBuilder<E> = this.apply { super.sort = sort }
-            fun sort(vararg expression: OrderSpecifier<*>?): BuildBuilder<E> = this.apply { super.orderSpecifiers = expression.filterNotNull().distinct() }
-            fun sort(orderSpecifiers: List<OrderSpecifier<*>>?): BuildBuilder<E> = this.apply { super.orderSpecifiers = orderSpecifiers }
+            fun sort(vararg expression: OrderSpecifier<*>?): BuildBuilder<E> = this.apply {
+                super.orderSpecifiers = expression.filterNotNull().distinct()
+            }
+
+            fun sort(orderSpecifiers: List<OrderSpecifier<*>>?): BuildBuilder<E> = this.apply {
+                super.orderSpecifiers = orderSpecifiers
+            }
         }
     }
 

@@ -10,6 +10,7 @@ object RsqlConstants {
             StringFieldTypeHandler::class.java,
             CharacterFieldTypeHandler::class.java,
             DateTimeFieldTypeHandler::class.java,
+            TemporalAccessorFieldTypeHandler::class.java,
             BooleanFieldTypeHandler::class.java,
             ListFieldTypeHandler::class.java,
             SetFieldTypeHandler::class.java,

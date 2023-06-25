@@ -8,6 +8,7 @@ import team.yi.rsql.querydsl.RsqlConfig
 import team.yi.rsql.querydsl.model.*
 import team.yi.rsql.querydsl.repository.*
 import java.security.SecureRandom
+import java.time.LocalDateTime
 import java.util.*
 
 @Suppress("UnnecessaryAbstractClass")
@@ -61,6 +62,7 @@ abstract class BaseRsqlTest {
             car.description = "Descreption car $randomNum"
             car.active = Math.random() < 0.5
             car.mfgdt = Date()
+            car.createdAt = LocalDateTime.now()
             car.screws = screws
             car.engine = savedEngine
 

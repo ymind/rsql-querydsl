@@ -5,8 +5,6 @@ import com.querydsl.core.types.dsl.*
 import cz.jirutka.rsql.parser.ast.ComparisonNode
 import team.yi.rsql.querydsl.*
 import team.yi.rsql.querydsl.operator.*
-import java.sql.Time
-import java.sql.Timestamp
 import java.util.*
 
 @Suppress("UNCHECKED_CAST")
@@ -20,10 +18,7 @@ abstract class TemporalFieldTypeHandler<E : Comparable<E>>(
         return if (type == null) {
             false
         } else {
-            Date::class.java.isAssignableFrom(type) ||
-                    java.sql.Date::class.java.isAssignableFrom(type) ||
-                    Time::class.java.isAssignableFrom(type) ||
-                    Timestamp::class.java.isAssignableFrom(type)
+            Date::class.java.isAssignableFrom(type)
         }
     }
 

@@ -154,6 +154,22 @@ class QuerydslRsqlTest : BaseRsqlTest() {
     }
 
     @Test
+    fun shouldHandleLocalDateRange() {
+        val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
+            .from("Car")
+            .where("createdAt>='2000-01-01T00:01:02' and createdAt<='6666-12-31T23:59:59'")
+            .build()
+        val cars = rsql.buildJPAQuery().fetch()
+
+        assertNotNull(cars, "result is null")
+
+        cars?.let {
+            assertFalse(cars.isEmpty(), "Can't handle `notnull` operator for Date type")
+            assertEquals(50, cars.size, "Can't handle `notnull` operator for Date type correctly")
+        }
+    }
+
+    @Test
     fun shouldHandleNumberIn() {
         val rsql = QuerydslRsql.Builder<Car>(rsqlConfig)
             .from("Car")

@@ -34,7 +34,7 @@ class BooleanFieldTypeHandler(
         }
     }
 
-    override fun toComparable(value: String?): Comparable<Boolean>? {
+    override fun toComparable(value: String?, fm: FieldMetadata?): Comparable<Boolean>? {
         return value?.toBoolean()
     }
 

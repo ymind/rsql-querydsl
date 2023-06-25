@@ -22,13 +22,13 @@ abstract class ComparableFieldTypeHandler<E : Comparable<E>>(
         if (values.isEmpty()) return null
 
         return values.map {
-            val value = toComparable(it) ?: return null
+            val value = toComparable(it, fm) ?: return null
 
             Expressions.asComparable(value)
         }.toList()
     }
 
-    protected abstract fun toComparable(value: String?): Comparable<E>?
+    protected abstract fun toComparable(value: String?, fm: FieldMetadata?): Comparable<E>?
 
     override fun getExpression(path: Expression<*>?, values: Collection<Expression<out Any?>?>?, fm: FieldMetadata?): BooleanExpression? {
         val left = path as ComparableExpression<E>

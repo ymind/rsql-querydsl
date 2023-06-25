@@ -61,19 +61,33 @@ class RsqlConfig private constructor(builder: Builder) {
         internal val nodeInterceptors = mutableListOf<RsqlNodeInterceptor>()
         internal var dateFormat: String? = null
 
-        fun operator(vararg operator: RsqlOperator): Builder = this.apply { this.operators += operator }
+        fun operator(vararg operator: RsqlOperator): Builder = this.apply {
+            this.operators += operator
+        }
 
-        fun fieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler>): Builder = this.apply { this.fieldTypeHandlers += typeHandler }
+        fun fieldTypeHandler(vararg typeHandler: Class<out FieldTypeHandler>): Builder = this.apply {
+            this.fieldTypeHandlers += typeHandler
+        }
 
-        fun sortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler>): Builder = this.apply { this.sortFieldTypeHandlers += typeHandler }
+        fun sortFieldTypeHandler(vararg typeHandler: Class<out SortFieldTypeHandler>): Builder = this.apply {
+            this.sortFieldTypeHandlers += typeHandler
+        }
 
-        fun nodeInterceptors(nodeInterceptors: List<RsqlNodeInterceptor>?): Builder = this.apply { nodeInterceptors?.let { this.nodeInterceptors.addAll(nodeInterceptors) } }
+        fun nodeInterceptors(nodeInterceptors: List<RsqlNodeInterceptor>?): Builder = this.apply {
+            nodeInterceptors?.let { this.nodeInterceptors.addAll(nodeInterceptors) }
+        }
 
-        fun nodeInterceptor(block: () -> RsqlNodeInterceptor?): Builder = this.apply { block()?.let { this.nodeInterceptor(it) } }
+        fun nodeInterceptor(block: () -> RsqlNodeInterceptor?): Builder = this.apply {
+            block()?.let { this.nodeInterceptor(it) }
+        }
 
-        fun nodeInterceptor(nodeInterceptor: RsqlNodeInterceptor?): Builder = this.apply { nodeInterceptor?.let { this.nodeInterceptors.add(nodeInterceptor) } }
+        fun nodeInterceptor(nodeInterceptor: RsqlNodeInterceptor?): Builder = this.apply {
+            nodeInterceptor?.let { this.nodeInterceptors.add(nodeInterceptor) }
+        }
 
-        fun dateFormat(dateFormat: String?): Builder = this.apply { this.dateFormat = dateFormat }
+        fun dateFormat(dateFormat: String?): Builder = this.apply {
+            this.dateFormat = dateFormat
+        }
 
         fun build(): RsqlConfig {
             return try {
